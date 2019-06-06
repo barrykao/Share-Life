@@ -1,7 +1,7 @@
 import UIKit
 
 
-class FirstViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate {
+class FirstViewController: UIViewController ,UITextFieldDelegate {
     
     var data : [userData] = []
     
@@ -14,8 +14,10 @@ class FirstViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountV
     
         self.theAccount.delegate = self
         self.thePassword.delegate = self
-    
+        self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem
     }
+    
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -68,13 +70,6 @@ class FirstViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountV
             judge(controller: self)
             return
         }
-    }
-    
-    func didFinishSingUpAccount(data: userData) {
-        
-        
-        
-        
     }
     
     

@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C60574CC226F19BC00C85CAC /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60574CB226F19BC00C85CAC /* FirstViewController.swift */; };
-		C60574CE226F23B100C85CAC /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60574CD226F23B100C85CAC /* AddNewAccountViewController.swift */; };
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
+		C6142A8B22A769F500875AF0 /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6142A8A22A769F500875AF0 /* AddNewAccountViewController.swift */; };
 		C6DC46FC229E641A0080363A /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DC46FB229E64190080363A /* UserData.swift */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
 		C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F65686226F14EF00706BEA /* AppDelegate.swift */; };
@@ -22,8 +22,8 @@
 
 /* Begin PBXFileReference section */
 		C60574CB226F19BC00C85CAC /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		C60574CD226F23B100C85CAC /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
+		C6142A8A22A769F500875AF0 /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
 		C6DC46FB229E64190080363A /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		C6F3F486227C557400D4F246 /* function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = function.swift; sourceTree = "<group>"; };
 		C6F65683226F14EF00706BEA /* HellowMyFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellowMyFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,7 +69,7 @@
 				C6F65686226F14EF00706BEA /* AppDelegate.swift */,
 				C6F65688226F14EF00706BEA /* ViewController.swift */,
 				C60574CB226F19BC00C85CAC /* FirstViewController.swift */,
-				C60574CD226F23B100C85CAC /* AddNewAccountViewController.swift */,
+				C6142A8A22A769F500875AF0 /* AddNewAccountViewController.swift */,
 				C6DC46FB229E64190080363A /* UserData.swift */,
 				C6F3F486227C557400D4F246 /* function.swift */,
 				C6F6568A226F14EF00706BEA /* Main.storyboard */,
@@ -154,7 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C60574CC226F19BC00C85CAC /* FirstViewController.swift in Sources */,
-				C60574CE226F23B100C85CAC /* AddNewAccountViewController.swift in Sources */,
+				C6142A8B22A769F500875AF0 /* AddNewAccountViewController.swift in Sources */,
 				C6DC46FC229E641A0080363A /* UserData.swift in Sources */,
 				C6F9D116228953F100FE02C0 /* SettingPageViewController.swift in Sources */,
 				C6F65689226F14EF00706BEA /* ViewController.swift in Sources */,
