@@ -8,7 +8,9 @@
 
 import UIKit
 
-class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate{
+class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate ,ModifyDataViewControllerDelegate{
+  
+    
     
     var data : [UserData] = []
     var isSignIn : Bool = true
@@ -22,8 +24,11 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     
     @IBOutlet weak var birthday: UITextField!
     
+    @IBOutlet weak var singIn: UIBarButtonItem!
     
-    @IBOutlet weak var signIn: UIButton!
+    @IBOutlet weak var imageView: UIImageView!
+    
+    @IBOutlet weak var modifyData: UIButton!
     
     
     override func viewDidLoad() {
@@ -36,7 +41,9 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
    
         self.nickname.isUserInteractionEnabled = false
         self.birthday.isUserInteractionEnabled = false
-        
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
+        self.modifyData.isEnabled = false
+
         // Do any additional setup after loading the view.
     }
 
@@ -76,15 +83,27 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         }
         
         if isSignIn {
-            self.signIn.setTitle("登出", for: .normal)
             self.isSignIn = false
-            self.tabBarController?.selectedIndex = 0
+            self.navigationItem.rightBarButtonItem?.title = "登出"
+//            self.tabBarController?.selectedIndex = 0
+            self.navigationItem.leftBarButtonItem?.isEnabled = true
+            self.account.isUserInteractionEnabled = false
+            self.password.isUserInteractionEnabled = false
+            self.modifyData.isEnabled = true
+            
         }else{
             self.isSignIn = true
             self.clear()
-            self.signIn.setTitle("登入", for: .normal)
+            self.navigationItem.rightBarButtonItem?.title = "登入"
+            self.navigationItem.leftBarButtonItem?.isEnabled = false
+            self.imageView.image = UIImage(named: "member.png")
+            self.account.isUserInteractionEnabled = true
+            self.password.isUserInteractionEnabled = true
+            self.modifyData.isEnabled = false
+
         }
         
+
         
         
     }
@@ -109,6 +128,22 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
             addVC.delegate = self
         }
         
+        if segue.identifier == "modifySegue"{
+            
+            let member = UserData()
+            member.userAccount = self.account.text
+            member.userPassword = self.password.text
+            member.userNickname = self.nickname.text
+            member.userBirthday = self.birthday.text
+            member.image = self.imageView.image
+            
+            let modifyVC = segue.destination as! ModifyDataViewController
+            modifyVC.modifyData = member
+            modifyVC.delegate = self
+            
+        }
+        
+        
     }
     
     func didFinishAdd(userData: UserData) {
@@ -121,6 +156,22 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
             self.birthday.text = userData.userBirthday
         
     }
+    
+    func didFinishModify(userData: UserData) {
+        
+        print("didFinishModify")
+        
+        self.password.text = userData.userPassword
+        self.nickname.text = userData.userNickname
+        self.birthday.text = userData.userBirthday
+        self.imageView.image = userData.image
+    }
+    
+    
+    
+    
+    
+    
     /*
     // MARK: - Navigation
 

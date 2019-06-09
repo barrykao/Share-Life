@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class UserData {
    
@@ -16,6 +17,9 @@ class UserData {
     var userPassword : String?
     var userNickname : String?
     var userBirthday : String?
+    
+    var image : UIImage?
+    
     
     init(){
         
