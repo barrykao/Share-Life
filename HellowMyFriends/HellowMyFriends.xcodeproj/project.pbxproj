@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C60574CC226F19BC00C85CAC /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60574CB226F19BC00C85CAC /* FirstViewController.swift */; };
+		83FC2770D848D8521FD1FC92 /* Pods_HellowMyFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5613D935B1DC19CA136EF5A3 /* Pods_HellowMyFriends.framework */; };
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
-		C6142A8B22A769F500875AF0 /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6142A8A22A769F500875AF0 /* AddNewAccountViewController.swift */; };
+		C67AF9A822A8E733001E51E4 /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */; };
+		C67AF9AA22AB92F8001E51E4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C67AF9A922AB92F8001E51E4 /* GoogleService-Info.plist */; };
+		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C6DC46FC229E641A0080363A /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DC46FB229E64190080363A /* UserData.swift */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
 		C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F65686226F14EF00706BEA /* AppDelegate.swift */; };
@@ -17,13 +19,15 @@
 		C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568A226F14EF00706BEA /* Main.storyboard */; };
 		C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568D226F14F000706BEA /* Assets.xcassets */; };
 		C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */; };
-		C6F9D116228953F100FE02C0 /* SettingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F9D115228953F100FE02C0 /* SettingPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C60574CB226F19BC00C85CAC /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		38C315E62EB3F4D5A78B5532 /* Pods-HellowMyFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HellowMyFriends.release.xcconfig"; path = "Target Support Files/Pods-HellowMyFriends/Pods-HellowMyFriends.release.xcconfig"; sourceTree = "<group>"; };
+		5613D935B1DC19CA136EF5A3 /* Pods_HellowMyFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HellowMyFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
-		C6142A8A22A769F500875AF0 /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
+		C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
+		C67AF9A922AB92F8001E51E4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C6DC46FB229E64190080363A /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		C6F3F486227C557400D4F246 /* function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = function.swift; sourceTree = "<group>"; };
 		C6F65683226F14EF00706BEA /* HellowMyFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellowMyFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -33,7 +37,7 @@
 		C6F6568D226F14F000706BEA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C6F65690226F14F000706BEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C6F65692226F14F000706BEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C6F9D115228953F100FE02C0 /* SettingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingPageViewController.swift; sourceTree = "<group>"; };
+		DB1E6627FB83BE45DD9ABA46 /* Pods-HellowMyFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HellowMyFriends.debug.xcconfig"; path = "Target Support Files/Pods-HellowMyFriends/Pods-HellowMyFriends.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,17 +45,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83FC2770D848D8521FD1FC92 /* Pods_HellowMyFriends.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4DBCBA8003F1C40B6175C21C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5613D935B1DC19CA136EF5A3 /* Pods_HellowMyFriends.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C67AF9AD22ABAF7B001E51E4 /* memberCenter */ = {
+			isa = PBXGroup;
+			children = (
+				C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */,
+				C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */,
+			);
+			path = memberCenter;
+			sourceTree = "<group>";
+		};
 		C6F6567A226F14EF00706BEA = {
 			isa = PBXGroup;
 			children = (
 				C6F65685226F14EF00706BEA /* HellowMyFriends */,
 				C6F65684226F14EF00706BEA /* Products */,
+				D81F961C61640CB60F6A925E /* Pods */,
+				4DBCBA8003F1C40B6175C21C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -66,20 +90,28 @@
 		C6F65685226F14EF00706BEA /* HellowMyFriends */ = {
 			isa = PBXGroup;
 			children = (
+				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
 				C6F65686226F14EF00706BEA /* AppDelegate.swift */,
 				C6F65688226F14EF00706BEA /* ViewController.swift */,
-				C60574CB226F19BC00C85CAC /* FirstViewController.swift */,
-				C6142A8A22A769F500875AF0 /* AddNewAccountViewController.swift */,
 				C6DC46FB229E64190080363A /* UserData.swift */,
 				C6F3F486227C557400D4F246 /* function.swift */,
 				C6F6568A226F14EF00706BEA /* Main.storyboard */,
-				C6F9D115228953F100FE02C0 /* SettingPageViewController.swift */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
+				C67AF9A922AB92F8001E51E4 /* GoogleService-Info.plist */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
 				C6F65692226F14F000706BEA /* Info.plist */,
 			);
 			path = HellowMyFriends;
+			sourceTree = "<group>";
+		};
+		D81F961C61640CB60F6A925E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DB1E6627FB83BE45DD9ABA46 /* Pods-HellowMyFriends.debug.xcconfig */,
+				38C315E62EB3F4D5A78B5532 /* Pods-HellowMyFriends.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -89,9 +121,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C6F65695226F14F000706BEA /* Build configuration list for PBXNativeTarget "HellowMyFriends" */;
 			buildPhases = (
+				CDD4BCAF2777D2FFC177CC1C /* [CP] Check Pods Manifest.lock */,
 				C6F6567F226F14EF00706BEA /* Sources */,
 				C6F65680226F14EF00706BEA /* Frameworks */,
 				C6F65681226F14EF00706BEA /* Resources */,
+				9E78C0D2DFE58E4409603685 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -141,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
+				C67AF9AA22AB92F8001E51E4 /* GoogleService-Info.plist in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
 			);
@@ -148,16 +183,64 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9E78C0D2DFE58E4409603685 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HellowMyFriends/Pods-HellowMyFriends-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HellowMyFriends/Pods-HellowMyFriends-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CDD4BCAF2777D2FFC177CC1C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HellowMyFriends-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C6F6567F226F14EF00706BEA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C60574CC226F19BC00C85CAC /* FirstViewController.swift in Sources */,
-				C6142A8B22A769F500875AF0 /* AddNewAccountViewController.swift in Sources */,
+				C67AF9A822A8E733001E51E4 /* AddNewAccountViewController.swift in Sources */,
 				C6DC46FC229E641A0080363A /* UserData.swift in Sources */,
-				C6F9D116228953F100FE02C0 /* SettingPageViewController.swift in Sources */,
 				C6F65689226F14EF00706BEA /* ViewController.swift in Sources */,
+				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,
@@ -304,16 +387,17 @@
 		};
 		C6F65696226F14F000706BEA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB1E6627FB83BE45DD9ABA46 /* Pods-HellowMyFriends.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NNN72WXPAH;
+				DEVELOPMENT_TEAM = F935NPNPXP;
 				INFOPLIST_FILE = HellowMyFriends/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends;
+				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -322,16 +406,17 @@
 		};
 		C6F65697226F14F000706BEA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 38C315E62EB3F4D5A78B5532 /* Pods-HellowMyFriends.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NNN72WXPAH;
+				DEVELOPMENT_TEAM = F935NPNPXP;
 				INFOPLIST_FILE = HellowMyFriends/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends;
+				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

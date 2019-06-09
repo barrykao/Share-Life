@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let tabBarController = self.window?.rootViewController as! UITabBarController
         tabBarController.selectedIndex = 3
-        
+        FirebaseApp.configure()
         return true
     }
 

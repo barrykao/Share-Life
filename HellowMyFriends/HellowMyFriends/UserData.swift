@@ -8,9 +8,10 @@
 
 import Foundation
 
-class userData {
+class UserData {
+   
     
-    
+   
     var userAccount : String?
     var userPassword : String?
     var userNickname : String?
