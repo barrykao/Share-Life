@@ -13,6 +13,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     
     
     var data : [UserData] = []
+    
     var isSignIn : Bool = true
     
     
@@ -28,7 +29,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     
     @IBOutlet weak var imageView: UIImageView!
     
-    @IBOutlet weak var modifyData: UIButton!
+    @IBOutlet weak var modifyDataBtn: UIButton!
     
     
     override func viewDidLoad() {
@@ -38,11 +39,13 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         self.password.delegate = self
         self.nickname.delegate = self
         self.birthday.delegate = self
-   
+        self.account.placeholder = "請輸入6-10位英數字"
+        self.password.placeholder = "請輸入6-10位英數字"
+
         self.nickname.isUserInteractionEnabled = false
         self.birthday.isUserInteractionEnabled = false
-        self.navigationItem.leftBarButtonItem?.isEnabled = false
-        self.modifyData.isEnabled = false
+        
+        self.modifyDataBtn.isEnabled = false
 
         // Do any additional setup after loading the view.
     }
@@ -83,37 +86,49 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         }
         
         if isSignIn {
-            self.isSignIn = false
-            self.navigationItem.rightBarButtonItem?.title = "登出"
-//            self.tabBarController?.selectedIndex = 0
-            self.navigationItem.leftBarButtonItem?.isEnabled = true
-            self.account.isUserInteractionEnabled = false
-            self.password.isUserInteractionEnabled = false
-            self.modifyData.isEnabled = true
-            
+            let alert = UIAlertController(title: "登入成功", message: "歡迎 \(str.userAccount!)", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+                
+                self.queryFromServer()
+                self.isSignIn = false
+                self.navigationItem.rightBarButtonItem?.title = "登出"
+                //            self.tabBarController?.selectedIndex = 0
+                
+                self.account.isUserInteractionEnabled = false
+                self.password.isUserInteractionEnabled = false
+                self.modifyDataBtn.isEnabled = true
+                
+            }
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+
         }else{
-            self.isSignIn = true
-            self.clear()
-            self.navigationItem.rightBarButtonItem?.title = "登入"
-            self.navigationItem.leftBarButtonItem?.isEnabled = false
-            self.imageView.image = UIImage(named: "member.png")
-            self.account.isUserInteractionEnabled = true
-            self.password.isUserInteractionEnabled = true
-            self.modifyData.isEnabled = false
+            let alert = UIAlertController(title: "登出成功", message: "期待您再次使用", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+                
+                self.isSignIn = true
+                self.clear()
+                self.navigationItem.rightBarButtonItem?.title = "登入"
+                
+                self.account.isUserInteractionEnabled = true
+                self.password.isUserInteractionEnabled = true
+                self.modifyDataBtn.isEnabled = false
+                
+            }
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+          
 
         }
-        
-
-        
-        
+   
     }
 
     func clear () {
-        
         self.account.text = ""
         self.password.text = ""
         self.nickname.text = ""
         self.birthday.text = ""
+        self.imageView.image = UIImage(named: "member.png")
     }
     
     
@@ -131,11 +146,14 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         if segue.identifier == "modifySegue"{
             
             let member = UserData()
+            let imageData = ImageData()
             member.userAccount = self.account.text
             member.userPassword = self.password.text
             member.userNickname = self.nickname.text
             member.userBirthday = self.birthday.text
-            member.image = self.imageView.image
+            
+            
+            imageData.image = self.imageView.image
             
             let modifyVC = segue.destination as! ModifyDataViewController
             modifyVC.modifyData = member
@@ -157,20 +175,54 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         
     }
     
-    func didFinishModify(userData: UserData) {
+    func didFinishModifyData( userData : UserData ) {
         
         print("didFinishModify")
         
         self.password.text = userData.userPassword
         self.nickname.text = userData.userNickname
         self.birthday.text = userData.userBirthday
-        self.imageView.image = userData.image
+        
     }
     
+    func didFinihModifyImage(imageData: ImageData) {
+        self.imageView.image = imageData.image
+    }
     
+    func queryFromServer(){
+        
+        if let url = URL(string: "http://127.0.0.1:8888/Account_json.php"){
+            
+            let request = URLRequest(url: url)
+            let session = URLSession.shared
+            let task = session.dataTask(with: request) { (data, response, error) in
+                
+                if let e = error {
+                    print("error \(e)")
+                }
+                guard let jsonData = data else{return}
+                print(jsonData)
+                let jsonContent = String(data: jsonData, encoding: .utf8)
+                print(jsonContent!)
+                
+                //update core data
+                //NSFetchResuletController
+                
+                let decoder = JSONDecoder()
+                do{
+                    self.data = try decoder.decode([UserData].self, from: jsonData)
+                    
+                    
+                    
+                }catch{
+                    print("error while parsing json \(error)")
+                }
+            }
+            task.resume()
+        }
+    }
     
-    
-    
+   
     
     /*
     // MARK: - Navigation

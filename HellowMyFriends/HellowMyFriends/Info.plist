@@ -41,5 +41,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>use camera to  take photo/movie</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access microphone when record movie</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Add photo/movie to libary</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Get photo/moview from libary</string>
 </dict>
 </plist>

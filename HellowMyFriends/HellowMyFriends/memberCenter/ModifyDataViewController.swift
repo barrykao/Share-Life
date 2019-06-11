@@ -8,13 +8,18 @@
 
 import UIKit
 protocol ModifyDataViewControllerDelegate : class{
-    func didFinishModify(userData:UserData)
+    func didFinishModifyData(userData : UserData)
+    func didFinihModifyImage(imageData : ImageData)
 }
 
 
 class ModifyDataViewController: UIViewController , UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
 
     var modifyData : UserData!
+    var modifyImage : ImageData!
+    
+    
+    var formatter: DateFormatter! = nil
     
     weak var delegate : ModifyDataViewControllerDelegate?
     
@@ -45,8 +50,37 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         self.nickname.text = self.modifyData.userNickname
         self.birthday.text = self.modifyData.userBirthday
         
-
-        // Do any additional setup after loading the view.
+        self.password.placeholder = "請輸入6-10位英數字"
+        self.nickname.placeholder = "此App使用的名字,最多五個字"
+        self.birthday.placeholder = "ex:1911/01/01"
+        
+        
+        formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        let myDatePicker = UIDatePicker()
+        myDatePicker.datePickerMode = .date
+        myDatePicker.date = NSDate() as Date
+        // 設置 UIDatePicker 改變日期時會執行動作的方法
+        myDatePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
+        // 將 UITextField 原先鍵盤的視圖更換成 UIDatePicker
+        birthday.inputView = myDatePicker
+        birthday.tag = 200
+    }
+    
+    @objc func datePickerChanged(datePicker:UIDatePicker) {
+        // 依據元件的 tag 取得 UITextField
+        let myTextField = self.view?.viewWithTag(200) as? UITextField
+        // 將 UITextField 的值更新為新的日期
+        myTextField?.text = formatter.string(from: datePicker.date)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     
@@ -55,7 +89,7 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         self.modifyData.userPassword = self.password.text
         self.modifyData.userNickname = self.nickname.text
         self.modifyData.userBirthday = self.birthday.text
-        self.modifyData.image = self.imageView.image
+        self.modifyImage.image = self.imageView.image
         
         // Password
         guard self.modifyData.userPassword?.isEmpty != true else {
@@ -75,9 +109,13 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
             judgeNickName(controller: self)
             return
         }
+        guard self.modifyData.userBirthday?.isEmpty != true else {
+            isEmpty(controller: self)
+            return
+        }
         
-        
-        self.delegate?.didFinishModify(userData: self.modifyData)
+        self.delegate?.didFinishModifyData(userData: self.modifyData)
+        self.delegate?.didFinihModifyImage(imageData:self.modifyImage)
         self.navigationController?.popViewController(animated: true)
         
     }
@@ -107,6 +145,8 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .savedPhotosAlbum
         imagePicker.delegate = self
+        
+        
         self.present(imagePicker, animated: true, completion: nil)
         
         
@@ -117,11 +157,12 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         self.imageView.image = image
         
+        
+        
         self.dismiss(animated: true, completion: nil)
         
         
     }
-    
     
     
     

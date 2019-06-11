@@ -11,21 +11,21 @@ import UIKit
 
 
 func isEmpty(controller: UIViewController){
-    let alert = UIAlertController(title: "Warning!", message: "There was some place you must be miss!", preferredStyle: .alert)
+    let alert = UIAlertController(title: "警告!", message: "有表格尚未填寫噢!", preferredStyle: .alert)
     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
     alert.addAction(okAction)
     controller.present(alert, animated: true, completion: nil)
 }
 
 func judge(controller: UIViewController){
-    let alert = UIAlertController(title: "Warning!", message: "This space did not less than six or more than ten!", preferredStyle: .alert)
+    let alert = UIAlertController(title: "警告!", message: "帳號或密碼不足6位數或超過10位數!", preferredStyle: .alert)
     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
     alert.addAction(okAction)
     controller.present(alert, animated: true, completion: nil)
 }
 
 func judgeNickName(controller: UIViewController){
-    let alert = UIAlertController(title: "Warning!", message: "This space did not more than five!", preferredStyle: .alert)
+    let alert = UIAlertController(title: "警告!", message: "稱號不得超過5位數!", preferredStyle: .alert)
     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
     alert.addAction(okAction)
     controller.present(alert, animated: true, completion: nil)

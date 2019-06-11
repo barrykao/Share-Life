@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let tabBarController = self.window?.rootViewController as! UITabBarController
         tabBarController.selectedIndex = 3
+        
         FirebaseApp.configure()
         return true
     }
