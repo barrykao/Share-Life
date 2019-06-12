@@ -21,7 +21,6 @@
 		C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568A226F14EF00706BEA /* Main.storyboard */; };
 		C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568D226F14F000706BEA /* Assets.xcassets */; };
 		C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */; };
-		C6FBEEA322AFC558003FACEF /* CenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FBEEA222AFC558003FACEF /* CenterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +41,6 @@
 		C6F6568D226F14F000706BEA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C6F65690226F14F000706BEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C6F65692226F14F000706BEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C6FBEEA222AFC558003FACEF /* CenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterViewController.swift; sourceTree = "<group>"; };
 		DB1E6627FB83BE45DD9ABA46 /* Pods-HellowMyFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HellowMyFriends.debug.xcconfig"; path = "Target Support Files/Pods-HellowMyFriends/Pods-HellowMyFriends.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */,
-				C6FBEEA222AFC558003FACEF /* CenterViewController.swift */,
 				C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */,
 				C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */,
 			);
@@ -267,7 +264,6 @@
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,
-				C6FBEEA322AFC558003FACEF /* CenterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

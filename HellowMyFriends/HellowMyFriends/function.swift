@@ -11,7 +11,7 @@ import UIKit
 
 
 func isEmpty(controller: UIViewController){
-    let alert = UIAlertController(title: "警告!", message: "有表格尚未填寫噢!", preferredStyle: .alert)
+    let alert = UIAlertController(title: "警告", message: "請輸入E-mail及密碼!", preferredStyle: .alert)
     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
     alert.addAction(okAction)
     controller.present(alert, animated: true, completion: nil)

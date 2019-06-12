@@ -63,7 +63,7 @@
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oG-q0-umv">
                                         <rect key="frame" x="0.0" y="290" width="314" height="50"/>
@@ -128,6 +128,7 @@
                         <outlet property="modifyDataBtn" destination="VoB-Jd-moh" id="Hfw-wd-L7o"/>
                         <outlet property="password" destination="Wp4-aa-vNC" id="6rZ-6O-lhH"/>
                         <outlet property="photo" destination="Rjq-V7-Ptj" id="5Sb-Kr-CWp"/>
+                        <outlet property="registerBtn" destination="wRH-Hd-sad" id="AcC-CF-NW5"/>
                         <outlet property="signInBtn" destination="4oG-q0-umv" id="4d3-Wj-NGm"/>
                     </connections>
                 </viewController>
@@ -135,7 +136,7 @@
             </objects>
             <point key="canvasLocation" x="1761" y="-529"/>
         </scene>
-        <!--修改密碼或照片-->
+        <!--編輯照片或修改密碼-->
         <scene sceneID="mkt-o7-egH">
             <objects>
                 <viewController id="xWL-hY-btA" customClass="ModifyDataViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
@@ -162,7 +163,7 @@
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3pS-ge-1V0">
                                         <rect key="frame" x="0.0" y="240" width="314" height="50"/>
@@ -193,7 +194,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="zKN-rM-UIc"/>
                     </view>
-                    <navigationItem key="navigationItem" title="修改密碼或照片" id="PVc-x7-fF9">
+                    <navigationItem key="navigationItem" title="編輯照片或修改密碼" id="PVc-x7-fF9">
                         <barButtonItem key="rightBarButtonItem" systemItem="camera" id="a2D-XG-XfK">
                             <connections>
                                 <action selector="camera:" destination="xWL-hY-btA" id="xP3-eA-B9m"/>
@@ -207,7 +208,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zeL-Ox-nig" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2413" y="198"/>
+            <point key="canvasLocation" x="2449" y="218"/>
         </scene>
         <!--註冊-->
         <scene sceneID="zP3-DC-zLK">
@@ -239,7 +240,7 @@
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="03S-FQ-h9b">
                                         <rect key="frame" x="0.0" y="140" width="314" height="50"/>
@@ -363,7 +364,6 @@
         <!--會員中心-->
         <scene sceneID="oub-Sb-dkj">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xlG-yJ-AUI" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tK9-Bt-9hp" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="會員中心" image="tabBarItem:pkc-Bp-Uf8:image" id="pkc-Bp-Uf8"/>
                     <toolbarItems/>
@@ -376,6 +376,7 @@
                         <segue destination="5Ty-e0-flZ" kind="relationship" relationship="rootViewController" id="Vlw-k8-ugV"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xlG-yJ-AUI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="948" y="-529"/>
         </scene>
