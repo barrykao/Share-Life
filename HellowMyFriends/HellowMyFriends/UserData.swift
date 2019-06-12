@@ -13,9 +13,6 @@ class UserData : Codable {
    
     var userAccount : String?
     var userPassword : String?
-    var userNickname : String?
-    var userBirthday : String?
-    
 
     init(){
         
@@ -25,6 +22,6 @@ class UserData : Codable {
 
 class ImageData {
     
-    var image : UIImage?
+    var image: UIImage?
     
 }
