@@ -7,60 +7,42 @@
 //
 
 import UIKit
-protocol ModifyDataViewControllerDelegate : class{
-    func didFinishModifyData(userData : UserData)
+import Firebase
+import FirebaseAuth
+
+protocol ModifyDataViewControllerDelegate : class {
     func didFinishModifyImage(imageData : ImageData)
 }
 
-
 class ModifyDataViewController: UIViewController , UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
 
-    var modifyData : UserData!
     var modifyImage : ImageData!
     
     weak var delegate : ModifyDataViewControllerDelegate?
     
     @IBOutlet weak var photo: UIImageView!
     
-    @IBOutlet weak var password: UITextField!
-    
     var isNewPhoto : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.password.text = self.modifyData.userPassword
         self.photo.image = self.modifyImage.image
-    }
-  
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     @IBAction func saveData(_ sender: Any) {
         
-        self.modifyData.userPassword = self.password.text
         self.modifyImage.image = self.photo.image
-        // Password
-        guard self.modifyData.userPassword?.isEmpty != true else {
-            isEmpty(controller: self)
-            return
-        }
-        let alert = UIAlertController(title: "編輯照片或修改密碼", message: "儲存成功!", preferredStyle: .alert)
+        let alert = UIAlertController(title: "編輯大頭貼", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-            self.delegate?.didFinishModifyData(userData: self.modifyData)
+            
             self.delegate?.didFinishModifyImage(imageData: self.modifyImage)
             self.navigationController?.popViewController(animated: true)
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
+ 
     }
 
-   
     @IBAction func camera(_ sender: Any) {
         
         let imagePicker = UIImagePickerController()
@@ -84,7 +66,6 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         controller.addAction(cancelAction)
         self.present(controller, animated: true, completion: nil)
-
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -93,8 +74,6 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         self.photo.image = image
         self.isNewPhoto = true
         self.dismiss(animated: true, completion: nil)
-        
-        
     }
     
     

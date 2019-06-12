@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate , ModifyDataViewControllerDelegate{
 
@@ -34,8 +36,6 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         self.account.delegate = self
         self.password.delegate = self
         modifyDataBtn.isEnabled = false
-        
-        // Do any additional setup after loading the view.
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -46,6 +46,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         textField.resignFirstResponder()
         return true
     }
+    
+    
     
     @IBAction func signIn(_ sender: Any) {
         
@@ -59,43 +61,59 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
             isEmpty(controller: self)
             return
         }
-
-        if isSignIn {
-            self.user.insert(str, at: 0)
-            self.image.insert(image, at: 0)
-            modifyDataBtn.isEnabled = true
-            registerBtn.isEnabled = false
-            signInBtn.setTitle("登出", for: .normal)
-            isSignIn = false
-            account.isEnabled = false
-            password.isEnabled = false
+        
+        Auth.auth().signIn(withEmail: self.account.text!, password: self.password.text!) { (user, error) in
             
-        let alert = UIAlertController(title: "登入成功", message: "你好", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: nil)
-            
-            
-        }else{
-            modifyDataBtn.isEnabled = false
-            registerBtn.isEnabled = true
-            signInBtn.setTitle("登入", for: .normal)
-            isSignIn = true
-            account.isEnabled = true
-            password.isEnabled = true
-            let image = ImageData()
-            image.image = UIImage(named: "member.png")
-            self.photo.image = image.image
-            let user = UserData()
-            user.userAccount = nil
-            user.userPassword = nil
-            let alert = UIAlertController(title: "登出成功", message: "謝謝", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: nil)
+            if error == nil {
+                if self.isSignIn {
+                    print("log in!")
+                    let alert = UIAlertController(title: "登入成功", message: "你好", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: {
+                        self.user.insert(str, at: 0)
+                        self.image.insert(image, at: 0)
+                        self.modifyDataBtn.isEnabled = true
+                        self.registerBtn.isEnabled = false
+                        self.signInBtn.setTitle("登出", for: .normal)
+                        self.account.isEnabled = false
+                        self.password.isEnabled = false
+                        self.isSignIn = false
+                        self.navigationItem.rightBarButtonItem?.isEnabled = false
+                    })
+                    
+                }else{
+                    let alert = UIAlertController(title: "登出成功", message: "謝謝", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: {
+                        do {
+                            try Auth.auth().signOut()
+                            
+                        } catch let error as NSError {
+                          print(error.localizedDescription)
+                        }
+                        self.modifyDataBtn.isEnabled = false
+                        self.registerBtn.isEnabled = true
+                        self.signInBtn.setTitle("登入", for: .normal)
+                        self.account.isEnabled = true
+                        self.password.isEnabled = true
+                        self.isSignIn = true
+                        self.photo.image = UIImage(named: "member.png")
+                        self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    })
+                }
+            } else {
+                // 提示用戶從 firebase 返回了一個錯誤。
+                let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
+                let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                alertController.addAction(defaultAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
         }
+        
     }
-  
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "addSegue" {
@@ -107,11 +125,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         }
 
         if segue.identifier == "modifySegue" {
-            
-            let modify = self.user.first
             let image = self.image.first
             let modifyVC = segue.destination as! ModifyDataViewController
-            modifyVC.modifyData = modify
             modifyVC.modifyImage = image
             modifyVC.delegate = self
         }

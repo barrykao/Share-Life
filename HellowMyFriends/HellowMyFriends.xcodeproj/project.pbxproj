@@ -10,12 +10,13 @@
 		83FC2770D848D8521FD1FC92 /* Pods_HellowMyFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5613D935B1DC19CA136EF5A3 /* Pods_HellowMyFriends.framework */; };
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
 		C67AF9A822A8E733001E51E4 /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */; };
-		C67AF9AA22AB92F8001E51E4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C67AF9A922AB92F8001E51E4 /* GoogleService-Info.plist */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */; };
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6DC46FC229E641A0080363A /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DC46FB229E64190080363A /* UserData.swift */; };
+		C6EC217822B0E43100D6C2C4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6EC217722B0E43100D6C2C4 /* GoogleService-Info.plist */; };
+		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
 		C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F65686226F14EF00706BEA /* AppDelegate.swift */; };
 		C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568A226F14EF00706BEA /* Main.storyboard */; };
@@ -28,12 +29,13 @@
 		5613D935B1DC19CA136EF5A3 /* Pods_HellowMyFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HellowMyFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
-		C67AF9A922AB92F8001E51E4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyDataViewController.swift; sourceTree = "<group>"; };
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6DC46FB229E64190080363A /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		C6EC217722B0E43100D6C2C4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6F3F486227C557400D4F246 /* function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = function.swift; sourceTree = "<group>"; };
 		C6F65683226F14EF00706BEA /* HellowMyFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellowMyFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6F65686226F14EF00706BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */,
 				C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */,
 				C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */,
+				C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */,
 			);
 			path = memberCenter;
 			sourceTree = "<group>";
@@ -111,7 +114,7 @@
 				C6F3F486227C557400D4F246 /* function.swift */,
 				C6F6568A226F14EF00706BEA /* Main.storyboard */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
-				C67AF9A922AB92F8001E51E4 /* GoogleService-Info.plist */,
+				C6EC217722B0E43100D6C2C4 /* GoogleService-Info.plist */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
 				C6F65692226F14F000706BEA /* Info.plist */,
@@ -190,10 +193,10 @@
 			files = (
 				C6A897FD22AF8970008C7BF5 /* member.png in Resources */,
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
-				C67AF9AA22AB92F8001E51E4 /* GoogleService-Info.plist in Resources */,
 				C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
+				C6EC217822B0E43100D6C2C4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +263,7 @@
 				C67AF9A822A8E733001E51E4 /* AddNewAccountViewController.swift in Sources */,
 				C6DC46FC229E641A0080363A /* UserData.swift in Sources */,
 				C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */,
+				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,

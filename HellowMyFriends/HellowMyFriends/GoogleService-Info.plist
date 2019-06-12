@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>843875845089-3ru2euvct2k0tso1e1t1tdm5eobtubpf.apps.googleusercontent.com</string>
+	<string>527572974720-qvq8naem18lr5qlg4qku7t1b8tno141n.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.843875845089-3ru2euvct2k0tso1e1t1tdm5eobtubpf</string>
+	<string>com.googleusercontent.apps.527572974720-qvq8naem18lr5qlg4qku7t1b8tno141n</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB0-sKuM0V6PqMOhMtt54uZXbza8EAcnY4</string>
+	<string>AIzaSyCk0zrV4qWCtNQrYNTltM-L24svTmrTll4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>843875845089</string>
+	<string>527572974720</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.www.NoteApp.sdhs88123</string>
+	<string>com.www.HellowMyFriends1</string>
 	<key>PROJECT_ID</key>
-	<string>mapd25-3fe7d</string>
+	<string>hellomyfriends-8c1e3</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mapd25-3fe7d.appspot.com</string>
+	<string>hellomyfriends-8c1e3.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:843875845089:ios:6f36475dc5cf582d</string>
+	<string>1:527572974720:ios:ce39f2e896d69ca8</string>
 	<key>DATABASE_URL</key>
-	<string>https://mapd25-3fe7d.firebaseio.com</string>
+	<string>https://hellomyfriends-8c1e3.firebaseio.com</string>
 </dict>
 </plist>
