@@ -281,7 +281,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zeL-Ox-nig" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2449" y="218"/>
+            <point key="canvasLocation" x="2616" y="218"/>
         </scene>
         <!--註冊-->
         <scene sceneID="zP3-DC-zLK">
@@ -352,7 +352,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="msK-AL-xzT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1725" y="219"/>
+            <point key="canvasLocation" x="948" y="218"/>
         </scene>
         <!--我的貼文-->
         <scene sceneID="rtb-Rk-Lmv">
