@@ -15,6 +15,8 @@
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */; };
+		C6CA0AEE22B25B88007702AE /* background1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6CA0AED22B25B88007702AE /* background1.jpg */; };
+		C6CA0AF022B26BAE007702AE /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA0AEF22B26BAE007702AE /* SignInViewController.swift */; };
 		C6DC46FC229E641A0080363A /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DC46FB229E64190080363A /* UserData.swift */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
@@ -34,6 +36,8 @@
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C6CA0AED22B25B88007702AE /* background1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background1.jpg; sourceTree = "<group>"; };
+		C6CA0AEF22B26BAE007702AE /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C6DC46FB229E64190080363A /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6F3F486227C557400D4F246 /* function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = function.swift; sourceTree = "<group>"; };
@@ -82,6 +86,7 @@
 			children = (
 				C6A897FB22AF896F008C7BF5 /* member.png */,
 				C6A897FC22AF896F008C7BF5 /* background.jpg */,
+				C6CA0AED22B25B88007702AE /* background1.jpg */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -113,6 +118,7 @@
 				C6DC46FB229E64190080363A /* UserData.swift */,
 				C6F3F486227C557400D4F246 /* function.swift */,
 				C6F6568A226F14EF00706BEA /* Main.storyboard */,
+				C6CA0AEF22B26BAE007702AE /* SignInViewController.swift */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
 				C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */,
@@ -196,6 +202,7 @@
 				C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
+				C6CA0AEE22B25B88007702AE /* background1.jpg in Resources */,
 				C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,6 +272,7 @@
 				C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */,
 				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
+				C6CA0AF022B26BAE007702AE /* SignInViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,

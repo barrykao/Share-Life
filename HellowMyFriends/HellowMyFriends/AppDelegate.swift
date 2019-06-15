@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -21,6 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = self.window?.rootViewController as! UITabBarController
         tabBarController.selectedIndex = 3
         
+//        let viewController = self.window?.rootViewController as! SignInViewController
+//        viewController.storyboard
+//        UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ViewController") as UIViewController
+//        // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
+//
+//        self.presentViewController(viewController, animated: false, completion: nil)
         FirebaseApp.configure()
         return true
     }

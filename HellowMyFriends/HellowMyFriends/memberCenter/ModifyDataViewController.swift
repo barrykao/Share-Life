@@ -36,7 +36,7 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
             self.delegate?.didFinishModifyImage(imageData: self.modifyImage)
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true)
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
@@ -77,6 +77,10 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     }
     
     
+    @IBAction func back(_ sender: Any) {
+        
+        self.dismiss(animated: true)
+    }
     /*
     // MARK: - Navigation
 

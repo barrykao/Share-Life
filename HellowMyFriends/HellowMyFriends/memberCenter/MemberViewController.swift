@@ -10,10 +10,12 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+
 class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate , ModifyDataViewControllerDelegate{
 
     var user : [UserData] = []
     var image : [ImageData] = []
+    
     
     var isSignIn : Bool = true
     
@@ -80,6 +82,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
                         self.password.isEnabled = false
                         self.isSignIn = false
                         self.navigationItem.rightBarButtonItem?.isEnabled = false
+                        
+
                     })
                     
                 }else{
@@ -87,11 +91,12 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: {
-                        do {
-                            try Auth.auth().signOut()
-                            
-                        } catch let error as NSError {
-                          print(error.localizedDescription)
+                        if Auth.auth().currentUser != nil {
+                            do {
+                                try Auth.auth().signOut()
+                            } catch let error as NSError {
+                                print(error.localizedDescription)
+                            }
                         }
                         self.modifyDataBtn.isEnabled = false
                         self.registerBtn.isEnabled = true
@@ -145,6 +150,13 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         self.photo.image = imageData.image
 //        self.image.insert(imageData, at: 0)
     }
+    
+    
+    
+    
+    
+    
+    
     /*
     // MARK: - Navigation
 
