@@ -12,15 +12,12 @@ import FirebaseAuth
 
 class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate {
     
-    
-    
-    var user : [UserData] = []
 
     @IBOutlet weak var account: UITextField!
     
     @IBOutlet weak var password: UITextField!
     
-    @IBOutlet weak var photo: UIImageView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

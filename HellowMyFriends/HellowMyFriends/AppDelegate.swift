@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = self.window?.rootViewController as! UITabBarController
         tabBarController.selectedIndex = 3
        
+        print("home= \(NSHomeDirectory())")
         
         FirebaseApp.configure()
         return true

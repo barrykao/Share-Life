@@ -12,10 +12,6 @@ import FirebaseAuth
 
 
 class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataViewControllerDelegate{
-
-    
-    var image : [ImageData] = []
-
     
     @IBOutlet weak var account: UITextField!
     
@@ -43,8 +39,28 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         
         self.account.text = UserDefaults.standard.string(forKey: "account")
         self.password.text = UserDefaults.standard.string(forKey: "password")
-       
+        
+        print("顯示圖片")
+        
+        self.photo.image = thumbnailImage()
+        /*
+        storageRef = Storage.storage().reference()
+        storageRef.child("UserPhoto").child("\(self.account.text!).png").getData(maxSize: 15 * 1024 * 1024){ (data, error) in
+            if error != nil {
+                print(error?.localizedDescription)
+                return
+            }
+            guard let imageData = UIImage(data: data!) else { return }
+            //非同步的方式，load出來
+            DispatchQueue.main.async {
+                self.photo.image = imageData
+            }
+            
+        }
+    */
     }
+    
+    var storageRef : StorageReference!
        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,18 +69,13 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         self.password.delegate = self
         self.account.isEnabled = false
         self.password.isEnabled = false
+        
+
     }
     
     
     @IBAction func signOut(_ sender: Any) {
         
-        let str = UserData()
-        str.userAccount = self.account.text
-        str.userPassword = self.password.text
-        let image = ImageData()
-        image.image = self.photo.image
-        
-        if Auth.auth().currentUser != nil {
             let alert = UIAlertController(title: "登出成功", message: "謝謝", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
                 
@@ -81,29 +92,20 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
                 } catch let error as NSError {
                     print(error.localizedDescription)
                 }
-               
             })
-                
-        }
-        
-        
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        if segue.identifier == "modifySegue" {
-            let image = self.image.first
-            let modifyVC = segue.destination as! ModifyDataViewController
-            modifyVC.modifyImage = image
-            modifyVC.delegate = self
-        }
-        
-    }
-
-    func didFinishModifyImage(imageData: ImageData) {
-        self.photo.image = imageData.image
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+            let modifyVC = segue.destination as! ModifyDataViewController
+//            modifyVC.photo.image = self.photo.image
+            modifyVC.delegate = self
+    }
+
+    
+    func didFinishModifyImage(image: UIImage?) {
+        self.photo.image = image
+    }
     
     /*
     // MARK: - Navigation

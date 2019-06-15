@@ -9,33 +9,59 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseStorage
+
 
 protocol ModifyDataViewControllerDelegate : class {
-    func didFinishModifyImage(imageData : ImageData)
+    func didFinishModifyImage(image:UIImage?)
 }
 
 class ModifyDataViewController: UIViewController , UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
-
-    var modifyImage : ImageData!
     
     weak var delegate : ModifyDataViewControllerDelegate?
     
     @IBOutlet weak var photo: UIImageView!
     
     var isNewPhoto : Bool = false
+    var databaseRef : DatabaseReference!
+    var storageRef : StorageReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.photo.image = self.modifyImage.image
+        databaseRef = Database.database().reference()
+        storageRef = Storage.storage().reference()
     }
-    
+
     @IBAction func saveData(_ sender: Any) {
         
-        self.modifyImage.image = self.photo.image
+        
         let alert = UIAlertController(title: "編輯大頭貼", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
-            self.delegate?.didFinishModifyImage(imageData: self.modifyImage)
+        if let image = self.photo.image, self.isNewPhoto {
+            
+            let photoName = UserDefaults.standard.string(forKey: "account")
+            
+                //儲存照片
+                //建立照片路徑，存的位置, String轉URL一定要用fileURLWithPath
+                let homeURL = URL(fileURLWithPath: NSHomeDirectory())
+                let documents = homeURL.appendingPathComponent("Documents")
+                let fileName = "\(photoName!).png"
+                let fileURL = documents.appendingPathComponent(fileName)
+            
+                if let imageData = image.jpegData(compressionQuality: 1) {
+                    do{
+                        try imageData.write(to: fileURL, options: [.atomicWrite])
+                        self.storageRef.child("UserPhoto").child("\(fileName)").putFile(from: fileURL)
+                    }catch{
+                        print("error \(error)")
+                    }
+                }
+            }
+//            let photodict = ["photo":self.photo.image]
+//            self.ref.child("UserAccount").child("\(uid)").setValue(photodict)
+            
+            self.delegate?.didFinishModifyImage(image: self.photo.image)
             self.dismiss(animated: true)
         }
         alert.addAction(okAction)
@@ -46,7 +72,7 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     @IBAction func camera(_ sender: Any) {
         
         let imagePicker = UIImagePickerController()
-        imagePicker.allowsEditing = true
+//        imagePicker.allowsEditing = true
         imagePicker.delegate = self
         
         let controller = UIAlertController(title: "變更圖片", message: "請選擇要上傳的照片或啟用相機", preferredStyle: .actionSheet)
@@ -81,6 +107,9 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         
         self.dismiss(animated: true)
     }
+    
+    
+    
     /*
     // MARK: - Navigation
 
