@@ -10,14 +10,12 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class SignInViewController: UIViewController ,AddNewAccountViewControllerDelegate {
+class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate {
+    
+    
     
     var user : [UserData] = []
-    var image : [ImageData] = []
-    
-    
-    
-    
+
     @IBOutlet weak var account: UITextField!
     
     @IBOutlet weak var password: UITextField!
@@ -27,40 +25,40 @@ class SignInViewController: UIViewController ,AddNewAccountViewControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        self.account.delegate = self
+        self.password.delegate = self
+        self.account.text = UserDefaults.standard.string(forKey: "account")
+        self.password.text = UserDefaults.standard.string(forKey: "password")
         
         // Do any additional setup after loading the view.
     }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if Auth.auth().currentUser != nil {
-            
-            
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-            if let memberVC = mainStoryboard.instantiateViewController(withIdentifier: "memberVC") as? MemberViewController
-            {
-                self.present(memberVC, animated: true, completion: nil)
-            }
-            
-        }
+        
     }
-    
     
     @IBAction func SignIn(_ sender: Any) {
         
         
-        let str = UserData()
-        str.userAccount = self.account.text
-        str.userPassword = self.password.text
-        let image = ImageData()
-        image.image = self.photo.image
-        
-        guard str.userAccount?.isEmpty != true && str.userPassword?.isEmpty != true else {
+        UserDefaults.standard.set(self.account.text, forKey: "account")
+        UserDefaults.standard.set(self.password.text, forKey: "password")
+
+
+        guard self.account.text != "" && self.password.text != "" else {
             isEmpty(controller: self)
             return
         }
-        
         
         
         Auth.auth().signIn(withEmail: self.account.text!, password: self.password.text!) { (user, error) in
@@ -68,17 +66,13 @@ class SignInViewController: UIViewController ,AddNewAccountViewControllerDelegat
             if error == nil {
                     print("log in!")
                     let alert = UIAlertController(title: "登入成功", message: "你好", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
+//                    self.user.insert(str, at: 0)
+                    self.dismiss(animated: true)
+                })
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
-                self.user.insert(str, at: 0)
-                let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                if let memberVC = mainStoryboard.instantiateViewController(withIdentifier: "memberVC") as? MemberViewController
-                {
-                    self.present(memberVC, animated: true, completion: nil)
-                }
-                
-                
+
             } else {
                 // 提示用戶從 firebase 返回了一個錯誤。
                 let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
@@ -90,21 +84,16 @@ class SignInViewController: UIViewController ,AddNewAccountViewControllerDelegat
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-            let add = UserData()
-            let addVC = segue.destination as! AddNewAccountViewController
-            addVC.currentData = add
-            addVC.delegate = self
+        
+        let addVC = segue.destination as? AddNewAccountViewController
+        addVC?.delegate = self
         
     }
     
-    func didFinishAdd(userData: UserData) {
-        self.account.text = userData.userAccount
-        self.password.text = userData.userPassword
+    func didFinishRegister(account: String?, password: String?) {
+        self.account.text = account
+        self.password.text = password
     }
-    
-    
-    
     /*
      // MARK: - Navigation
      

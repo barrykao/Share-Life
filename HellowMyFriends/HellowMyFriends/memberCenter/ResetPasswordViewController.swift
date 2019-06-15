@@ -10,13 +10,23 @@ import Firebase
 import FirebaseAuth
 
 
-class ResetPasswordViewController: UIViewController {
+class ResetPasswordViewController: UIViewController ,UITextFieldDelegate {
 
     @IBOutlet weak var emailText: UITextField!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.emailText.delegate = self
         // Do any additional setup after loading the view.
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     @IBAction func send(_ sender: Any) {
