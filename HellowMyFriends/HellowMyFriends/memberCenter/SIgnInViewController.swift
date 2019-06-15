@@ -2,7 +2,7 @@
 //  SignInViewController.swift
 //  HellowMyFriends
 //
-//  Created by 高琨淯 on 2019/6/13.
+//  Created by 高琨淯 on 2019/6/15.
 //  Copyright © 2019 Appcoda. All rights reserved.
 //
 
@@ -10,12 +10,11 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class SignInViewController: UIViewController {
-
+class SignInViewController: UIViewController ,AddNewAccountViewControllerDelegate {
+    
     var user : [UserData] = []
     var image : [ImageData] = []
     
-    var isSignIn : Bool = true
     
     
     
@@ -27,7 +26,7 @@ class SignInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         
         
         // Do any additional setup after loading the view.
@@ -37,7 +36,13 @@ class SignInViewController: UIViewController {
         
         if Auth.auth().currentUser != nil {
             
-            self.storyboard?.instantiateViewController(withIdentifier: "member")
+            
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+            if let memberVC = mainStoryboard.instantiateViewController(withIdentifier: "memberVC") as? MemberViewController
+            {
+                self.present(memberVC, animated: true, completion: nil)
+            }
+            
         }
     }
     
@@ -57,25 +62,23 @@ class SignInViewController: UIViewController {
         }
         
         
-            
-            Auth.auth().signIn(withEmail: self.account.text!, password: self.password.text!) { (user, error) in
+        
+        Auth.auth().signIn(withEmail: self.account.text!, password: self.password.text!) { (user, error) in
             
             if error == nil {
-                if self.isSignIn {
                     print("log in!")
                     let alert = UIAlertController(title: "登入成功", message: "你好", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
-                    self.present(alert, animated: true, completion: {
-                        self.user.insert(str, at: 0)
-                        self.isSignIn = false
-
-                    })
-                    
-                }else{
-                    self.photo.image = UIImage(named: "member.png")
-
+                    self.present(alert, animated: true, completion: nil)
+                self.user.insert(str, at: 0)
+                let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+                if let memberVC = mainStoryboard.instantiateViewController(withIdentifier: "memberVC") as? MemberViewController
+                {
+                    self.present(memberVC, animated: true, completion: nil)
                 }
+                
+                
             } else {
                 // 提示用戶從 firebase 返回了一個錯誤。
                 let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
@@ -84,26 +87,32 @@ class SignInViewController: UIViewController {
                 self.present(alertController, animated: true, completion: nil)
             }
         }
-            
-        
-        
-        
-        
-        
     }
     
-    
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
+            let add = UserData()
+            let addVC = segue.destination as! AddNewAccountViewController
+            addVC.currentData = add
+            addVC.delegate = self
+        
+    }
+    
+    func didFinishAdd(userData: UserData) {
+        self.account.text = userData.userAccount
+        self.password.text = userData.userPassword
+    }
+    
+    
+    
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

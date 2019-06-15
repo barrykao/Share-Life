@@ -19,15 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let tabBarController = self.window?.rootViewController as! UITabBarController
-        tabBarController.selectedIndex = 3
+//        let tabBarController = self.window?.rootViewController as! UITabBarController
+//        tabBarController.selectedIndex = 3
         
-//        let viewController = self.window?.rootViewController as! SignInViewController
-//        viewController.storyboard
-//        UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ViewController") as UIViewController
-//        // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
-//
-//        self.presentViewController(viewController, animated: false, completion: nil)
         FirebaseApp.configure()
         return true
     }

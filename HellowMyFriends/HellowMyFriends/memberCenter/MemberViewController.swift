@@ -30,7 +30,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     @IBOutlet weak var signInBtn: UIButton!
     
     
-    @IBOutlet weak var registerBtn: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,7 +76,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
                         self.user.insert(str, at: 0)
                         self.image.insert(image, at: 0)
                         self.modifyDataBtn.isEnabled = true
-                        self.registerBtn.isEnabled = false
+                        
                         self.signInBtn.setTitle("登出", for: .normal)
                         self.account.isEnabled = false
                         self.password.isEnabled = false
@@ -99,7 +99,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
                             }
                         }
                         self.modifyDataBtn.isEnabled = false
-                        self.registerBtn.isEnabled = true
+                        
                         self.signInBtn.setTitle("登入", for: .normal)
                         self.account.isEnabled = true
                         self.password.isEnabled = true
@@ -152,11 +152,6 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     }
     
     
-    
-    
-    
-    
-    
     /*
     // MARK: - Navigation
 
@@ -167,4 +162,5 @@ class MemberViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     }
     */
 
+  
 }

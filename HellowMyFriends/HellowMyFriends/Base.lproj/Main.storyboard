@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="JSU-8P-PpV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cMB-wE-W2I">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -30,16 +30,16 @@
         <!--會員中心-->
         <scene sceneID="6Yp-oZ-BFX">
             <objects>
-                <viewController storyboardIdentifier="member" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5Ty-e0-flZ" customClass="MemberViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="memberVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5Ty-e0-flZ" customClass="MemberViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="v9t-yj-5Vr">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="kBC-x1-6Lm">
-                                <rect key="frame" x="0.0" y="64" width="414" height="623"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="667"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="NeU-23-rgp">
-                                <rect key="frame" x="50" y="80.666666666666686" width="314" height="575"/>
+                                <rect key="frame" x="50" y="115.66666666666669" width="314" height="505.00000000000006"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="member.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rjq-V7-Ptj">
                                         <rect key="frame" x="0.0" y="0.0" width="314" height="225"/>
@@ -72,29 +72,15 @@
                                             <constraint firstAttribute="height" constant="50" id="jtD-cP-BPH"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="登入">
+                                        <state key="normal" title="登出">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="signIn:" destination="5Ty-e0-flZ" eventType="touchUpInside" id="Bh2-Jm-7Ce"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wRH-Hd-sad">
-                                        <rect key="frame" x="0.0" y="454.99999999999994" width="314" height="50"/>
-                                        <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="8cb-Dc-Dcp"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="註冊">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="ogY-3z-HXc" kind="presentation" identifier="addSegue" id="LwV-gj-RE5"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VoB-Jd-moh">
-                                        <rect key="frame" x="0.0" y="525" width="314" height="50"/>
+                                        <rect key="frame" x="0.0" y="454.99999999999994" width="314" height="50"/>
                                         <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="bSb-9Q-JXr"/>
@@ -112,36 +98,29 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="top" secondItem="zxn-M5-H7J" secondAttribute="top" id="2V4-dE-gCb"/>
-                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="bottom" secondItem="zxn-M5-H7J" secondAttribute="bottom" id="5IX-1O-rrl"/>
-                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="leading" secondItem="zxn-M5-H7J" secondAttribute="leading" id="EWU-dL-VnS"/>
-                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="trailing" secondItem="zxn-M5-H7J" secondAttribute="trailing" id="gYl-T5-yYO"/>
+                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="trailing" secondItem="zxn-M5-H7J" secondAttribute="trailing" id="gmJ-ma-5bD"/>
+                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="top" secondItem="zxn-M5-H7J" secondAttribute="top" id="n1O-zf-XyC"/>
+                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="leading" secondItem="zxn-M5-H7J" secondAttribute="leading" id="nlu-zj-aCy"/>
                             <constraint firstItem="NeU-23-rgp" firstAttribute="centerY" secondItem="v9t-yj-5Vr" secondAttribute="centerY" id="t3y-Xv-Au5"/>
                             <constraint firstItem="zxn-M5-H7J" firstAttribute="trailing" secondItem="NeU-23-rgp" secondAttribute="trailing" constant="50" id="t8e-tb-JOw"/>
                             <constraint firstItem="NeU-23-rgp" firstAttribute="leading" secondItem="zxn-M5-H7J" secondAttribute="leading" constant="50" id="xJG-RG-a34"/>
+                            <constraint firstItem="kBC-x1-6Lm" firstAttribute="bottom" secondItem="zxn-M5-H7J" secondAttribute="bottom" id="xYS-QI-NMf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="zxn-M5-H7J"/>
                     </view>
-                    <navigationItem key="navigationItem" title="會員中心" id="Qvd-NQ-lfx">
-                        <barButtonItem key="rightBarButtonItem" title="忘記密碼？" id="Jjw-OW-Mbr">
-                            <connections>
-                                <action selector="ResetPasswordBtn:" destination="5Ty-e0-flZ" id="aCd-EM-GKD"/>
-                                <segue destination="aQr-14-GlW" kind="presentation" id="PKf-YF-ZDR"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <tabBarItem key="tabBarItem" title="Item" id="SD0-cA-Bxo"/>
+                    <navigationItem key="navigationItem" title="會員中心" id="Qvd-NQ-lfx"/>
                     <connections>
                         <outlet property="account" destination="okT-Fn-ULW" id="qFp-eX-ZEu"/>
                         <outlet property="modifyDataBtn" destination="VoB-Jd-moh" id="Hfw-wd-L7o"/>
                         <outlet property="password" destination="Wp4-aa-vNC" id="6rZ-6O-lhH"/>
                         <outlet property="photo" destination="Rjq-V7-Ptj" id="5Sb-Kr-CWp"/>
-                        <outlet property="registerBtn" destination="wRH-Hd-sad" id="AcC-CF-NW5"/>
                         <outlet property="signInBtn" destination="4oG-q0-umv" id="4d3-Wj-NGm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S4H-FB-HHc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1761" y="-529"/>
+            <point key="canvasLocation" x="948" y="-529"/>
         </scene>
         <!--Reset Password View Controller-->
         <scene sceneID="Sv8-ZN-F9M">
@@ -226,7 +205,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VxL-8a-st9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2615.9420289855075" y="-529.07608695652175"/>
+            <point key="canvasLocation" x="-177" y="180"/>
         </scene>
         <!--Modify Data View Controller-->
         <scene sceneID="mkt-o7-egH">
@@ -313,7 +292,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zeL-Ox-nig" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1761" y="218"/>
+            <point key="canvasLocation" x="1996" y="-529"/>
         </scene>
         <!--Add New Account View Controller-->
         <scene sceneID="zP3-DC-zLK">
@@ -406,7 +385,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="msK-AL-xzT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="947.82608695652186" y="217.66304347826087"/>
+            <point key="canvasLocation" x="546" y="179"/>
         </scene>
         <!--我的貼文-->
         <scene sceneID="rtb-Rk-Lmv">
@@ -439,7 +418,7 @@
                         <segue destination="TWR-7l-DWm" kind="relationship" relationship="viewControllers" id="Mm9-DP-WBF"/>
                         <segue destination="wD5-4C-x77" kind="relationship" relationship="viewControllers" id="17E-ZU-GCW"/>
                         <segue destination="gyi-hL-faB" kind="relationship" relationship="viewControllers" id="yux-QR-kyL"/>
-                        <segue destination="tK9-Bt-9hp" kind="relationship" relationship="viewControllers" id="oQh-ab-dh7"/>
+                        <segue destination="5Ty-e0-flZ" kind="relationship" relationship="viewControllers" id="jA0-XK-W7v"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pvK-Az-6IO" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -491,7 +470,7 @@
         <!--Sign In View Controller-->
         <scene sceneID="6VW-9x-0pn">
             <objects>
-                <viewController id="cMB-wE-W2I" customClass="SignInViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Main" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cMB-wE-W2I" customClass="SignInViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6kT-YY-zG0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -500,33 +479,96 @@
                                 <rect key="frame" x="0.0" y="20" width="414" height="716"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="uHt-gF-R2x">
+                                <rect key="frame" x="50" y="80.666666666666686" width="314" height="575"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="member.png" translatesAutoresizingMaskIntoConstraints="NO" id="IAz-oi-dBa">
+                                        <rect key="frame" x="0.0" y="0.0" width="314" height="225"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="225" id="tly-FJ-yj6"/>
+                                        </constraints>
+                                    </imageView>
+                                    <textField opaque="NO" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="E-mail" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="t6g-cv-ejQ">
+                                        <rect key="frame" x="0.0" y="245" width="314" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="vch-CN-aPo"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="email"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JhN-k7-3VS">
+                                        <rect key="frame" x="0.0" y="315" width="314" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="opi-3E-3Gj"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R5f-yW-IMA">
+                                        <rect key="frame" x="0.0" y="385" width="314" height="50"/>
+                                        <color key="backgroundColor" red="0.16483829929999999" green="0.097113616489999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="WBx-G6-iay"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="登入">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="SignIn:" destination="cMB-wE-W2I" eventType="touchUpInside" id="lny-fJ-nwa"/>
+                                            <action selector="signIn:" destination="5Ty-e0-flZ" eventType="touchUpInside" id="RbU-mf-y7o"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ldd-pi-m7v">
+                                        <rect key="frame" x="0.0" y="454.99999999999994" width="314" height="50"/>
+                                        <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="B2W-VQ-uY3"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="註冊">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="ogY-3z-HXc" kind="presentation" id="oBB-Fb-vJ1"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OrC-ip-hHn">
+                                        <rect key="frame" x="0.0" y="525" width="314" height="50"/>
+                                        <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="a55-FL-bao"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="忘記密碼？">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="aQr-14-GlW" kind="presentation" id="tZr-94-2YA"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="uHt-gF-R2x" firstAttribute="leading" secondItem="8YA-xX-EAe" secondAttribute="leading" constant="50" id="mL5-Sz-LwG"/>
+                            <constraint firstItem="uHt-gF-R2x" firstAttribute="centerY" secondItem="6kT-YY-zG0" secondAttribute="centerY" id="p2Y-5a-IzR"/>
+                            <constraint firstItem="8YA-xX-EAe" firstAttribute="trailing" secondItem="uHt-gF-R2x" secondAttribute="trailing" constant="50" id="yq4-YH-yv6"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="8YA-xX-EAe"/>
                     </view>
+                    <connections>
+                        <outlet property="account" destination="t6g-cv-ejQ" id="Uic-yV-ccG"/>
+                        <outlet property="password" destination="JhN-k7-3VS" id="pGz-Sc-GJz"/>
+                        <outlet property="photo" destination="IAz-oi-dBa" id="1Uf-uf-bFz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j1M-Gg-YF6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-176.81159420289856" y="-529.07608695652175"/>
-        </scene>
-        <!--會員中心-->
-        <scene sceneID="oub-Sb-dkj">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tK9-Bt-9hp" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="會員中心" image="profile" id="pkc-Bp-Uf8"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="70C-WO-FVh">
-                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="5Ty-e0-flZ" kind="relationship" relationship="rootViewController" id="Vlw-k8-ugV"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xlG-yJ-AUI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="948" y="-529"/>
+            <point key="canvasLocation" x="-32" y="-529"/>
         </scene>
     </scenes>
     <resources>
@@ -534,7 +576,6 @@
         <image name="background.jpg" width="700" height="1050"/>
         <image name="member.png" width="225" height="225"/>
         <image name="photo-camera" width="16" height="16"/>
-        <image name="profile" width="16" height="16"/>
         <image name="speech-bubble" width="16" height="16"/>
     </resources>
 </document>
