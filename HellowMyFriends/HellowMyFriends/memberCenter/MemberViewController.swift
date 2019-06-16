@@ -11,6 +11,7 @@ import Firebase
 import FirebaseAuth
 
 
+
 class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataViewControllerDelegate{
     
     @IBOutlet weak var account: UITextField!
@@ -20,13 +21,18 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
     @IBOutlet weak var photo: UIImageView!
 
     override func viewDidAppear(_ animated: Bool) {
+        print("viewDidAppear")
         if Auth.auth().currentUser != nil {
             print(Auth.auth().currentUser!.uid)
             print("已登入")
+            self.account.text = UserDefaults.standard.string(forKey: "account")
+            self.password.text = UserDefaults.standard.string(forKey: "password")
+            let fileName = "\(self.account.text!).jpg"
+            print("顯示圖片")
+            self.photo.image = checkImage(fileName: fileName)
             
         }else{
             print("尚未登入")
-            
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
             {
                 present(signVC, animated: true, completion: nil)
@@ -34,31 +40,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         }
         
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        self.account.text = UserDefaults.standard.string(forKey: "account")
-        self.password.text = UserDefaults.standard.string(forKey: "password")
-        
-        print("顯示圖片")
-        
-        self.photo.image = thumbnailImage()
-        /*
-        storageRef = Storage.storage().reference()
-        storageRef.child("UserPhoto").child("\(self.account.text!).png").getData(maxSize: 15 * 1024 * 1024){ (data, error) in
-            if error != nil {
-                print(error?.localizedDescription)
-                return
-            }
-            guard let imageData = UIImage(data: data!) else { return }
-            //非同步的方式，load出來
-            DispatchQueue.main.async {
-                self.photo.image = imageData
-            }
-            
-        }
-    */
-    }
+
+
     
     var storageRef : StorageReference!
        

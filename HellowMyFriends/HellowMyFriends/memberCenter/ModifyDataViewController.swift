@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-import FirebaseStorage
 
 
 protocol ModifyDataViewControllerDelegate : class {
@@ -31,44 +30,36 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if let photoName = UserDefaults.standard.string(forKey: "account"){
+            let fileName = "\(photoName).jpg"
+            self.photo.image = checkImage(fileName: fileName)
+        }
+    }
+    
 
     @IBAction func saveData(_ sender: Any) {
-        
-        
+
         let alert = UIAlertController(title: "編輯大頭貼", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
-        if let image = self.photo.image, self.isNewPhoto {
-            
-            let photoName = UserDefaults.standard.string(forKey: "account")
-            
-                //儲存照片
-                //建立照片路徑，存的位置, String轉URL一定要用fileURLWithPath
-                let homeURL = URL(fileURLWithPath: NSHomeDirectory())
-                let documents = homeURL.appendingPathComponent("Documents")
-                let fileName = "\(photoName!).png"
-                let fileURL = documents.appendingPathComponent(fileName)
-            
-                if let imageData = image.jpegData(compressionQuality: 1) {
-                    do{
-                        try imageData.write(to: fileURL, options: [.atomicWrite])
-                        self.storageRef.child("UserPhoto").child("\(fileName)").putFile(from: fileURL)
-                    }catch{
-                        print("error \(error)")
-                    }
+            if let image = self.photo.image, self.isNewPhoto {
+                
+                if let account = UserDefaults.standard.string(forKey: "account") {
+                    let fileName = "\(account).jpg"
+                    let fileURL = fileDocumentsPath(fileName: fileName)
+                    self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL)
                 }
+                self.delegate?.didFinishModifyImage(image: image)
+                self.dismiss(animated: true)
             }
-//            let photodict = ["photo":self.photo.image]
-//            self.ref.child("UserAccount").child("\(uid)").setValue(photodict)
-            
-            self.delegate?.didFinishModifyImage(image: self.photo.image)
-            self.dismiss(animated: true)
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
- 
+    
     }
-
     @IBAction func camera(_ sender: Any) {
         
         let imagePicker = UIImagePickerController()
@@ -95,9 +86,10 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        self.photo.image = image
+        let image = info[.originalImage] as! UIImage
+        DispatchQueue.main.async {
+            self.photo.image = thumbmailImage(image: image)
+        }
         self.isNewPhoto = true
         self.dismiss(animated: true, completion: nil)
     }

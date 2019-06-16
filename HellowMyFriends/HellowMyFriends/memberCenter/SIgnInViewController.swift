@@ -29,7 +29,7 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         
         // Do any additional setup after loading the view.
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -39,19 +39,10 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         return true
     }
     
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        
-    }
-    
     @IBAction func SignIn(_ sender: Any) {
-        
         
         UserDefaults.standard.set(self.account.text, forKey: "account")
         UserDefaults.standard.set(self.password.text, forKey: "password")
-
-
         guard self.account.text != "" && self.password.text != "" else {
             isEmpty(controller: self)
             return

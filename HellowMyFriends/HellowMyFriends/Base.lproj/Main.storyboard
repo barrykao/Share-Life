@@ -426,7 +426,7 @@
         <!--首頁-->
         <scene sceneID="iwI-lB-Qt8">
             <objects>
-                <viewController id="TWR-7l-DWm" sceneMemberID="viewController">
+                <viewController id="TWR-7l-DWm" customClass="HomePageViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9Td-Xp-kDz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -460,6 +460,9 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="首頁" image="003-house" id="veP-pt-h0g"/>
                     <navigationItem key="navigationItem" id="5Tf-Yw-Fbh"/>
+                    <connections>
+                        <outlet property="tableView" destination="qBA-DN-2aI" id="o61-J2-6ha"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ylp-xg-tCy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -560,7 +563,6 @@
                     <connections>
                         <outlet property="account" destination="t6g-cv-ejQ" id="Uic-yV-ccG"/>
                         <outlet property="password" destination="JhN-k7-3VS" id="pGz-Sc-GJz"/>
-                        <outlet property="photo" destination="IAz-oi-dBa" id="1Uf-uf-bFz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j1M-Gg-YF6" userLabel="First Responder" sceneMemberID="firstResponder"/>

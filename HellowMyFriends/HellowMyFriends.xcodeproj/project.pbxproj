@@ -66,6 +66,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C65EB18222B642B00093AAC6 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		C67AF9AD22ABAF7B001E51E4 /* memberCenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,12 +116,12 @@
 		C6F65685226F14EF00706BEA /* HellowMyFriends */ = {
 			isa = PBXGroup;
 			children = (
+				C65EB18222B642B00093AAC6 /* New Group */,
 				C6A897FA22AF896F008C7BF5 /* images */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
 				C6F65686226F14EF00706BEA /* AppDelegate.swift */,
 				C6F3F486227C557400D4F246 /* function.swift */,
 				C6F6568A226F14EF00706BEA /* Main.storyboard */,
-				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
 				C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
