@@ -10,6 +10,10 @@
 		83FC2770D848D8521FD1FC92 /* Pods_HellowMyFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5613D935B1DC19CA136EF5A3 /* Pods_HellowMyFriends.framework */; };
 		C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */; };
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
+		C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65EB18322B6458F0093AAC6 /* MessageViewController.swift */; };
+		C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */; };
+		C65EB18C22B652800093AAC6 /* MyMessage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18B22B652800093AAC6 /* MyMessage.storyboard */; };
+		C65EB18E22B652930093AAC6 /* MyMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65EB18D22B652930093AAC6 /* MyMessageViewController.swift */; };
 		C67AF9A822A8E733001E51E4 /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */; };
@@ -29,6 +33,10 @@
 		5613D935B1DC19CA136EF5A3 /* Pods_HellowMyFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HellowMyFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIgnInViewController.swift; sourceTree = "<group>"; };
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
+		C65EB18322B6458F0093AAC6 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
+		C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MemberCenter.storyboard; sourceTree = "<group>"; };
+		C65EB18B22B652800093AAC6 /* MyMessage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MyMessage.storyboard; sourceTree = "<group>"; };
+		C65EB18D22B652930093AAC6 /* MyMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessageViewController.swift; sourceTree = "<group>"; };
 		C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyDataViewController.swift; sourceTree = "<group>"; };
@@ -66,17 +74,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C65EB18222B642B00093AAC6 /* New Group */ = {
+		C65EB18222B642B00093AAC6 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
+				C65EB18322B6458F0093AAC6 /* MessageViewController.swift */,
 			);
-			path = "New Group";
+			path = HomePage;
+			sourceTree = "<group>";
+		};
+		C65EB18A22B6525D0093AAC6 /* MyMessage */ = {
+			isa = PBXGroup;
+			children = (
+				C65EB18B22B652800093AAC6 /* MyMessage.storyboard */,
+				C65EB18D22B652930093AAC6 /* MyMessageViewController.swift */,
+			);
+			path = MyMessage;
 			sourceTree = "<group>";
 		};
 		C67AF9AD22ABAF7B001E51E4 /* memberCenter */ = {
 			isa = PBXGroup;
 			children = (
+				C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */,
 				C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */,
 				C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */,
 				C67AF9A722A8E733001E51E4 /* AddNewAccountViewController.swift */,
@@ -116,8 +135,9 @@
 		C6F65685226F14EF00706BEA /* HellowMyFriends */ = {
 			isa = PBXGroup;
 			children = (
-				C65EB18222B642B00093AAC6 /* New Group */,
 				C6A897FA22AF896F008C7BF5 /* images */,
+				C65EB18222B642B00093AAC6 /* HomePage */,
+				C65EB18A22B6525D0093AAC6 /* MyMessage */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
 				C6F65686226F14EF00706BEA /* AppDelegate.swift */,
 				C6F3F486227C557400D4F246 /* function.swift */,
@@ -205,6 +225,8 @@
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
 				C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */,
+				C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */,
+				C65EB18C22B652800093AAC6 /* MyMessage.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,12 +291,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C67AF9A822A8E733001E51E4 /* AddNewAccountViewController.swift in Sources */,
+				C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */,
 				C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */,
 				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
 				C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */,
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
+				C65EB18E22B652930093AAC6 /* MyMessageViewController.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -22,12 +22,11 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     @IBOutlet weak var photo: UIImageView!
     
     var isNewPhoto : Bool = false
-    var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        databaseRef = Database.database().reference()
+        
         storageRef = Storage.storage().reference()
     }
     
