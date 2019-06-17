@@ -31,6 +31,16 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
             print("顯示圖片")
             self.photo.image = checkImage(fileName: fileName)
             
+            databaseRef = Database.database().reference()
+            let uid = Auth.auth().currentUser!.uid
+            databaseRef.child("UserAccount").child("\(uid)").child("photo").observe(.value) { (snapshot) in
+                if let name = snapshot.value as? String {
+                    DispatchQueue.main.async {
+                        self.photo.image = checkImage(fileName: name)
+                    }
+                }
+            }
+            
         }else{
             print("尚未登入")
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
@@ -40,10 +50,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         }
         
     }
-
-
     
-    var storageRef : StorageReference!
+    var databaseRef : DatabaseReference!
        
     override func viewDidLoad() {
         super.viewDidLoad()

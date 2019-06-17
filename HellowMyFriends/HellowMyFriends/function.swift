@@ -93,25 +93,28 @@ func checkFile (fileName : String) -> Bool {
     return exist
 }
 
-
-var storageRef : StorageReference!
-
 func checkImage(fileName: String) -> UIImage? {
     
     if checkFile(fileName: fileName) {
         return image(fileName: fileName)
     }
     
-    storageRef = Storage.storage().reference()
-    storageRef.child("UserPhoto").child(fileName).getData(maxSize: 15 * 1024 * 1024){ (data, error) in
-        if error != nil {
-            print(error!.localizedDescription)
-            return
+    if let dataDecoded = Data(base64Encoded: fileName, options: .ignoreUnknownCharacters) ,
+        let image = UIImage(data: dataDecoded){
+            return thumbmailImage(image: image)
         }
-        guard let imageData = UIImage(data: data!) else { return }
-        DispatchQueue.main.async {
-            return _ = thumbmailImage(image: imageData)
-        }
-    }
     return UIImage(named: "member.png")
 }
+
+
+//    storageRef = Storage.storage().reference()
+//    storageRef.child("UserPhoto").child(fileName).getData(maxSize: 15 * 1024 * 1024){ (data, error) in
+//        if error != nil {
+//            print(error!.localizedDescription)
+//            return
+//        }
+//        guard let imageData = UIImage(data: data!) else { return }
+//        DispatchQueue.main.async {
+//            return _ = thumbmailImage(image: imageData)
+//        }
+//    }

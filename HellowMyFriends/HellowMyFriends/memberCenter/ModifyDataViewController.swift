@@ -23,11 +23,13 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     
     var isNewPhoto : Bool = false
     var storageRef : StorageReference!
+    var databaseRef : DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         storageRef = Storage.storage().reference()
+        databaseRef = Database.database().reference()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,17 +42,36 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     
 
     @IBAction func saveData(_ sender: Any) {
-
+        
+        // convert the NSData to base64 encoding
+        
+        
+        
         let alert = UIAlertController(title: "編輯大頭貼", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
             if let image = self.photo.image, self.isNewPhoto {
-                
-                if let account = UserDefaults.standard.string(forKey: "account") {
-                    let fileName = "\(account).jpg"
-                    let fileURL = fileDocumentsPath(fileName: fileName)
-                    self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL)
+                let account = UserDefaults.standard.string(forKey: "account")
+                let password = UserDefaults.standard.string(forKey: "password")
+                if let imageData = image.jpegData(compressionQuality: 1){
+                    let imageSring = imageData.base64EncodedString(options: .lineLength64Characters)
+                   
+                    let uid = Auth.auth().currentUser!.uid
+                    let accoutdict = ["id" : account , "password" : password , "photo" : imageSring]
+                    self.databaseRef.child("UserAccount").child("\(uid)").setValue(accoutdict)
                 }
+                
+                
+                
+                
+                
+                
+//                if let account = UserDefaults.standard.string(forKey: "account") {
+//                    let fileName = "\(account).jpg"
+//                    let fileURL = fileDocumentsPath(fileName: fileName)
+//                    self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL)
+//                    print(self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL))
+//                }
                 self.delegate?.didFinishModifyImage(image: image)
                 self.dismiss(animated: true)
             }
