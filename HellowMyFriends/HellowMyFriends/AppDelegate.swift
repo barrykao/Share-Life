@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import IQKeyboardManagerSwift
 
 
 @UIApplicationMain
@@ -22,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = self.window?.rootViewController as! UITabBarController
         tabBarController.selectedIndex = 2
        
+        IQKeyboardManager.shared.enable = true
+
         print("home= \(NSHomeDirectory())")
         
         FirebaseApp.configure()

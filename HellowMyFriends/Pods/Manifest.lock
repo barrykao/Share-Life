@@ -69,18 +69,24 @@ PODS:
   - GoogleUtilities/UserDefaults (6.2.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.2)
+  - IQKeyboardManagerSwift (6.4.0)
   - leveldb-library (1.20)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - SDWebImage/Core (5.0.6)
+  - SDWebImage/MapKit (5.0.6):
+    - SDWebImage/Core
 
 DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
+  - IQKeyboardManagerSwift
+  - SDWebImage/MapKit
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -95,8 +101,10 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - GTMSessionFetcher
+    - IQKeyboardManagerSwift
     - leveldb-library
     - nanopb
+    - SDWebImage
 
 SPEC CHECKSUMS:
   Firebase: 5965bac23e7fcb5fa6d926ed429c9ecef8a2014e
@@ -110,9 +118,11 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 51d8d9ea48f0ca44484d29cfbdef976fbd4fc336
   GoogleUtilities: 996e0db07153674fd1b54b220fda3a3dc3547cba
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
+  IQKeyboardManagerSwift: ed9b04ee0e3067ffba543283462d619f944b05e5
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  SDWebImage: 920f1a2ff1ca8296ad34f6e0510a1ef1d70ac965
 
-PODFILE CHECKSUM: 70ec804b051754b013f61944f8b93ea00233bb00
+PODFILE CHECKSUM: bb3c3610e0fa0f12320e4a98ef1857b4c9fc058d
 
 COCOAPODS: 1.6.1

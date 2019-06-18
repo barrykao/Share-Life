@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import SDWebImage
 
 
 protocol ModifyDataViewControllerDelegate : class {
@@ -27,9 +28,11 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
+
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
+     
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,34 +54,39 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
             if let image = self.photo.image, self.isNewPhoto {
-                let account = UserDefaults.standard.string(forKey: "account")
-                let password = UserDefaults.standard.string(forKey: "password")
-                if let imageData = image.jpegData(compressionQuality: 1){
-                    let imageSring = imageData.base64EncodedString(options: .lineLength64Characters)
-                   
-                    let uid = Auth.auth().currentUser!.uid
-                    let accoutdict = ["id" : account , "password" : password , "photo" : imageSring]
-                    self.databaseRef.child("UserAccount").child("\(uid)").setValue(accoutdict)
+//                let account = UserDefaults.standard.string(forKey: "account")
+//                let password = UserDefaults.standard.string(forKey: "password")
+//                if let imageData = image.jpegData(compressionQuality: 1){
+//                    let imageSring = imageData.base64EncodedString(options: .lineLength64Characters)
+//
+//                    let uid = Auth.auth().currentUser!.uid
+//                    let accoutdict = ["id" : account , "password" : password , "photo" : imageSring]
+//                    self.databaseRef.child("UserAccount").child("\(uid)").setValue(accoutdict)
+                
+                if let account = UserDefaults.standard.string(forKey: "account") {
+                    let fileName = "\(account).jpg"
+                    let fileURL = fileDocumentsPath(fileName: fileName)
+                    self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL)
                 }
+
                 
                 
                 
                 
                 
                 
-//                if let account = UserDefaults.standard.string(forKey: "account") {
-//                    let fileName = "\(account).jpg"
-//                    let fileURL = fileDocumentsPath(fileName: fileName)
-//                    self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL)
-//                    print(self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL))
-//                }
+                
+                
                 self.delegate?.didFinishModifyImage(image: image)
                 self.dismiss(animated: true)
+
             }
         }
         alert.addAction(okAction)
+        self.dismiss(animated: true)
         self.present(alert, animated: true, completion: nil)
-    
+        
+
     }
     @IBAction func camera(_ sender: Any) {
         

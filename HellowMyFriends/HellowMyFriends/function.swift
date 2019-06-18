@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Firebase
 import FirebaseAuth
-import FirebaseStorage
+import SDWebImage
 
 
 func isEmpty(controller: UIViewController){
@@ -36,8 +36,8 @@ func thumbmailImage(image :UIImage) -> UIImage? {
     let ratio = max(width,height)
     let imageSize = CGSize(width:image.size.width*ratio,height: image.size.height*ratio)
     //在畫圖行前 切圓形
-    //        let circle = UIBezierPath(ovalIn: CGRect(x: 0,y: 0,width: thumbnailSize.width,height: thumbnailSize.height))
-    //        circle.addClip()
+            let circle = UIBezierPath(ovalIn: CGRect(x: 0,y: 0,width: thumbnailSize.width,height: thumbnailSize.height))
+            circle.addClip()
     image.draw(in:CGRect(x: -(imageSize.width-thumbnailSize.width)/2.0,y: -(imageSize.height-thumbnailSize.height)/2.0,width: imageSize.width,height: imageSize.height))
     //取得畫布上的圖
     let smallImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -92,7 +92,7 @@ func checkFile (fileName : String) -> Bool {
     let exist = FileManager.default.fileExists(atPath: filePath)
     return exist
 }
-
+/*
 func checkImage(fileName: String) -> UIImage? {
     
     if checkFile(fileName: fileName) {
@@ -105,16 +105,25 @@ func checkImage(fileName: String) -> UIImage? {
         }
     return UIImage(named: "member.png")
 }
+*/
+var storageRef : StorageReference!
 
 
-//    storageRef = Storage.storage().reference()
-//    storageRef.child("UserPhoto").child(fileName).getData(maxSize: 15 * 1024 * 1024){ (data, error) in
-//        if error != nil {
-//            print(error!.localizedDescription)
-//            return
-//        }
-//        guard let imageData = UIImage(data: data!) else { return }
-//        DispatchQueue.main.async {
-//            return _ = thumbmailImage(image: imageData)
-//        }
-//    }
+func checkImage(fileName: String) -> UIImage? {
+    
+    if checkFile(fileName: fileName) {
+        return image(fileName: fileName)
+    }
+    
+    storageRef = Storage.storage().reference()
+    storageRef.child("UserPhoto").child(fileName).downloadURL { (url, error) in
+        
+        guard let url = url else { return }
+        
+        
+        
+    }
+    return UIImage(named: "member.png")
+}
+
+

@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-
+import SDWebImage
 
 
 class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataViewControllerDelegate{
@@ -22,6 +22,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
 
     override func viewDidAppear(_ animated: Bool) {
         print("viewDidAppear")
+        
+      
         if Auth.auth().currentUser != nil {
             print(Auth.auth().currentUser!.uid)
             print("已登入")
@@ -29,8 +31,16 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
             self.password.text = UserDefaults.standard.string(forKey: "password")
             let fileName = "\(self.account.text!).jpg"
             print("顯示圖片")
+            
+            
+            let storageRef = Storage.storage().reference().child("UserPhoto").child(fileName)
+            storageRef.downloadURL { url, error in
+                guard let url = url else { return }
+                self.photo.sd_setImage(with: url, placeholderImage: UIImage(named: "member.png"), completed:nil)
+            }
             self.photo.image = checkImage(fileName: fileName)
             
+            /*
             databaseRef = Database.database().reference()
             let uid = Auth.auth().currentUser!.uid
             databaseRef.child("UserAccount").child("\(uid)").child("photo").observe(.value) { (snapshot) in
@@ -40,7 +50,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
                     }
                 }
             }
-            
+            */
         }else{
             print("尚未登入")
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
@@ -61,7 +71,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         self.account.isEnabled = false
         self.password.isEnabled = false
         
-
+        
     }
     
     
