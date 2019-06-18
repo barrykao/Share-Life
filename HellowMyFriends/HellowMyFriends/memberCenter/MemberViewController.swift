@@ -29,28 +29,33 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
             print("已登入")
             self.account.text = UserDefaults.standard.string(forKey: "account")
             self.password.text = UserDefaults.standard.string(forKey: "password")
-            let fileName = "\(self.account.text!).jpg"
+            
             print("顯示圖片")
-            
-            
-            let storageRef = Storage.storage().reference().child("UserPhoto").child(fileName)
-            storageRef.downloadURL { url, error in
-                guard let url = url else { return }
-                self.photo.sd_setImage(with: url, placeholderImage: UIImage(named: "member.png"), completed:nil)
-            }
-            self.photo.image = checkImage(fileName: fileName)
-            
-            /*
-            databaseRef = Database.database().reference()
-            let uid = Auth.auth().currentUser!.uid
-            databaseRef.child("UserAccount").child("\(uid)").child("photo").observe(.value) { (snapshot) in
-                if let name = snapshot.value as? String {
-                    DispatchQueue.main.async {
-                        self.photo.image = checkImage(fileName: name)
+            let fileName = "\(self.account.text!).jpg"
+            if checkFile(fileName: fileName){
+                self.photo.image = image(fileName: fileName)
+            }else{
+                let databaseRef = Database.database().reference()
+                databaseRef.child("UserAccount").child(uid).child("photo").observe(.value) { (snapshot) in
+                    if let urlString = snapshot.value as? String {
+                       if let url = URL(string: urlString) {
+                            let request = URLRequest(url: url)
+                            let session = URLSession.shared
+                            let task = session.dataTask(with: request) { (data, response, error) in
+                                if let e = error {
+                                    print("error \(e)")
+                                }
+                                if let imageData = data {
+                                    DispatchQueue.main.async {
+                                        self.photo.image = thumbmailImage(image: UIImage(data: imageData)!, fileName: fileName)
+                                    }
+                                }
+                            }
+                            task.resume()
+                        }
                     }
                 }
             }
-            */
         }else{
             print("尚未登入")
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
@@ -61,7 +66,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         
     }
     
-    var databaseRef : DatabaseReference!
+    var databaseRef : DatabaseReference?
        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +76,7 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         self.account.isEnabled = false
         self.password.isEnabled = false
         
+
         
     }
     

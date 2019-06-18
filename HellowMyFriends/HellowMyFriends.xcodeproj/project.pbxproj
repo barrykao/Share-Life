@@ -11,6 +11,13 @@
 		C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */; };
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
 		C657054A22B73A1800AF08A2 /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C657054922B73A1800AF08A2 /* AddNewAccountViewController.swift */; };
+		C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65A131822B88F36002C2881 /* HomePage.storyboard */; };
+		C65A131C22B89016002C2881 /* PostMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65A131B22B89016002C2881 /* PostMessageViewController.swift */; };
+		C65A131E22B8902A002C2881 /* PostMessage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65A131D22B8902A002C2881 /* PostMessage.storyboard */; };
+		C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */; };
+		C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C65A132122B8AB9D002C2881 /* background 2.jpg */; };
+		C65A132622B8BB63002C2881 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = C65A132522B8BB63002C2881 /* first.png */; };
+		C65A132822B8C2EC002C2881 /* reset.png in Resources */ = {isa = PBXBuildFile; fileRef = C65A132722B8C2EC002C2881 /* reset.png */; };
 		C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65EB18322B6458F0093AAC6 /* MessageViewController.swift */; };
 		C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */; };
 		C65EB18C22B652800093AAC6 /* MyMessage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18B22B652800093AAC6 /* MyMessage.storyboard */; };
@@ -34,6 +41,13 @@
 		C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIgnInViewController.swift; sourceTree = "<group>"; };
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		C657054922B73A1800AF08A2 /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
+		C65A131822B88F36002C2881 /* HomePage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HomePage.storyboard; sourceTree = "<group>"; };
+		C65A131B22B89016002C2881 /* PostMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMessageViewController.swift; sourceTree = "<group>"; };
+		C65A131D22B8902A002C2881 /* PostMessage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PostMessage.storyboard; sourceTree = "<group>"; };
+		C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
+		C65A132122B8AB9D002C2881 /* background 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background 2.jpg"; sourceTree = "<group>"; };
+		C65A132522B8BB63002C2881 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
+		C65A132722B8C2EC002C2881 /* reset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reset.png; sourceTree = "<group>"; };
 		C65EB18322B6458F0093AAC6 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MemberCenter.storyboard; sourceTree = "<group>"; };
 		C65EB18B22B652800093AAC6 /* MyMessage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MyMessage.storyboard; sourceTree = "<group>"; };
@@ -74,11 +88,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C65A131A22B88FEA002C2881 /* PostMassage */ = {
+			isa = PBXGroup;
+			children = (
+				C65A131D22B8902A002C2881 /* PostMessage.storyboard */,
+				C65A131B22B89016002C2881 /* PostMessageViewController.swift */,
+			);
+			path = PostMassage;
+			sourceTree = "<group>";
+		};
 		C65EB18222B642B00093AAC6 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
+				C65A131822B88F36002C2881 /* HomePage.storyboard */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
 				C65EB18322B6458F0093AAC6 /* MessageViewController.swift */,
+				C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -109,7 +134,10 @@
 			isa = PBXGroup;
 			children = (
 				C6A897FB22AF896F008C7BF5 /* member.png */,
+				C65A132722B8C2EC002C2881 /* reset.png */,
+				C65A132522B8BB63002C2881 /* first.png */,
 				C6A897FC22AF896F008C7BF5 /* background.jpg */,
+				C65A132122B8AB9D002C2881 /* background 2.jpg */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -135,17 +163,18 @@
 		C6F65685226F14EF00706BEA /* HellowMyFriends */ = {
 			isa = PBXGroup;
 			children = (
-				C6A897FA22AF896F008C7BF5 /* images */,
+				C6F65686226F14EF00706BEA /* AppDelegate.swift */,
+				C6F6568A226F14EF00706BEA /* Main.storyboard */,
+				C6F3F486227C557400D4F246 /* function.swift */,
 				C65EB18222B642B00093AAC6 /* HomePage */,
+				C65A131A22B88FEA002C2881 /* PostMassage */,
 				C65EB18A22B6525D0093AAC6 /* MyMessage */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
-				C6F65686226F14EF00706BEA /* AppDelegate.swift */,
-				C6F3F486227C557400D4F246 /* function.swift */,
-				C6F6568A226F14EF00706BEA /* Main.storyboard */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
 				C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
 				C6F65692226F14F000706BEA /* Info.plist */,
+				C6A897FA22AF896F008C7BF5 /* images */,
 			);
 			path = HellowMyFriends;
 			sourceTree = "<group>";
@@ -219,14 +248,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C65A132622B8BB63002C2881 /* first.png in Resources */,
+				C65A131E22B8902A002C2881 /* PostMessage.storyboard in Resources */,
+				C65A132822B8C2EC002C2881 /* reset.png in Resources */,
 				C6A897FD22AF8970008C7BF5 /* member.png in Resources */,
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
+				C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */,
 				C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
 				C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */,
 				C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */,
 				C65EB18C22B652800093AAC6 /* MyMessage.storyboard in Resources */,
+				C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,11 +330,13 @@
 			files = (
 				C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */,
 				C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */,
+				C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */,
 				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
 				C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */,
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
+				C65A131C22B89016002C2881 /* PostMessageViewController.swift in Sources */,
 				C657054A22B73A1800AF08A2 /* AddNewAccountViewController.swift in Sources */,
 				C65EB18E22B652930093AAC6 /* MyMessageViewController.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,

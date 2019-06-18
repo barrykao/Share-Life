@@ -18,6 +18,11 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     @IBOutlet weak var password: UITextField!
     
     
+    @IBOutlet weak var signInBtn: UIButton!
+    
+    @IBOutlet weak var registerBtn: UIButton!
+    
+    @IBOutlet weak var resetPwdBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +31,9 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         self.password.delegate = self
         self.account.text = UserDefaults.standard.string(forKey: "account")
         self.password.text = UserDefaults.standard.string(forKey: "password")
-        
+        buttonDesign(button: signInBtn)
+        buttonDesign(button: registerBtn)
+        buttonDesign(button: resetPwdBtn)
         // Do any additional setup after loading the view.
     }
     

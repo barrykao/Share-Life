@@ -19,7 +19,9 @@ protocol ModifyDataViewControllerDelegate : class {
 class ModifyDataViewController: UIViewController , UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
     
     weak var delegate : ModifyDataViewControllerDelegate?
-    
+    let uid = Auth.auth().currentUser!.uid
+    var account : String?
+
     @IBOutlet weak var photo: UIImageView!
     
     var isNewPhoto : Bool = false
@@ -28,11 +30,9 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-
+        account = UserDefaults.standard.string(forKey: "account")
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
-     
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,37 +46,48 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
 
     @IBAction func saveData(_ sender: Any) {
         
-        // convert the NSData to base64 encoding
-        
-        
-        
         let alert = UIAlertController(title: "編輯大頭貼", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
-            if let image = self.photo.image, self.isNewPhoto {
-//                let account = UserDefaults.standard.string(forKey: "account")
-//                let password = UserDefaults.standard.string(forKey: "password")
-//                if let imageData = image.jpegData(compressionQuality: 1){
-//                    let imageSring = imageData.base64EncodedString(options: .lineLength64Characters)
-//
-//                    let uid = Auth.auth().currentUser!.uid
-//                    let accoutdict = ["id" : account , "password" : password , "photo" : imageSring]
-//                    self.databaseRef.child("UserAccount").child("\(uid)").setValue(accoutdict)
-                
-                if let account = UserDefaults.standard.string(forKey: "account") {
-                    let fileName = "\(account).jpg"
-                    let fileURL = fileDocumentsPath(fileName: fileName)
-                    self.storageRef.child("UserPhoto").child(fileName).putFile(from: fileURL)
-                }
-
-                
-                
-                
-                
-                
-                
-                
-                
+            if let image = self.photo.image, self.isNewPhoto{
+                let fileName = "\(self.account!).jpg"
+                    let filePath = fileDocumentsPath(fileName: fileName)
+                    //write file
+                    if let imageData = image.jpegData(compressionQuality: 1) {//compressionQuality:0~1之間
+                        do{
+                            try imageData.write(to: filePath, options: [.atomicWrite])
+                            // Save to storage
+                            self.storageRef = Storage.storage().reference().child("UserPhoto").child(fileName)
+                            let metadata = StorageMetadata()
+                            self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                                if error != nil {
+                                    print("Error: \(error!.localizedDescription)")
+                                    return
+                                }
+                                self.storageRef.downloadURL(completion: { (url, error) in
+                                    if error != nil {
+                                        print("Error: \(error!.localizedDescription)")
+                                        return
+                                    }
+                                    if let uploadImageUrl = url?.absoluteString{
+                                        print("Photo Url: \(uploadImageUrl)")
+                                        // Save to Database
+                                        let userAccount = ["id" : self.account! , "photo" : uploadImageUrl ]
+                                        self.databaseRef.child("UserAccount").child(self.uid).setValue(userAccount, withCompletionBlock: { (error, dataRef) in
+                                            
+                                            if error != nil{
+                                                print("Database Error: \(error!.localizedDescription)")
+                                            }else{
+                                                print("圖片已儲存")
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }catch {
+                            print("uer photo file save is eror : \(error)")
+                        }
+                    }
                 self.delegate?.didFinishModifyImage(image: image)
                 self.dismiss(animated: true)
 
@@ -115,8 +126,9 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as! UIImage
+        let fileName = "\(self.account!).jpg"
         DispatchQueue.main.async {
-            self.photo.image = thumbmailImage(image: image)
+            self.photo.image = thumbmailImage(image: image, fileName: fileName)
         }
         self.isNewPhoto = true
         self.dismiss(animated: true, completion: nil)

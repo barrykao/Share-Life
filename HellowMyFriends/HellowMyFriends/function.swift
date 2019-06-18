@@ -12,6 +12,8 @@ import Firebase
 import FirebaseAuth
 import SDWebImage
 
+var databaseRef : DatabaseReference!
+let uid = Auth.auth().currentUser!.uid
 
 func isEmpty(controller: UIViewController){
     let alert = UIAlertController(title: "警告", message: "請輸入E-mail及密碼!", preferredStyle: .alert)
@@ -21,8 +23,25 @@ func isEmpty(controller: UIViewController){
     
 }
 
+func buttonDesign (button: UIButton) {
+    button.layer.cornerRadius = 20.0
+    //button.layer.masksToBounds = true
+    button.layer.shadowColor = UIColor.black.cgColor
+    button.layer.shadowRadius = 2
+    button.layer.shadowOffset = CGSize(width: 2, height: 2)
+    button.layer.shadowOpacity = 0.3
+    
+}
+
+//MARK: func - check file exist
+func checkFile (fileName : String) -> Bool {
+    let filePath = NSHomeDirectory()+"/Documents/"+fileName
+    let exist = FileManager.default.fileExists(atPath: filePath)
+    return exist
+}
+
 //MARK: func - save thumbmailImage
-func thumbmailImage(image :UIImage) -> UIImage? {
+func thumbmailImage(image :UIImage , fileName : String) -> UIImage? {
     
     //設定縮圖大小
     let thumbnailSize = CGSize(width: 450 ,height: 450)
@@ -43,12 +62,6 @@ func thumbmailImage(image :UIImage) -> UIImage? {
     let smallImage = UIGraphicsGetImageFromCurrentImageContext()
     //關掉畫布
     UIGraphicsEndImageContext()
-    
-    let userEmail = UserDefaults.standard
-    //read userdefault is login or registered?
-    let emailHead = userEmail.string(forKey: "account")
-    let fileName = "\(emailHead!).jpg"
-    
     let filePath = fileDocumentsPath(fileName: fileName)
     
     //write file
@@ -59,7 +72,6 @@ func thumbmailImage(image :UIImage) -> UIImage? {
                 print("uer photo fiel save is eror : \(error)")
             }
         }
-    
     return smallImage
 }
 //MARK: func - fileURL
@@ -78,50 +90,16 @@ func image(fileName:String?) -> UIImage? {
         let fileURL = fileDocumentsPath(fileName: fileName)
         //如果取得到指定位置的Data，才產生UIImage物件
         if let imageData = try? Data(contentsOf: fileURL){
-            if let image = UIImage(data: imageData){
-                return thumbmailImage(image: image)
-            }
+            return UIImage(data: imageData)
         }
     }
     return UIImage(named: "member.png")
 }
 
-
-func checkFile (fileName : String) -> Bool {
-    let filePath = NSHomeDirectory()+"/Documents/"+fileName
-    let exist = FileManager.default.fileExists(atPath: filePath)
-    return exist
-}
-/*
 func checkImage(fileName: String) -> UIImage? {
     
     if checkFile(fileName: fileName) {
         return image(fileName: fileName)
-    }
-    
-    if let dataDecoded = Data(base64Encoded: fileName, options: .ignoreUnknownCharacters) ,
-        let image = UIImage(data: dataDecoded){
-            return thumbmailImage(image: image)
-        }
-    return UIImage(named: "member.png")
-}
-*/
-var storageRef : StorageReference!
-
-
-func checkImage(fileName: String) -> UIImage? {
-    
-    if checkFile(fileName: fileName) {
-        return image(fileName: fileName)
-    }
-    
-    storageRef = Storage.storage().reference()
-    storageRef.child("UserPhoto").child(fileName).downloadURL { (url, error) in
-        
-        guard let url = url else { return }
-        
-        
-        
     }
     return UIImage(named: "member.png")
 }

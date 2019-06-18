@@ -1,15 +1,13 @@
 //
 //  AppDelegate.swift
-//  HellowMyFriends
+//  FirebaseLogin
 //
-//  Created by 高琨淯 on 2019/4/23.
-//  Copyright © 2019 Appcoda. All rights reserved.
+//  Created by Michael on 2019/6/18.
+//  Copyright © 2019 Zencher. All rights reserved.
 //
 
 import UIKit
 import Firebase
-import IQKeyboardManagerSwift
-
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,16 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        
-        let tabBarController = self.window?.rootViewController as! UITabBarController
-        tabBarController.selectedIndex = 3
-       
-        IQKeyboardManager.shared.enable = true
-
-        print("home= \(NSHomeDirectory())")
         
         FirebaseApp.configure()
+
         return true
     }
 

@@ -14,9 +14,17 @@ class ResetPasswordViewController: UIViewController ,UITextFieldDelegate {
 
     @IBOutlet weak var emailText: UITextField!
 
+    
+    @IBOutlet weak var sendBtn: UIButton!
+    
+    
+    @IBOutlet weak var backBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.emailText.delegate = self
+        buttonDesign(button: sendBtn)
+        buttonDesign(button: backBtn)
         // Do any additional setup after loading the view.
     }
     
