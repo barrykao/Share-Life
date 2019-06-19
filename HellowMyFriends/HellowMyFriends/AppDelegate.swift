@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         let tabBarController = self.window?.rootViewController as! UITabBarController
-        tabBarController.selectedIndex = 3
+        tabBarController.selectedIndex = 0
        
         IQKeyboardManager.shared.enable = true
 

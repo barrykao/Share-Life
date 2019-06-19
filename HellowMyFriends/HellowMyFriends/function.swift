@@ -23,8 +23,9 @@ func isEmpty(controller: UIViewController){
     
 }
 
-func buttonDesign (button: UIButton) {
-    button.layer.cornerRadius = 20.0
+func buttonDesign (button: AnyObject) {
+    
+    button.layer.cornerRadius = 25.0
     //button.layer.masksToBounds = true
     button.layer.shadowColor = UIColor.black.cgColor
     button.layer.shadowRadius = 2
@@ -32,6 +33,7 @@ func buttonDesign (button: UIButton) {
     button.layer.shadowOpacity = 0.3
     
 }
+
 
 //MARK: func - check file exist
 func checkFile (fileName : String) -> Bool {
@@ -55,8 +57,8 @@ func thumbmailImage(image :UIImage , fileName : String) -> UIImage? {
     let ratio = max(width,height)
     let imageSize = CGSize(width:image.size.width*ratio,height: image.size.height*ratio)
     //在畫圖行前 切圓形
-            let circle = UIBezierPath(ovalIn: CGRect(x: 0,y: 0,width: thumbnailSize.width,height: thumbnailSize.height))
-            circle.addClip()
+//            let circle = UIBezierPath(ovalIn: CGRect(x: 0,y: 0,width: thumbnailSize.width,height: thumbnailSize.height))
+//            circle.addClip()
     image.draw(in:CGRect(x: -(imageSize.width-thumbnailSize.width)/2.0,y: -(imageSize.height-thumbnailSize.height)/2.0,width: imageSize.width,height: imageSize.height))
     //取得畫布上的圖
     let smallImage = UIGraphicsGetImageFromCurrentImageContext()

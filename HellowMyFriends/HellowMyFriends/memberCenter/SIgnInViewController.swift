@@ -34,6 +34,10 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
         buttonDesign(button: signInBtn)
         buttonDesign(button: registerBtn)
         buttonDesign(button: resetPwdBtn)
+        buttonDesign(button: self.account)
+        buttonDesign(button: self.password)
+
+        
         // Do any additional setup after loading the view.
     }
     

@@ -24,6 +24,13 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
 
     @IBOutlet weak var photo: UIImageView!
     
+    @IBOutlet weak var saveBtn: UIButton!
+    
+    @IBOutlet weak var cameraBtn: UIButton!
+    
+    @IBOutlet weak var backBtn: UIButton!
+    
+    
     var isNewPhoto : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
@@ -33,6 +40,15 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         account = UserDefaults.standard.string(forKey: "account")
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
+        buttonDesign(button: saveBtn)
+        buttonDesign(button: cameraBtn)
+        buttonDesign(button: backBtn)
+        saveBtn.isEnabled = false
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        saveBtn.isEnabled = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,16 +62,12 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
 
     @IBAction func saveData(_ sender: Any) {
         
-        let alert = UIAlertController(title: "編輯大頭貼", message: "儲存成功", preferredStyle: .alert)
+        let alert = UIAlertController(title: "編輯相片", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
-            if let image = self.photo.image, self.isNewPhoto{
+            if let image = self.photo.image{
                 let fileName = "\(self.account!).jpg"
-                    let filePath = fileDocumentsPath(fileName: fileName)
-                    //write file
                     if let imageData = image.jpegData(compressionQuality: 1) {//compressionQuality:0~1之間
-                        do{
-                            try imageData.write(to: filePath, options: [.atomicWrite])
                             // Save to storage
                             self.storageRef = Storage.storage().reference().child("UserPhoto").child(fileName)
                             let metadata = StorageMetadata()
@@ -84,21 +96,22 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
                                     }
                                 })
                             }
-                        }catch {
-                            print("uer photo file save is eror : \(error)")
-                        }
                     }
                 self.delegate?.didFinishModifyImage(image: image)
                 self.dismiss(animated: true)
-
             }
         }
         alert.addAction(okAction)
-        self.dismiss(animated: true)
         self.present(alert, animated: true, completion: nil)
         
 
     }
+    
+    
+    
+    
+    
+    
     @IBAction func camera(_ sender: Any) {
         
         let imagePicker = UIImagePickerController()
@@ -131,6 +144,7 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
             self.photo.image = thumbmailImage(image: image, fileName: fileName)
         }
         self.isNewPhoto = true
+        saveBtn.isEnabled = true
         self.dismiss(animated: true, completion: nil)
     }
     

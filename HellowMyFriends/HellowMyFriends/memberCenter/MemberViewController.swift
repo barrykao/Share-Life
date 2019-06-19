@@ -16,10 +16,14 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
     
     @IBOutlet weak var account: UITextField!
     
-    @IBOutlet weak var password: UITextField!
-    
     @IBOutlet weak var photo: UIImageView!
 
+    
+    @IBOutlet weak var signOutBtn: UIButton!
+    
+    
+    @IBOutlet weak var cameraBtn: UIButton!
+    
     override func viewDidAppear(_ animated: Bool) {
         print("viewDidAppear")
         
@@ -28,34 +32,10 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
             print(Auth.auth().currentUser!.uid)
             print("已登入")
             self.account.text = UserDefaults.standard.string(forKey: "account")
-            self.password.text = UserDefaults.standard.string(forKey: "password")
             
             print("顯示圖片")
-            let fileName = "\(self.account.text!).jpg"
-            if checkFile(fileName: fileName){
-                self.photo.image = image(fileName: fileName)
-            }else{
-                let databaseRef = Database.database().reference()
-                databaseRef.child("UserAccount").child(uid).child("photo").observe(.value) { (snapshot) in
-                    if let urlString = snapshot.value as? String {
-                       if let url = URL(string: urlString) {
-                            let request = URLRequest(url: url)
-                            let session = URLSession.shared
-                            let task = session.dataTask(with: request) { (data, response, error) in
-                                if let e = error {
-                                    print("error \(e)")
-                                }
-                                if let imageData = data {
-                                    DispatchQueue.main.async {
-                                        self.photo.image = thumbmailImage(image: UIImage(data: imageData)!, fileName: fileName)
-                                    }
-                                }
-                            }
-                            task.resume()
-                        }
-                    }
-                }
-            }
+            self.loadImage()
+            
         }else{
             print("尚未登入")
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
@@ -66,17 +46,16 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         
     }
     
-    var databaseRef : DatabaseReference?
+    var databaseRef : DatabaseReference!
        
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.account.delegate = self
-        self.password.delegate = self
         self.account.isEnabled = false
-        self.password.isEnabled = false
-        
-
+        buttonDesign(button: signOutBtn)
+        buttonDesign(button: cameraBtn)
+        buttonDesign(button: self.account)
         
     }
     
@@ -105,7 +84,6 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
             let modifyVC = segue.destination as! ModifyDataViewController
-//            modifyVC.photo.image = self.photo.image
             modifyVC.delegate = self
     }
 
@@ -113,6 +91,38 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
     func didFinishModifyImage(image: UIImage?) {
         self.photo.image = image
     }
+    
+    func loadImage() {
+        
+        let fileName = "\(self.account.text!).jpg"
+        if checkFile(fileName: fileName){
+            self.photo.image = image(fileName: fileName)
+        }else{
+            let databaseRef = Database.database().reference()
+            databaseRef.child("UserAccount").child(uid).child("photo").observe(.value) { (snapshot) in
+                if let urlString = snapshot.value as? String {
+                    if let url = URL(string: urlString) {
+                        let request = URLRequest(url: url)
+                        let session = URLSession.shared
+                        let task = session.dataTask(with: request) { (data, response, error) in
+                            if let e = error {
+                                print("error \(e)")
+                            }
+                            if let imageData = data {
+                                DispatchQueue.main.async {
+                                    self.photo.image = thumbmailImage(image: UIImage(data: imageData)!, fileName: fileName)
+                                }
+                            }
+                        }
+                        task.resume()
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
     
     /*
     // MARK: - Navigation
