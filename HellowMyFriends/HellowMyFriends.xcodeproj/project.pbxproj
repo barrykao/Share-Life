@@ -12,7 +12,6 @@
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
 		C657054A22B73A1800AF08A2 /* AddNewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C657054922B73A1800AF08A2 /* AddNewAccountViewController.swift */; };
 		C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65A131822B88F36002C2881 /* HomePage.storyboard */; };
-		C65A131C22B89016002C2881 /* PostMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65A131B22B89016002C2881 /* PostMessageViewController.swift */; };
 		C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */; };
 		C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C65A132122B8AB9D002C2881 /* background 2.jpg */; };
 		C65A132622B8BB63002C2881 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = C65A132522B8BB63002C2881 /* first.png */; };
@@ -28,6 +27,7 @@
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */; };
+		C6DECCB022BAA91500A50F84 /* PostMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DECCAF22BAA91500A50F84 /* PostMessageViewController.swift */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
 		C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F65686226F14EF00706BEA /* AppDelegate.swift */; };
@@ -43,7 +43,6 @@
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		C657054922B73A1800AF08A2 /* AddNewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewAccountViewController.swift; sourceTree = "<group>"; };
 		C65A131822B88F36002C2881 /* HomePage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HomePage.storyboard; sourceTree = "<group>"; };
-		C65A131B22B89016002C2881 /* PostMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PostMessageViewController.swift; path = ../PostMassage/PostMessageViewController.swift; sourceTree = "<group>"; };
 		C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
 		C65A132122B8AB9D002C2881 /* background 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background 2.jpg"; sourceTree = "<group>"; };
 		C65A132522B8BB63002C2881 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
@@ -59,6 +58,7 @@
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C6DECCAF22BAA91500A50F84 /* PostMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostMessageViewController.swift; path = ../../../../../.Trash/PostMassage/PostMessageViewController.swift; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6F3F486227C557400D4F246 /* function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = function.swift; sourceTree = "<group>"; };
 		C6F65683226F14EF00706BEA /* HellowMyFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellowMyFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,8 +94,8 @@
 			isa = PBXGroup;
 			children = (
 				C65A131822B88F36002C2881 /* HomePage.storyboard */,
+				C6DECCAF22BAA91500A50F84 /* PostMessageViewController.swift */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
-				C65A131B22B89016002C2881 /* PostMessageViewController.swift */,
 				C65EB18322B6458F0093AAC6 /* MessageViewController.swift */,
 				C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */,
 			);
@@ -328,11 +328,11 @@
 				C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */,
 				C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */,
 				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
+				C6DECCB022BAA91500A50F84 /* PostMessageViewController.swift in Sources */,
 				C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */,
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
-				C65A131C22B89016002C2881 /* PostMessageViewController.swift in Sources */,
 				C657054A22B73A1800AF08A2 /* AddNewAccountViewController.swift in Sources */,
 				C65EB18E22B652930093AAC6 /* MyMessageViewController.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,
