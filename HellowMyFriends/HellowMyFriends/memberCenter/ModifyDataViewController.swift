@@ -69,7 +69,7 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
                 let fileName = "\(self.account!).jpg"
                     if let imageData = image.jpegData(compressionQuality: 1) {//compressionQuality:0~1之間
                             // Save to storage
-                            self.storageRef = Storage.storage().reference().child("UserPhoto").child(fileName)
+                            self.storageRef = Storage.storage().reference().child(self.account!).child(fileName)
                             let metadata = StorageMetadata()
                             self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
                                 if error != nil {

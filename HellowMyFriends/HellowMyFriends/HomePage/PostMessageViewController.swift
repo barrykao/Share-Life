@@ -9,10 +9,15 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import CoreData
+
+//protocol PostMessageViewControllerDelegate : class {
+//    func didPostMessage(data: DatabaseData)
+//}
 
 class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-
-
+    
+    
     
     @IBOutlet weak var account: UILabel!
     
@@ -24,6 +29,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     
     
     
+    //    var delegate : PostMessageViewControllerDelegate?
     
     var imageName : String = UUID().uuidString
     
@@ -32,11 +38,9 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
     var uid : String?
-  
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         
         storageRef = Storage.storage().reference()
@@ -56,7 +60,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
         textView.becomeFirstResponder()
         textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
         // Do any additional setup after loading the view.
-       
+        
     }
     
     
@@ -108,73 +112,77 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
             self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
-   
     
     func textViewDidEndEditing(_ textView: UITextView) {
         isEditing()
-
+        
     }
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
         isEditing()
-
+        
     }
     
     @IBAction func postToServer(_ sender: Any) {
         
         print(imageName)
+        
         let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-        
-            if let image = self.imageView.image {
+            
+            if let image = self.imageView.image{
                 let fileName = "\(self.imageName).jpg"
                 //write file
-                if let imageData = image.jpegData(compressionQuality: 1) {//compressionQuality:0~1之間
-                        // Save to storage
-                        let now:Date = Date()
-                        // 建立時間格式
-                        let dateFormat:DateFormatter = DateFormatter()
-                        dateFormat.dateFormat = "yyyy-MM-dd"
-                    
-                        // 將當下時間轉換成設定的時間格式
-                        let dateString:String = dateFormat.string(from: now)
-                        print(dateString)
+                if let imageData = image.jpegData(compressionQuality: 1) {
+                    // Save to storage
+                    let now:Date = Date()
+                    // 建立時間格式
+                    let dateFormat:DateFormatter = DateFormatter()
+                    dateFormat.dateFormat = "yyyy-MM-dd"
+                    // 將當下時間轉換成設定的時間格式
+                    let dateString:String = dateFormat.string(from: now)
+                    print(dateString)
                     self.storageRef = Storage.storage().reference().child(self.account.text!).child(fileName)
-                        let metadata = StorageMetadata()
-                        self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                    let metadata = StorageMetadata()
+                    self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                        if error != nil {
+                            print("Error: \(error!.localizedDescription)")
+                            return
+                        }
+                        self.storageRef.downloadURL(completion: { (url, error) in
                             if error != nil {
                                 print("Error: \(error!.localizedDescription)")
                                 return
                             }
-                            self.storageRef.downloadURL(completion: { (url, error) in
-                                if error != nil {
-                                    print("Error: \(error!.localizedDescription)")
-                                    return
+                            if let uploadImageUrl = url?.absoluteString {
+                                print("Photo Url: \(uploadImageUrl)")
+                                // Save to Database
+                                if self.textView.text == "在想些什麼?"{
+                                    self.textView.text = ""
                                 }
-                                if let uploadImageUrl = url?.absoluteString{
-                                    print("Photo Url: \(uploadImageUrl)")
-                                    // Save to Database
-                                    let userAccount = ["message" :self.textView.text ?? "" ,self.imageName : uploadImageUrl ] as [String:Any]
-                                    self.databaseRef.child("Paper").child(dateString).child(self.uid!).child(self.imageName).setValue(userAccount, withCompletionBlock: { (error, dataRef) in
-                                        
-                                        if error != nil{
-                                            print("Database Error: \(error!.localizedDescription)")
-                                        }else{
-                                            print("圖片已儲存")
-                                        }
-                                    })
-                                }
-                            })
-                        }
+                                let postMessage : [String : Any] = ["uid" : self.uid!,
+                                                                    "date" : dateString,
+                                                                    "message" : self.textView.text!,
+                                                                    "photo" : uploadImageUrl ]
+                                self.saveToFile()
+                                self.databaseRef.child("Paper").child(self.imageName).setValue(postMessage, withCompletionBlock: { (error, dataRef) in
+                                    
+                                    if error != nil{
+                                        print("Database Error: \(error!.localizedDescription)")
+                                    }else{
+                                        print("圖片已儲存")
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
                 self.dismiss(animated: true)
             }
-        
         }
         alert.addAction(okAction)
-
+        
         self.present(alert, animated: true, completion: nil)
         
         
@@ -211,6 +219,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
         
         let image = info[.originalImage] as! UIImage
         let fileName = "\(imageName).jpg"
+        
         DispatchQueue.main.async {
             self.imageView.image = thumbmailImage(image: image, fileName: fileName)
         }
@@ -234,14 +243,20 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
         }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func saveToFile() {
+        
+        let homeURL = URL(fileURLWithPath: NSHomeDirectory())
+        let documents = homeURL.appendingPathComponent("Documents")
+        let fileURL = documents.appendingPathComponent("notes.archive")
+        do{
+            //把[Note]轉成Data型式
+            let data = try NSKeyedArchiver.archivedData(withRootObject: self.imageName, requiringSecureCoding: false)
+            //寫到檔案
+            try data.write(to: fileURL, options: [.atomicWrite])
+            
+        }catch{
+            print("error \(error)")
+        }
+        
     }
-    */
-
 }

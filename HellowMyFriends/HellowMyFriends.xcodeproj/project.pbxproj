@@ -26,6 +26,7 @@
 		C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */; };
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
+		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
 		C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */; };
 		C6DECCB022BAA91500A50F84 /* PostMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DECCAF22BAA91500A50F84 /* PostMessageViewController.swift */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
@@ -57,6 +58,7 @@
 		C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyDataViewController.swift; sourceTree = "<group>"; };
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
+		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
 		C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C6DECCAF22BAA91500A50F84 /* PostMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostMessageViewController.swift; path = ../../../../../.Trash/PostMassage/PostMessageViewController.swift; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				C6F65686226F14EF00706BEA /* AppDelegate.swift */,
 				C6F6568A226F14EF00706BEA /* Main.storyboard */,
 				C6F3F486227C557400D4F246 /* function.swift */,
+				C6B0574B22BB5AA600D00761 /* Database.swift */,
 				C65EB18222B642B00093AAC6 /* HomePage */,
 				C65EB18A22B6525D0093AAC6 /* MyMessage */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
@@ -335,6 +338,7 @@
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
 				C657054A22B73A1800AF08A2 /* AddNewAccountViewController.swift in Sources */,
 				C65EB18E22B652930093AAC6 /* MyMessageViewController.swift in Sources */,
+				C6B0574C22BB5AA600D00761 /* Database.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

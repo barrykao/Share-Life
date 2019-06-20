@@ -15,6 +15,9 @@ import SDWebImage
 var databaseRef : DatabaseReference!
 let uid = Auth.auth().currentUser!.uid
 
+
+
+
 func isEmpty(controller: UIViewController){
     let alert = UIAlertController(title: "警告", message: "請輸入E-mail及密碼!", preferredStyle: .alert)
     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)

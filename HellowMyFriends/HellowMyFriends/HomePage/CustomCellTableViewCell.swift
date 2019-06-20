@@ -11,6 +11,17 @@ import UIKit
 class CustomCellTableViewCell: UITableViewCell {
     
     
+    
+    @IBOutlet weak var photo: UIImageView!
+    
+    @IBOutlet weak var account: UILabel!
+    
+    @IBOutlet weak var date: UILabel!
+    
+    @IBOutlet weak var textView: UITextView!
+    
+    @IBOutlet var photoview: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -21,6 +32,7 @@ class CustomCellTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
     
     
     
