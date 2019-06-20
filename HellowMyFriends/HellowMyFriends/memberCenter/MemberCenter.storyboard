@@ -374,10 +374,10 @@
             </objects>
             <point key="canvasLocation" x="1886.9565217391305" y="244.56521739130437"/>
         </scene>
-        <!--Add New Account View Controller-->
+        <!--Register View Controller-->
         <scene sceneID="xM0-pF-JZT">
             <objects>
-                <viewController id="OwN-zK-bzK" customClass="AddNewAccountViewController" customModule="HellowMyFriends" sceneMemberID="viewController">
+                <viewController id="OwN-zK-bzK" customClass="RegisterViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VbF-4A-qhn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -417,7 +417,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="SignUp:" destination="OwN-zK-bzK" eventType="touchUpInside" id="Wxk-Bo-3xt"/>
+                                            <action selector="SignUp:" destination="OwN-zK-bzK" eventType="touchUpInside" id="PjL-hk-C8l"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ze-Yi-cnX">
@@ -431,7 +431,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="back:" destination="OwN-zK-bzK" eventType="touchUpInside" id="ku1-qd-JqC"/>
+                                            <action selector="back:" destination="OwN-zK-bzK" eventType="touchUpInside" id="eFR-CY-pWv"/>
                                         </connections>
                                     </button>
                                 </subviews>

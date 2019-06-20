@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccountViewControllerDelegate {
+class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewControllerDelegate {
     
 
     @IBOutlet weak var account: UITextField!
@@ -84,8 +84,8 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,AddNewAccount
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let addVC = segue.destination as? AddNewAccountViewController
-        addVC?.delegate = self
+        let registerVC = segue.destination as? RegisterViewController
+        registerVC?.delegate = self
         
     }
     
