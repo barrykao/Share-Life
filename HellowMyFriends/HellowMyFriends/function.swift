@@ -13,8 +13,7 @@ import FirebaseAuth
 import SDWebImage
 
 var databaseRef : DatabaseReference!
-let uid = Auth.auth().currentUser!.uid
-
+var storageRef : StorageReference!
 
 
 
@@ -49,7 +48,7 @@ func checkFile (fileName : String) -> Bool {
 func thumbmailImage(image :UIImage , fileName : String) -> UIImage? {
     
     //設定縮圖大小
-    let thumbnailSize = CGSize(width: 450 ,height: 450)
+    let thumbnailSize = CGSize(width: 900 ,height: 900)
     //找出目前螢幕的scale
     let scale = UIScreen.main.scale
     //產生畫布
@@ -109,4 +108,50 @@ func checkImage(fileName: String) -> UIImage? {
     return UIImage(named: "member.png")
 }
 
+var urlString : String = ""
 
+func saveToFirebase (controller: UIViewController ,image: UIImage? ,imageName: String ,name: String ,database: DatabaseReference){
+    
+    let now:Date = Date()
+    let dateFormat:DateFormatter = DateFormatter()
+    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let dateString:String = dateFormat.string(from: now)
+    
+    if let image = image ,
+        let imageData = image.jpegData(compressionQuality: 1) ,
+         let account = UserDefaults.standard.string(forKey: "account") {
+            storageRef = Storage.storage().reference().child(account).child("\(imageName).jpg")
+            let metadata = StorageMetadata()
+            storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                if error != nil {
+                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
+                storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print("Error: \(error!.localizedDescription)")
+                        return
+                    }
+                    guard let uploadImageUrl = url?.absoluteString else {
+//                        print("Photo Url: \(uploadImageUrl)")
+                        // Save to Database
+                        return
+                    }
+                    guard let uid = Auth.auth().currentUser?.uid else {return}
+                    let postMessage = ["account" : account,
+                                       "date" : dateString,
+                                       "message" : name,
+                                       "uid" : uid,
+                                       "photo" : uploadImageUrl]
+                    database.setValue(postMessage, withCompletionBlock: { (error, dataRef) in
+                        if error != nil{
+                            print("Database Error: \(error!.localizedDescription)")
+                        }else{
+                            print("圖片已儲存")
+                        }
+                    })
+                })
+            }
+        controller.dismiss(animated: true)
+    }
+}

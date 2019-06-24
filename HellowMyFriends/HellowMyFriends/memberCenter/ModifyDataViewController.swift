@@ -12,15 +12,14 @@ import FirebaseAuth
 import SDWebImage
 
 
-protocol ModifyDataViewControllerDelegate : class {
-    func didFinishModifyImage(image:UIImage?)
-}
+//protocol ModifyDataViewControllerDelegate : class {
+//    func didFinishModifyImage(image:UIImage?)
+//}
 
 class ModifyDataViewController: UIViewController , UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
     
-    weak var delegate : ModifyDataViewControllerDelegate?
+//    weak var delegate : ModifyDataViewControllerDelegate?
     let uid = Auth.auth().currentUser!.uid
-    var account : String?
 
     @IBOutlet weak var photo: UIImageView!
     
@@ -34,10 +33,10 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     var isNewPhoto : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
+    var account : String = UserDefaults.standard.string(forKey: "account")!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        account = UserDefaults.standard.string(forKey: "account")
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
         buttonDesign(button: saveBtn)
@@ -64,7 +63,7 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         
         let alert = UIAlertController(title: "編輯相片", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-            
+            /*
             if let image = self.photo.image{
                 let fileName = "\(self.account!).jpg"
                     if let imageData = image.jpegData(compressionQuality: 1) {//compressionQuality:0~1之間
@@ -100,11 +99,19 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
                 self.delegate?.didFinishModifyImage(image: image)
                 self.dismiss(animated: true)
             }
+            */
+            
+            
+            self.databaseRef = self.databaseRef.child("User").child(self.uid)
+            saveToFirebase(controller: self, image: self.photo.image, imageName: self.account, name: self.account, database: self.databaseRef)
+            
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
+ 
         
-
+        
+      
     }
     
     
@@ -139,7 +146,7 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as! UIImage
-        let fileName = "\(self.account!).jpg"
+        let fileName = "\(account).jpg"
         DispatchQueue.main.async {
             self.photo.image = thumbmailImage(image: image, fileName: fileName)
         }

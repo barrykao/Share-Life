@@ -70,7 +70,7 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
                     
                     let uid = Auth.auth().currentUser!.uid
                     let accoutdict = ["id":self.newAccount.text!]
-                    self.ref.child("UserAccount").child("\(uid)").setValue(accoutdict)
+                    self.ref.child("User").child("\(uid)").setValue(accoutdict)
                     
                     self.dismiss(animated: true, completion: nil)
                 })

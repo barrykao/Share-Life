@@ -12,13 +12,13 @@
 		4C76394022B8B613004FDB6C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C76393E22B8B613004FDB6C /* Main.storyboard */; };
 		4C76394222B8B614004FDB6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C76394122B8B614004FDB6C /* Assets.xcassets */; };
 		4C76394522B8B614004FDB6C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C76394322B8B614004FDB6C /* LaunchScreen.storyboard */; };
-		4C76394D22B8B78C004FDB6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C76394C22B8B78C004FDB6C /* GoogleService-Info.plist */; };
 		4C76394F22B8BE74004FDB6C /* YoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C76394E22B8BE74004FDB6C /* YoViewController.swift */; };
 		4C76395122B8C37E004FDB6C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C76395022B8C37E004FDB6C /* LoginViewController.swift */; };
 		4C76395322B8CC5E004FDB6C /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C76395222B8CC5E004FDB6C /* UploadViewController.swift */; };
 		4C76395522B8CCDE004FDB6C /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C76395422B8CCDE004FDB6C /* ListViewController.swift */; };
 		4C76395722B8D4E9004FDB6C /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76395622B8D4E9004FDB6C /* loading.png */; };
 		C05359516AAA4B54FA208CFB /* Pods_FirebaseLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C92ECB05DFF9CB57B5CC72 /* Pods_FirebaseLogin.framework */; };
+		C64D914422BE01E1002A7F2F /* GoogleService-Info (3).plist in Resources */ = {isa = PBXBuildFile; fileRef = C64D914322BE01E1002A7F2F /* GoogleService-Info (3).plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,7 +30,6 @@
 		4C76394122B8B614004FDB6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C76394422B8B614004FDB6C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C76394622B8B614004FDB6C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C76394C22B8B78C004FDB6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4C76394E22B8BE74004FDB6C /* YoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoViewController.swift; sourceTree = "<group>"; };
 		4C76395022B8C37E004FDB6C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4C76395222B8CC5E004FDB6C /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +37,7 @@
 		4C76395622B8D4E9004FDB6C /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		63C92ECB05DFF9CB57B5CC72 /* Pods_FirebaseLogin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FirebaseLogin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		97299DFF0FF18F06EE6C0EB9 /* Pods-FirebaseLogin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FirebaseLogin.release.xcconfig"; path = "Pods/Target Support Files/Pods-FirebaseLogin/Pods-FirebaseLogin.release.xcconfig"; sourceTree = "<group>"; };
+		C64D914322BE01E1002A7F2F /* GoogleService-Info (3).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (3).plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +74,8 @@
 			isa = PBXGroup;
 			children = (
 				4C76395622B8D4E9004FDB6C /* loading.png */,
-				4C76394C22B8B78C004FDB6C /* GoogleService-Info.plist */,
 				4C76393A22B8B613004FDB6C /* AppDelegate.swift */,
+				C64D914322BE01E1002A7F2F /* GoogleService-Info (3).plist */,
 				4C76393C22B8B613004FDB6C /* ViewController.swift */,
 				4C76393E22B8B613004FDB6C /* Main.storyboard */,
 				4C76394122B8B614004FDB6C /* Assets.xcassets */,
@@ -168,9 +168,9 @@
 			files = (
 				4C76395722B8D4E9004FDB6C /* loading.png in Resources */,
 				4C76394522B8B614004FDB6C /* LaunchScreen.storyboard in Resources */,
-				4C76394D22B8B78C004FDB6C /* GoogleService-Info.plist in Resources */,
 				4C76394222B8B614004FDB6C /* Assets.xcassets in Resources */,
 				4C76394022B8B613004FDB6C /* Main.storyboard in Resources */,
+				C64D914422BE01E1002A7F2F /* GoogleService-Info (3).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

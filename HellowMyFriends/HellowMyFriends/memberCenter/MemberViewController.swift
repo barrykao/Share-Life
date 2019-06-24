@@ -12,8 +12,9 @@ import FirebaseAuth
 import SDWebImage
 
 
-class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataViewControllerDelegate{
-    
+//class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataViewControllerDelegate{
+class MemberViewController: UIViewController ,UITextFieldDelegate {
+
     @IBOutlet weak var account: UITextField!
     
     @IBOutlet weak var photo: UIImageView!
@@ -24,15 +25,29 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
     
     @IBOutlet weak var cameraBtn: UIButton!
     
+   
+    
+    var databaseRef : DatabaseReference!
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.account.delegate = self
+        self.account.isEnabled = false
+        buttonDesign(button: signOutBtn)
+        buttonDesign(button: cameraBtn)
+        buttonDesign(button: self.account)
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         print("viewDidAppear")
         
-      
         if Auth.auth().currentUser != nil {
-            print(Auth.auth().currentUser!.uid)
+            
             print("已登入")
             self.account.text = UserDefaults.standard.string(forKey: "account")
-            
             print("顯示圖片")
             self.loadImage()
             
@@ -46,20 +61,6 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
         
     }
     
-    var databaseRef : DatabaseReference!
-       
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.account.delegate = self
-        self.account.isEnabled = false
-        buttonDesign(button: signOutBtn)
-        buttonDesign(button: cameraBtn)
-        buttonDesign(button: self.account)
-        
-    }
-    
-    
     @IBAction func signOut(_ sender: Any) {
         
             let alert = UIAlertController(title: "登出成功", message: "謝謝", preferredStyle: .alert)
@@ -69,6 +70,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
                 {
                     self.present(signVC, animated: true, completion: nil)
                 }
+                self.photo.image = UIImage(named: "member.png")
+
             }
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: {
@@ -81,16 +84,16 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
             })
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-            let modifyVC = segue.destination as! ModifyDataViewController
-            modifyVC.delegate = self
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//
+//            let modifyVC = segue.destination as! ModifyDataViewController
+//            modifyVC.delegate = self
+//    }
 
     
-    func didFinishModifyImage(image: UIImage?) {
-        self.photo.image = image
-    }
+//    func didFinishModifyImage(image: UIImage?) {
+//        self.photo.image = image
+//    }
     
     func loadImage() {
         
@@ -99,7 +102,8 @@ class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataVie
             self.photo.image = image(fileName: fileName)
         }else{
             let databaseRef = Database.database().reference()
-            databaseRef.child("UserAccount").child(uid).child("photo").observe(.value) { (snapshot) in
+            let uid = Auth.auth().currentUser!.uid
+            databaseRef.child("User").child(uid).child("photo").observe(.value) { (snapshot) in
                 if let urlString = snapshot.value as? String {
                     if let url = URL(string: urlString) {
                         let request = URLRequest(url: url)

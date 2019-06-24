@@ -11,9 +11,10 @@ import Firebase
 import FirebaseAuth
 import CoreData
 
-//protocol PostMessageViewControllerDelegate : class {
-//    func didPostMessage(data: DatabaseData)
-//}
+
+protocol PostMessageViewControllerDelegate : class {
+    func didPostMessage(data: DatabaseData)
+}
 
 class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
@@ -27,33 +28,37 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     
     @IBOutlet weak var imageView: UIImageView!
     
+    var currentName : DatabaseData!
     
     
-    //    var delegate : PostMessageViewControllerDelegate?
     
-    var imageName : String = UUID().uuidString
+    weak var delegate : PostMessageViewControllerDelegate?
+    
+//    var imageName : String = UUID().uuidString
     
     var isEdit : Bool = false
-    
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
     var uid : String?
+
+//    var delegate : PostMessageViewControllerDelegate?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        currentName = DatabaseData()
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
         let uid = Auth.auth().currentUser!.uid
         self.uid = uid
-        let account = UserDefaults.standard.string(forKey: "account")
-        let imageName = "\(account!).jpg"
-        photo.image = image(fileName: imageName)
         
-        self.account.text = account
+        if let account = UserDefaults.standard.string(forKey: "account") {
+            let photoName = "\(account).jpg"
+            photo.image = image(fileName: photoName)
+            self.account.text = account
+        }
+        
         buttonDesign(button: textView)
-        
         textView.delegate = self
         textView.text = "在想些什麼?"
         textView.textColor = UIColor.lightGray
@@ -126,66 +131,22 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     
     @IBAction func postToServer(_ sender: Any) {
         
-        print(imageName)
-        
         let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-            
-            if let image = self.imageView.image{
-                let fileName = "\(self.imageName).jpg"
-                //write file
-                if let imageData = image.jpegData(compressionQuality: 1) {
-                    // Save to storage
-                    let now:Date = Date()
-                    // 建立時間格式
-                    let dateFormat:DateFormatter = DateFormatter()
-                    dateFormat.dateFormat = "yyyy-MM-dd"
-                    // 將當下時間轉換成設定的時間格式
-                    let dateString:String = dateFormat.string(from: now)
-                    print(dateString)
-                    self.storageRef = Storage.storage().reference().child(self.account.text!).child(fileName)
-                    let metadata = StorageMetadata()
-                    self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
-                        if error != nil {
-                            print("Error: \(error!.localizedDescription)")
-                            return
-                        }
-                        self.storageRef.downloadURL(completion: { (url, error) in
-                            if error != nil {
-                                print("Error: \(error!.localizedDescription)")
-                                return
-                            }
-                            if let uploadImageUrl = url?.absoluteString {
-                                print("Photo Url: \(uploadImageUrl)")
-                                // Save to Database
-                                if self.textView.text == "在想些什麼?"{
-                                    self.textView.text = ""
-                                }
-                                let postMessage : [String : Any] = ["uid" : self.uid!,
-                                                                    "date" : dateString,
-                                                                    "message" : self.textView.text!,
-                                                                    "photo" : uploadImageUrl ]
-                                self.saveToFile()
-                                self.databaseRef.child("Paper").child(self.imageName).setValue(postMessage, withCompletionBlock: { (error, dataRef) in
-                                    
-                                    if error != nil{
-                                        print("Database Error: \(error!.localizedDescription)")
-                                    }else{
-                                        print("圖片已儲存")
-                                    }
-                                })
-                            }
-                        })
-                    }
-                }
-                self.dismiss(animated: true)
+        
+            if self.textView.text == "在想些什麼?"{
+                self.textView.text = ""
             }
+            self.currentName.message = self.textView.text
+        
+            self.databaseRef = self.databaseRef.child("Paper").child(self.currentName.paperName)
+            saveToFirebase(controller: self, image: self.imageView.image, imageName: self.currentName.paperName, name: self.textView.text, database: self.databaseRef)
+             self.delegate?.didPostMessage(data: self.currentName)
         }
         alert.addAction(okAction)
         
         self.present(alert, animated: true, completion: nil)
-        
-        
+
     }
     
     
@@ -218,7 +179,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         let image = info[.originalImage] as! UIImage
-        let fileName = "\(imageName).jpg"
+        let fileName = "\(currentName.paperName).jpg"
         
         DispatchQueue.main.async {
             self.imageView.image = thumbmailImage(image: image, fileName: fileName)
@@ -227,8 +188,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
         self.dismiss(animated: true, completion: nil)
         self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
-    
-    
     
     @IBAction func back(_ sender: Any) {
         
@@ -242,21 +201,5 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
             self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
-    
-    func saveToFile() {
-        
-        let homeURL = URL(fileURLWithPath: NSHomeDirectory())
-        let documents = homeURL.appendingPathComponent("Documents")
-        let fileURL = documents.appendingPathComponent("notes.archive")
-        do{
-            //把[Note]轉成Data型式
-            let data = try NSKeyedArchiver.archivedData(withRootObject: self.imageName, requiringSecureCoding: false)
-            //寫到檔案
-            try data.write(to: fileURL, options: [.atomicWrite])
-            
-        }catch{
-            print("error \(error)")
-        }
-        
-    }
+   
 }
