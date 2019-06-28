@@ -16,18 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        FirebaseApp.configure()
+
         let tabBarController = self.window?.rootViewController as! UITabBarController
-        tabBarController.selectedIndex = 2
+        tabBarController.selectedIndex = 1
        
         IQKeyboardManager.shared.enable = true
-
         print("home= \(NSHomeDirectory())")
-        
-        FirebaseApp.configure()
+
         return true
     }
 

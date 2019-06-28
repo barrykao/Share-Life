@@ -17,20 +17,21 @@
 		C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65A131822B88F36002C2881 /* HomePage.storyboard */; };
 		C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */; };
 		C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C65A132122B8AB9D002C2881 /* background 2.jpg */; };
-		C65A132622B8BB63002C2881 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = C65A132522B8BB63002C2881 /* first.png */; };
-		C65A132822B8C2EC002C2881 /* reset.png in Resources */ = {isa = PBXBuildFile; fileRef = C65A132722B8C2EC002C2881 /* reset.png */; };
-		C65A132E22B9D812002C2881 /* register.png in Resources */ = {isa = PBXBuildFile; fileRef = C65A132D22B9D812002C2881 /* register.png */; };
 		C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65EB18322B6458F0093AAC6 /* MessageViewController.swift */; };
 		C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */; };
 		C65EB18C22B652800093AAC6 /* MyMessage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18B22B652800093AAC6 /* MyMessage.storyboard */; };
 		C65EB18E22B652930093AAC6 /* MyMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65EB18D22B652930093AAC6 /* MyMessageViewController.swift */; };
-		C66FDDAA22BA92150066ECC6 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = C66FDDA922BA92140066ECC6 /* blank.png */; };
+		C65F50BF22C1E71F00CAB067 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */; };
+		C65F50C522C22B5200CAB067 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C65F50C422C22B5200CAB067 /* GoogleService-Info.plist */; };
+		C65F50C722C22DEE00CAB067 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50C622C22DEE00CAB067 /* first.png */; };
+		C65F50C922C22E2D00CAB067 /* register.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50C822C22E2D00CAB067 /* register.png */; };
+		C65F50CD22C22E8400CAB067 /* reset.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50CC22C22E8300CAB067 /* reset.png */; };
+		C65F510B22C5D26C00CAB067 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */; };
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
-		C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
@@ -52,20 +53,21 @@
 		C65A131822B88F36002C2881 /* HomePage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HomePage.storyboard; sourceTree = "<group>"; };
 		C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
 		C65A132122B8AB9D002C2881 /* background 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background 2.jpg"; sourceTree = "<group>"; };
-		C65A132522B8BB63002C2881 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
-		C65A132722B8C2EC002C2881 /* reset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reset.png; sourceTree = "<group>"; };
-		C65A132D22B9D812002C2881 /* register.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register.png; sourceTree = "<group>"; };
 		C65EB18322B6458F0093AAC6 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MemberCenter.storyboard; sourceTree = "<group>"; };
 		C65EB18B22B652800093AAC6 /* MyMessage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MyMessage.storyboard; sourceTree = "<group>"; };
 		C65EB18D22B652930093AAC6 /* MyMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessageViewController.swift; sourceTree = "<group>"; };
-		C66FDDA922BA92140066ECC6 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
+		C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		C65F50C422C22B5200CAB067 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C65F50C622C22DEE00CAB067 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
+		C65F50C822C22E2D00CAB067 /* register.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register.png; sourceTree = "<group>"; };
+		C65F50CC22C22E8300CAB067 /* reset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reset.png; sourceTree = "<group>"; };
+		C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyDataViewController.swift; sourceTree = "<group>"; };
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
-		C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6EE2DFD22BF929700844D38 /* DataModel2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel2.0.xcdatamodel; sourceTree = "<group>"; };
 		C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
@@ -104,10 +106,10 @@
 			children = (
 				C65A131822B88F36002C2881 /* HomePage.storyboard */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
+				C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */,
 				C64882BA22BBE4C900D0CB9E /* PostMessageViewController.swift */,
 				C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */,
 				C65EB18322B6458F0093AAC6 /* MessageViewController.swift */,
-				C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -125,9 +127,11 @@
 			isa = PBXGroup;
 			children = (
 				C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */,
+				C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */,
 				C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */,
 				C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */,
 				C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */,
+				C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */,
 				C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */,
 				C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */,
 			);
@@ -138,10 +142,9 @@
 			isa = PBXGroup;
 			children = (
 				C6A897FB22AF896F008C7BF5 /* member.png */,
-				C66FDDA922BA92140066ECC6 /* blank.png */,
-				C65A132722B8C2EC002C2881 /* reset.png */,
-				C65A132522B8BB63002C2881 /* first.png */,
-				C65A132D22B9D812002C2881 /* register.png */,
+				C65F50C822C22E2D00CAB067 /* register.png */,
+				C65F50C622C22DEE00CAB067 /* first.png */,
+				C65F50CC22C22E8300CAB067 /* reset.png */,
 				C6A897FC22AF896F008C7BF5 /* background.jpg */,
 				C65A132122B8AB9D002C2881 /* background 2.jpg */,
 			);
@@ -176,11 +179,11 @@
 				C64D914522BF9152002A7F2F /* CoreDataHelper.swift */,
 				C64D914722BF918E002A7F2F /* DataModel.xcdatamodeld */,
 				C65EB18222B642B00093AAC6 /* HomePage */,
-				C65EB18A22B6525D0093AAC6 /* MyMessage */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
+				C65EB18A22B6525D0093AAC6 /* MyMessage */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
-				C6CA0AE722B22E75007702AE /* GoogleService-Info.plist */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
+				C65F50C422C22B5200CAB067 /* GoogleService-Info.plist */,
 				C6F65692226F14F000706BEA /* Info.plist */,
 				C6A897FA22AF896F008C7BF5 /* images */,
 			);
@@ -256,19 +259,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C65A132E22B9D812002C2881 /* register.png in Resources */,
-				C65A132622B8BB63002C2881 /* first.png in Resources */,
-				C65A132822B8C2EC002C2881 /* reset.png in Resources */,
+				C65F50C522C22B5200CAB067 /* GoogleService-Info.plist in Resources */,
 				C6A897FD22AF8970008C7BF5 /* member.png in Resources */,
+				C65F50CD22C22E8400CAB067 /* reset.png in Resources */,
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
 				C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */,
 				C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */,
+				C65F50C922C22E2D00CAB067 /* register.png in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
-				C6CA0AE822B22E75007702AE /* GoogleService-Info.plist in Resources */,
 				C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */,
+				C65F50C722C22DEE00CAB067 /* first.png in Resources */,
 				C65EB18C22B652800093AAC6 /* MyMessage.storyboard in Resources */,
-				C66FDDAA22BA92150066ECC6 /* blank.png in Resources */,
 				C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +343,7 @@
 				C64882BF22BBE6A500D0CB9E /* ReisterViewController.swift in Sources */,
 				C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */,
 				C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */,
+				C65F50BF22C1E71F00CAB067 /* PhotoCollectionViewCell.swift in Sources */,
 				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
 				C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */,
 				C64D914922BF918E002A7F2F /* DataModel.xcdatamodeld in Sources */,
@@ -352,6 +355,7 @@
 				C64D914622BF9152002A7F2F /* CoreDataHelper.swift in Sources */,
 				C65EB18E22B652930093AAC6 /* MyMessageViewController.swift in Sources */,
 				C6B0574C22BB5AA600D00761 /* Database.swift in Sources */,
+				C65F510B22C5D26C00CAB067 /* EditPostViewController.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

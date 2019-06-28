@@ -31,7 +31,6 @@
                     </tabBar>
                     <connections>
                         <segue destination="dXP-Vt-Rsj" kind="relationship" relationship="viewControllers" id="o9T-Nt-0k8"/>
-                        <segue destination="udc-tI-aVd" kind="relationship" relationship="viewControllers" id="lgj-AP-zPf"/>
                         <segue destination="7Mq-Ia-Hc1" kind="relationship" relationship="viewControllers" id="Dad-ac-hqh"/>
                     </connections>
                 </tabBarController>
@@ -48,16 +47,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kG2-Lv-ANT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1780" y="-1524"/>
-        </scene>
-        <!--myMessageVC-->
-        <scene sceneID="Byy-Ol-KUf">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="myMessageVC" storyboardName="MyMessage" referencedIdentifier="myMessageVC" id="udc-tI-aVd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="我的貼文" image="speech-bubble" id="kWg-IY-PRb"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nOG-fU-kVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1728" y="-1288"/>
         </scene>
     </scenes>
     <resources>

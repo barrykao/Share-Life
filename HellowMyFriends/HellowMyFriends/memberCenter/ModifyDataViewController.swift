@@ -9,26 +9,14 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-import SDWebImage
-
-
-//protocol ModifyDataViewControllerDelegate : class {
-//    func didFinishModifyImage(image:UIImage?)
-//}
 
 class ModifyDataViewController: UIViewController , UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
     
-//    weak var delegate : ModifyDataViewControllerDelegate?
     let uid = Auth.auth().currentUser!.uid
 
     @IBOutlet weak var photo: UIImageView!
     
-    @IBOutlet weak var saveBtn: UIButton!
-    
-    @IBOutlet weak var cameraBtn: UIButton!
-    
-    @IBOutlet weak var backBtn: UIButton!
-    
+    var photoImageView : UIImage?
     
     var isNewPhoto : Bool = false
     var storageRef : StorageReference!
@@ -39,86 +27,27 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         super.viewDidLoad()
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
-        buttonDesign(button: saveBtn)
-        buttonDesign(button: cameraBtn)
-        buttonDesign(button: backBtn)
-        saveBtn.isEnabled = false
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        saveBtn.isEnabled = false
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if let photoName = UserDefaults.standard.string(forKey: "account"){
-            let fileName = "\(photoName).jpg"
-            self.photo.image = checkImage(fileName: fileName)
-        }
-    }
-    
+        self.photo.image = self.photoImageView
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
 
+    
+    }
+    
     @IBAction func saveData(_ sender: Any) {
         
         let alert = UIAlertController(title: "編輯相片", message: "儲存成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-            /*
-            if let image = self.photo.image{
-                let fileName = "\(self.account!).jpg"
-                    if let imageData = image.jpegData(compressionQuality: 1) {//compressionQuality:0~1之間
-                            // Save to storage
-                            self.storageRef = Storage.storage().reference().child(self.account!).child(fileName)
-                            let metadata = StorageMetadata()
-                            self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
-                                if error != nil {
-                                    print("Error: \(error!.localizedDescription)")
-                                    return
-                                }
-                                self.storageRef.downloadURL(completion: { (url, error) in
-                                    if error != nil {
-                                        print("Error: \(error!.localizedDescription)")
-                                        return
-                                    }
-                                    if let uploadImageUrl = url?.absoluteString{
-                                        print("Photo Url: \(uploadImageUrl)")
-                                        // Save to Database
-                                        let userAccount = ["id" : self.account! , "photo" : uploadImageUrl ]
-                                        self.databaseRef.child("UserAccount").child(self.uid).setValue(userAccount, withCompletionBlock: { (error, dataRef) in
-                                            
-                                            if error != nil{
-                                                print("Database Error: \(error!.localizedDescription)")
-                                            }else{
-                                                print("圖片已儲存")
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                    }
-                self.delegate?.didFinishModifyImage(image: image)
-                self.dismiss(animated: true)
-            }
-            */
             
-            
+            let fileName = "\(self.account).jpg"
+            self.photo.image = thumbmailImage(image: self.photo.image! , fileName: fileName)
             self.databaseRef = self.databaseRef.child("User").child(self.uid)
-            saveToFirebase(controller: self, image: self.photo.image, imageName: self.account, name: self.account, database: self.databaseRef)
+            saveToFirebase(controller: self, image: self.photo.image, imageName: self.account, message: self.account, database: self.databaseRef)
             
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
- 
-        
-        
-      
     }
-    
-    
-    
-    
-    
-    
+
     @IBAction func camera(_ sender: Any) {
         
         let imagePicker = UIImagePickerController()
@@ -145,19 +74,19 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let image = info[.originalImage] as! UIImage
-        let fileName = "\(account).jpg"
+        guard let image = info[.originalImage] as? UIImage else {return}
         DispatchQueue.main.async {
-            self.photo.image = thumbmailImage(image: image, fileName: fileName)
+            self.photo.image = image
         }
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         self.isNewPhoto = true
-        saveBtn.isEnabled = true
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
         self.dismiss(animated: true, completion: nil)
     }
     
     
     @IBAction func back(_ sender: Any) {
-        
+
         self.dismiss(animated: true)
     }
     

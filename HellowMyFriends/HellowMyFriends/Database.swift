@@ -57,21 +57,20 @@ class DatabaseData : Equatable {
         return lhs === rhs
     }
     
-    var paperName : String
+    var paperName : String?
     
     var account : String?
     var date : String?
     var message : String?
     var url : String?
     var uid : String?
-    
-    
+    var imageName : String?
+    var postTime : Double?
     
     init() {
-        self.paperName = UUID().uuidString
+
     }
-    
-    
+ 
 }
  
 /*
