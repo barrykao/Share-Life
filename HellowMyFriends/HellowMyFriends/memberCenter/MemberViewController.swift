@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-import SDWebImage
 
 
 //class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataViewControllerDelegate{
@@ -25,6 +24,8 @@ class MemberViewController: UIViewController {
     var databaseRef : DatabaseReference!
     var storageRef: StorageReference!
     var currentData: [DatabaseData] = []
+    var refreshControl:UIRefreshControl!
+    var expanded : Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,16 +33,22 @@ class MemberViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         
+        photo.isUserInteractionEnabled = true
 
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
         let flow = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        flow.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        flow.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 10)
         
         buttonDesign(button: self.account)
-        
+        refreshControl = UIRefreshControl()
+
         // collectionView
         collectionViewReloadData()
+
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(gestureRecognizer:)))
+//        tapGestureRecognizer.numberOfTapsRequired = 1
+//        photo.addGestureRecognizer(tapGestureRecognizer)
 
     }
     
@@ -79,6 +86,22 @@ class MemberViewController: UIViewController {
         }
         
     }
+    /*
+    @objc func tap(gestureRecognizer: UITapGestureRecognizer) {
+        var frame = photo.frame
+        if (!expanded) {
+            frame.size.height = frame.size.height * 2
+            frame.size.width = frame.size.width * 2
+            expanded = true
+        } else {
+            frame.size.height = frame.size.height / 2
+            frame.size.width = frame.size.width / 2
+            expanded = false
+        }
+        
+        photo.frame = frame
+    }
+    */
     
     @IBAction func signOut(_ sender: Any) {
         
@@ -128,7 +151,7 @@ class MemberViewController: UIViewController {
                             self.currentData.append(note)
                             // sort Post
                             self.currentData.sort(by: { (post1, post2) -> Bool in
-                                post1.postTime! < post2.postTime!
+                                post1.postTime! > post2.postTime!
                             })
                             // PhotoView
                             guard let fileName = note.imageName else {return}
@@ -148,8 +171,6 @@ class MemberViewController: UIViewController {
         })
     }
 
-    
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "modifySegue" {
@@ -166,9 +187,6 @@ class MemberViewController: UIViewController {
         
     }
 }
-
-
-
 
 extension MemberViewController : UICollectionViewDataSource {
 
@@ -252,4 +270,5 @@ extension MemberViewController : UICollectionViewDelegate {
         self.present(controller, animated: true, completion: nil)
         
     }
+    
 }

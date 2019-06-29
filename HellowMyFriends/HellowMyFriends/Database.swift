@@ -52,10 +52,7 @@ class DatabaseData : NSObject,NSCoding {
 
 
 
-class DatabaseData : Equatable {
-    static func == (lhs: DatabaseData, rhs: DatabaseData) -> Bool {
-        return lhs === rhs
-    }
+class DatabaseData {
     
     var paperName : String?
     

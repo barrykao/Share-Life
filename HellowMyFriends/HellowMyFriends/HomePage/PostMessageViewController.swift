@@ -9,7 +9,12 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-import CoreData
+
+protocol PostMessageViewControllerDelegate {
+    func didPostMessage()
+}
+
+
 
 class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
@@ -25,7 +30,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     var currentName : DatabaseData!
     
     var image1 : UIImage?
-    
+    var delegate: PostMessageViewControllerDelegate?
     var isEdit : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
@@ -34,6 +39,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
         super.viewDidLoad()
         currentName = DatabaseData()
         self.imageView.image = image1
+        self.textView.text = currentName.message
         
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
@@ -73,15 +79,15 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
             // save To file
             guard let image1 = thumbmail(image: self.imageView.image!) else {return}
             self.imageView.image = thumbmailImage(image: image1, fileName: "\(fileName).jpg")
-            
-            
+  
             // save To Server
             self.databaseRef = self.databaseRef.child("Paper").child(fileName)
             saveToFirebase(controller: self, image: self.imageView.image, imageName: fileName, message: self.textView.text, database: self.databaseRef)
         }
         alert.addAction(okAction)
+        
         self.present(alert, animated: true, completion: nil)
-
+        
     }
    
     func textViewDidBeginEditing(_ textView: UITextView) {
