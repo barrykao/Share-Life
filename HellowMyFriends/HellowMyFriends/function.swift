@@ -48,7 +48,7 @@ func checkFile (fileName : String) -> Bool {
 func thumbmailImage(image :UIImage , fileName : String) -> UIImage? {
     
     //設定縮圖大小
-    let thumbnailSize = CGSize(width: 100 ,height: 100)
+    let thumbnailSize = CGSize(width: 150 ,height: 150)
     //找出目前螢幕的scale
     let scale = UIScreen.main.scale
     //產生畫布
@@ -83,7 +83,7 @@ func thumbmailImage(image :UIImage , fileName : String) -> UIImage? {
 func thumbmail (image: UIImage) -> UIImage? {
     
     //設定縮圖大小
-    let thumbnailSize = CGSize(width: 200 ,height: 200)
+    let thumbnailSize = CGSize(width: 400 ,height: 400)
     //找出目前螢幕的scale
     let scale = UIScreen.main.scale
     //產生畫布
@@ -156,11 +156,14 @@ func saveToFirebase (controller: UIViewController ,image: UIImage? ,imageName: S
                     }
                     guard let uid = Auth.auth().currentUser?.uid else {return}
                     let postMessage: [String : Any] = ["account" : account,
-                                       "date" : dateString,
-                                       "message" : message,
-                                       "uid" : uid,
-                                       "photo" : uploadImageUrl,
-                                       "postTime": [".sv":"timestamp"]]
+                                                       "date" : dateString,
+                                                       "message" : message,
+                                                       "uid" : uid,
+                                                       "photo" : uploadImageUrl,
+                                                       "postTime": [".sv":"timestamp"],
+                                                       "comment" : ["fakeData" : ["postTime" : "123"]
+                                                                   ]
+                                                      ]
                     database.setValue(postMessage, withCompletionBlock: { (error, dataRef) in
                         if error != nil{
                             print("Database Error: \(error!.localizedDescription)")
@@ -200,3 +203,9 @@ func loadImageToFile(fileName: String , database : DatabaseReference){
 }
 
 
+func textFieldClearMode (textField: UITextField) {
+//    textField.clearButtonMode = .whileEditing //編輯時出現清除按鈕
+//    textField.clearButtonMode = .unlessEditing //編輯時不出現,編輯後才出現清除按鈕
+    textField.clearButtonMode = .always //一直顯示清除按鈕
+
+}

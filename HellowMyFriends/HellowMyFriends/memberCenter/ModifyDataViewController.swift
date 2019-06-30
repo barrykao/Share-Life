@@ -9,9 +9,11 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import ImagePicker
 
-class ModifyDataViewController: UIViewController , UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
-    
+
+class ModifyDataViewController: UIViewController { //, UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
+
     let uid = Auth.auth().currentUser!.uid
 
     @IBOutlet weak var photo: UIImageView!
@@ -30,7 +32,6 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         self.photo.image = self.photoImageView
         self.navigationItem.rightBarButtonItem?.isEnabled = false
 
-    
     }
     
     @IBAction func saveData(_ sender: Any) {
@@ -49,9 +50,8 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     }
 
     @IBAction func camera(_ sender: Any) {
-        
+        /*
         let imagePicker = UIImagePickerController()
-//        imagePicker.allowsEditing = true
         imagePicker.delegate = self
         
         let controller = UIAlertController(title: "變更圖片", message: "請選擇要上傳的照片或啟用相機", preferredStyle: .actionSheet)
@@ -71,8 +71,14 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         controller.addAction(cancelAction)
         self.present(controller, animated: true, completion: nil)
+        */
+
+        let imagePicker = ImagePickerController()
+        imagePicker.delegate = self
+        self.present(imagePicker, animated: true, completion: nil)
+        
     }
-    
+    /*
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[.originalImage] as? UIImage else {return}
         DispatchQueue.main.async {
@@ -83,14 +89,14 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
         self.navigationItem.rightBarButtonItem?.isEnabled = true
         self.dismiss(animated: true, completion: nil)
     }
-    
+    */
     
     @IBAction func back(_ sender: Any) {
 
         self.dismiss(animated: true)
     }
     
-    
+   
     
     /*
     // MARK: - Navigation
@@ -102,4 +108,28 @@ class ModifyDataViewController: UIViewController , UIImagePickerControllerDelega
     }
     */
 
+}
+extension ModifyDataViewController : ImagePickerDelegate {
+    
+    
+    func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        print("wrapperDidPress")
+    }
+    
+    func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        print("doneButtonDidPress")
+        guard let image = images.first else {return}
+        self.photo.image = image
+        self.isNewPhoto = true
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
+        self.dismiss(animated: true)
+
+    }
+    
+    func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
+        print("cancelButtonDidPress")
+        self.dismiss(animated: true)
+    }
+    
+    
 }

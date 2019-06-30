@@ -268,6 +268,10 @@ extension MemberViewController : UICollectionViewDelegate {
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         controller.addAction(cancelAction)
         self.present(controller, animated: true, completion: nil)
+       
+        
+        
+        
         
     }
     

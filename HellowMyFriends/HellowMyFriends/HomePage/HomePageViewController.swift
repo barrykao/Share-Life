@@ -19,6 +19,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
     var refreshControl:UIRefreshControl!
+    
 
     override func viewDidAppear(_ animated: Bool) {
         
@@ -63,17 +64,13 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 if let uploadDataDic = snapshot.value as? [String:Any] {
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)
-//                    print(dataDic)
-//                    print(keyArray)
-                    self!.data = []
+
+                    self?.data = []
                     for i in 0 ..< keyArray.count {
                         let array = dataDic[keyArray[i]] as! [String:Any]
                         print(array)
-                       
-//                        let moc = CoreDataHelper.shared.managedObjectContext()
-//                        let note = DatabaseData(context: moc)
-                        let note = DatabaseData()
                         
+                        let note = DatabaseData()
                         note.paperName = keyArray[i]
                         note.imageName = "\(keyArray[i]).jpg"
                         note.account = array["account"] as? String
@@ -82,12 +79,13 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         note.url = array["photo"] as? String
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
+                        guard let comment = array["comment"] as? [String:Any] else {return}
+                        note.commentCount = comment.count
                         self!.data.append(note)
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
                         })
-                        // sort Post
-                      
+
                         print(i)
               
                         // PhotoView
@@ -123,10 +121,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         return 0.1
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: false)
-        print("\(indexPath.section), \(indexPath.row)")
-    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.data.count + 1
@@ -163,40 +157,43 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell?.photo.image = image(fileName: "\(account).jpg")
         }
         
+        cell?.messageCount.text = "\(dict.commentCount - 1)則留言"
         
         
         return cell!
     }
-
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        self.tableView.deselectRow(at: indexPath, animated: false)
+        print("\(indexPath.section), \(indexPath.row)")
+        
+    }
+    
+    
+    
+    
+    @IBAction func heartBtn(_ sender: Any) {
+        
+        
+        
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let navigationVC = segue.destination as! UINavigationController
-        let postVC = navigationVC.topViewController as! PostViewController
-        
-//        postVC.delegate = self
-        
-    }
-    /*
-    func saveToCoreData () {
-        CoreDataHelper.shared.saveContext()
-    }
-    
-    func queryFromCoreData () {
-        
-        let moc = CoreDataHelper.shared.managedObjectContext()
-        let request = NSFetchRequest<DatabaseData>(entityName: "Database")
-        let sort = NSSortDescriptor(key: "date", ascending: true)
-        request.sortDescriptors = [sort]
-        moc.performAndWait {
-            do{
-                self.data = try moc.fetch(request)
-            }catch{
-                print("error \(error)")
-                self.data = []
+        if segue.identifier == "messageSegue" {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                let home = self.data[indexPath.section - 1]
+                let navigationVC = segue.destination as! UINavigationController
+                let messageVC = navigationVC.topViewController as! MessageViewController
+                messageVC.messageData = home
+                
             }
+            
         }
+        
     }
-    */
     
 }
+

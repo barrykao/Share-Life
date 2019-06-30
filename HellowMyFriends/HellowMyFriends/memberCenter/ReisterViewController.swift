@@ -34,6 +34,9 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
         
         buttonDesign(button: signUpBtn)
         buttonDesign(button: backBtn)
+        textFieldClearMode(textField: newAccount)
+        textFieldClearMode(textField: newPassword)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {

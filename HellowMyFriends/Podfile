@@ -12,6 +12,7 @@ target 'HellowMyFriends' do
  pod ‘Firebase/Storage’
  pod 'IQKeyboardManagerSwift'
  pod 'SDWebImage/MapKit'
+ pod 'ImagePicker'
 
 
 end

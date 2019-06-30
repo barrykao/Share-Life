@@ -21,19 +21,13 @@ class CustomCellTableViewCell: UITableViewCell {
     @IBOutlet weak var textView: UITextView!
     
     @IBOutlet var photoView: UIImageView!
+
     
-//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//
-//        
-//        
-//        
-//        
-//    }
-//    
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    @IBOutlet var heartCount: UIButton!
+    
+    @IBOutlet var messageCount: UILabel!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -38,6 +38,9 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         buttonDesign(button: self.password)
 
         
+        textFieldClearMode(textField: account)
+        textFieldClearMode(textField: password)
+
         // Do any additional setup after loading the view.
     }
     

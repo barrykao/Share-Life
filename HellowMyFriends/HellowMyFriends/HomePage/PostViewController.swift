@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import ImagePicker
 
-class PostViewController: UIViewController ,UIImagePickerControllerDelegate , UINavigationControllerDelegate{
+class PostViewController: UIViewController {// ,UIImagePickerControllerDelegate , UINavigationControllerDelegate{
 
     @IBOutlet var photoView: UIImageView!
     
@@ -19,8 +20,16 @@ class PostViewController: UIViewController ,UIImagePickerControllerDelegate , UI
 
         currentImage = DatabaseData()
         self.navigationItem.rightBarButtonItem?.isEnabled = false
+        let imagePicker = ImagePickerController()
+        imagePicker.delegate = self
+        self.present(imagePicker, animated: true, completion: nil)
     }
- 
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        
+        
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -35,7 +44,7 @@ class PostViewController: UIViewController ,UIImagePickerControllerDelegate , UI
     
     
     @IBAction func camera(_ sender: Any) {
-        
+        /*
         let imagePicker = UIImagePickerController()
 //        imagePicker.allowsEditing = true
         imagePicker.delegate = self
@@ -57,7 +66,11 @@ class PostViewController: UIViewController ,UIImagePickerControllerDelegate , UI
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         controller.addAction(cancelAction)
         self.present(controller, animated: true, completion: nil)
-        
+        */
+        let imagePicker = ImagePickerController()
+        imagePicker.delegate = self
+        self.present(imagePicker, animated: true, completion: nil)
+    
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -74,4 +87,28 @@ class PostViewController: UIViewController ,UIImagePickerControllerDelegate , UI
         
         self.dismiss(animated: true)
     }
+}
+
+extension PostViewController : ImagePickerDelegate {
+    
+    
+    func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        print("wrapperDidPress")
+    }
+    
+    func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        print("doneButtonDidPress")
+        guard let image = images.first else {return}
+        self.photoView.image = image
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
+        self.dismiss(animated: true)
+        
+    }
+    
+    func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
+        print("cancelButtonDidPress")
+        self.dismiss(animated: true)
+    }
+    
+    
 }
