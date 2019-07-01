@@ -59,8 +59,8 @@ func thumbmailImage(image :UIImage , fileName : String) -> UIImage? {
     let ratio = max(width,height)
     let imageSize = CGSize(width:image.size.width*ratio,height: image.size.height*ratio)
     //在畫圖行前 切圓形
-//            let circle = UIBezierPath(ovalIn: CGRect(x: 0,y: 0,width: thumbnailSize.width,height: thumbnailSize.height))
-//            circle.addClip()
+//    let circle = UIBezierPath(ovalIn: CGRect(x: 0,y: 0,width: thumbnailSize.width,height: thumbnailSize.height))
+//    circle.addClip()
     image.draw(in:CGRect(x: -(imageSize.width-thumbnailSize.width)/2.0,y: -(imageSize.height-thumbnailSize.height)/2.0,width: imageSize.width,height: imageSize.height))
     //取得畫布上的圖
     let smallImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -104,6 +104,40 @@ func thumbmail (image: UIImage) -> UIImage? {
     return smallImage
 }
 
+func circleImage(image :UIImage , fileName : String) -> UIImage? {
+    
+    //設定縮圖大小
+    let thumbnailSize = CGSize(width: 200 ,height: 200)
+    //找出目前螢幕的scale
+    let scale = UIScreen.main.scale
+    //產生畫布
+    UIGraphicsBeginImageContextWithOptions(thumbnailSize,false,scale)
+    //計算長寬要縮圖比例
+    let width = thumbnailSize.width / image.size.width
+    let height = thumbnailSize.height / image.size.height
+    let ratio = max(width,height)
+    let imageSize = CGSize(width:image.size.width*ratio,height: image.size.height*ratio)
+    //在畫圖行前 切圓形
+    let circle = UIBezierPath(ovalIn: CGRect(x: 0,y: 0,width: thumbnailSize.width,height: thumbnailSize.height))
+    circle.addClip()
+    image.draw(in:CGRect(x: -(imageSize.width-thumbnailSize.width)/2.0,y: -(imageSize.height-thumbnailSize.height)/2.0,width: imageSize.width,height: imageSize.height))
+    //取得畫布上的圖
+    let smallImage = UIGraphicsGetImageFromCurrentImageContext()
+    //關掉畫布
+    UIGraphicsEndImageContext()
+    
+    
+    let filePath = fileDocumentsPath(fileName: fileName)
+    //write file
+    if let imageData = smallImage?.jpegData(compressionQuality: 1) {//compressionQuality:0~1之間
+        do{
+            try imageData.write(to: filePath, options: [.atomicWrite])
+        }catch {
+            print("uer photo fiel save is eror : \(error)")
+        }
+    }
+    return smallImage
+}
 //MARK: func - fileURL
 func fileDocumentsPath(fileName: String) -> URL {
     
@@ -155,15 +189,27 @@ func saveToFirebase (controller: UIViewController ,image: UIImage? ,imageName: S
                         return
                     }
                     guard let uid = Auth.auth().currentUser?.uid else {return}
+//                    let postMessage: [String : Any] = ["account" : account,
+//                                                       "date" : dateString,
+//                                                       "message" : message,
+//                                                       "uid" : uid,
+//                                                       "photo" : uploadImageUrl,
+//                                                       "postTime": [".sv":"timestamp"],
+//                                                       "comment" : ["fakeData" : ["postTime" : "123"]
+//                                                                   ]
+//                                                      ]
                     let postMessage: [String : Any] = ["account" : account,
                                                        "date" : dateString,
                                                        "message" : message,
                                                        "uid" : uid,
                                                        "photo" : uploadImageUrl,
                                                        "postTime": [".sv":"timestamp"],
-                                                       "comment" : ["fakeData" : ["postTime" : "123"]
-                                                                   ]
+                                                       "comment" : "commentData",
+                                                       "heart" : "heartData"
                                                       ]
+                    
+                    
+                    
                     database.setValue(postMessage, withCompletionBlock: { (error, dataRef) in
                         if error != nil{
                             print("Database Error: \(error!.localizedDescription)")

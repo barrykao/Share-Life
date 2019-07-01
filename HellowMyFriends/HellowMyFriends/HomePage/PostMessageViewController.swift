@@ -10,13 +10,9 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-protocol PostMessageViewControllerDelegate {
-    func didPostMessage()
-}
 
 
-
-class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+class PostMessageViewController: UIViewController ,UITextViewDelegate{
 
     
     @IBOutlet weak var account: UILabel!
@@ -30,7 +26,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     var currentName : DatabaseData!
     
     var image1 : UIImage?
-    var delegate: PostMessageViewControllerDelegate?
     var isEdit : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
@@ -123,7 +118,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate , UIImageP
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
         isEditing()
-        
     }
     
     func isEditing() {

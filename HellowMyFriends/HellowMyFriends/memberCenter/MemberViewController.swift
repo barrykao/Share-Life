@@ -10,22 +10,23 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-
-//class MemberViewController: UIViewController ,UITextFieldDelegate, ModifyDataViewControllerDelegate{
-class MemberViewController: UIViewController {
+class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,UINavigationControllerDelegate{
 
     
     @IBOutlet var account: UILabel!
-    
-    @IBOutlet weak var photo: UIImageView!
 
     @IBOutlet var collectionView: UICollectionView!
+    
+    @IBOutlet var imageBtn: UIButton!
+    
+    
     
     var databaseRef : DatabaseReference!
     var storageRef: StorageReference!
     var currentData: [DatabaseData] = []
     var refreshControl:UIRefreshControl!
-    var expanded : Bool = false
+    var isNewPhoto : Bool = false
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +34,6 @@ class MemberViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         
-        photo.isUserInteractionEnabled = true
 
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
@@ -46,10 +46,24 @@ class MemberViewController: UIViewController {
         // collectionView
         collectionViewReloadData()
 
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(gestureRecognizer:)))
-//        tapGestureRecognizer.numberOfTapsRequired = 1
-//        photo.addGestureRecognizer(tapGestureRecognizer)
-
+        
+        databaseRef = Database.database().reference()
+        databaseRef.child("User").observe(.value) { (snapshot) in
+            
+            guard let uploadDataDic = snapshot.value as? [String:Any] else {return}
+            let dataDic = uploadDataDic
+            let keyArray = Array(dataDic.keys)
+            for i in 0 ..< keyArray.count {
+                let array = dataDic[keyArray[i]] as! [String:Any]
+                let databasePhoto = self.databaseRef.child("User").child(keyArray[i]).child("photo")
+                guard let photoName = array["account"] as? String else {return}
+                loadImageToFile(fileName: "\(photoName).jpg", database: databasePhoto)
+            }
+        }
+        
+        
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,14 +77,18 @@ class MemberViewController: UIViewController {
             
             let fileName = "\(account).jpg"
             if checkFile(fileName: fileName) {
-                self.photo.image = image(fileName: fileName)
+                let photoImage = image(fileName: fileName)
+                DispatchQueue.main.async {
+                    self.imageBtn.setImage(photoImage, for: .normal)
+                }
             }else {
                 let uid = Auth.auth().currentUser!.uid
                 
                 databaseRef = databaseRef.child("User").child(uid).child("photo")
                 loadImageToFile(fileName: fileName, database: databaseRef)
+                let photoImage = image(fileName: fileName)
                 DispatchQueue.main.async {
-                    self.photo.image = image(fileName: fileName)
+                    self.imageBtn.setImage(photoImage, for: .normal)
                 }
             }
 
@@ -86,22 +104,6 @@ class MemberViewController: UIViewController {
         }
         
     }
-    /*
-    @objc func tap(gestureRecognizer: UITapGestureRecognizer) {
-        var frame = photo.frame
-        if (!expanded) {
-            frame.size.height = frame.size.height * 2
-            frame.size.width = frame.size.width * 2
-            expanded = true
-        } else {
-            frame.size.height = frame.size.height / 2
-            frame.size.width = frame.size.width / 2
-            expanded = false
-        }
-        
-        photo.frame = frame
-    }
-    */
     
     @IBAction func signOut(_ sender: Any) {
         
@@ -112,7 +114,9 @@ class MemberViewController: UIViewController {
                 {
                     self.present(signVC, animated: true, completion: nil)
                 }
-                self.photo.image = UIImage(named: "member.png")
+//                self.photo.image = UIImage(named: "member.png")
+                self.imageBtn.imageView?.image = UIImage(named: "member.png")
+
             }
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: {
@@ -171,22 +175,58 @@ class MemberViewController: UIViewController {
         })
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+    
+    @IBAction func imageBtn(_ sender: Any) {
         
-        if segue.identifier == "modifySegue" {
-            let image = self.photo.image
-            let navigationVC = segue.destination as! UINavigationController
-            let modifyVC = navigationVC.topViewController as! ModifyDataViewController
-            modifyVC.photoImageView = image
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        
+        let controller = UIAlertController(title: "變更圖片", message: "請選擇要上傳的照片或啟用相機", preferredStyle: .actionSheet)
+        let names = ["照片圖庫", "相機"]
+        for name in names {
+            let action = UIAlertAction(title: name, style: .default) { (action) in
+                if action.title == "照片圖庫" {
+                    imagePicker.sourceType = .savedPhotosAlbum
+                }
+                if action.title == "相機" {
+                    imagePicker.sourceType = .camera
+                }
+                self.present(imagePicker, animated: true, completion: nil)
+            }
+            controller.addAction(action)
         }
-        
-        
-        
-        
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        controller.addAction(cancelAction)
+        self.present(controller, animated: true, completion: nil)
         
         
     }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.originalImage] as? UIImage else {return}
+        
+        guard let account = UserDefaults.standard.string(forKey: "account")else {return}
+        let fileName = "\(account).jpg"
+        guard let thumbImage = thumbmail(image: image) else {return}
+        let photoImage = circleImage(image: thumbImage , fileName: fileName)
+        
+        DispatchQueue.main.async {
+            self.imageBtn.setImage(photoImage, for: .normal)
+        }
+        self.imageBtn.setImage(photoImage, for: .normal)
+
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        self.databaseRef = self.databaseRef.child("User").child(uid)
+        saveToFirebase(controller: self, image: photoImage, imageName: account, message: account, database: self.databaseRef)
+        
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        self.isNewPhoto = true
+        self.dismiss(animated: true, completion: nil)
+    }
+
 }
+
 
 extension MemberViewController : UICollectionViewDataSource {
 
@@ -268,11 +308,7 @@ extension MemberViewController : UICollectionViewDelegate {
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         controller.addAction(cancelAction)
         self.present(controller, animated: true, completion: nil)
-       
-        
-        
-        
-        
+          
     }
     
 }

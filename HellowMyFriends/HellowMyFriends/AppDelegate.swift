@@ -25,9 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         IQKeyboardManager.shared.enable = true
         print("home= \(NSHomeDirectory())")
-
         
-        
+      
         
         return true
     }

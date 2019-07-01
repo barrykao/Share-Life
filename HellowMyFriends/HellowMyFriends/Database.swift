@@ -22,6 +22,9 @@ class DatabaseData {
     var imageName : String?
     var postTime : Double?
     var commentCount: Int = 0
+    var heartCount: Int = 0
+    var heartUid: [String] = []
+    
 
 
     init() {
@@ -44,3 +47,17 @@ class CommentData {
     }
 }
 
+class HeartData {
+    
+    var heartName: String?
+    var account : String?
+    var postTime : Double?
+    var uid : String?
+    var heartUUID : String
+    
+    init() {
+        self.heartUUID = UUID().uuidString
+    }
+    
+    
+}

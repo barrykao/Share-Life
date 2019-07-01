@@ -6,24 +6,20 @@ import Firebase
 import FirebaseAuth
 
 
-class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate ,PostMessageViewControllerDelegate{
-    func didPostMessage() {
-        refreshLoadData(1)
-    }
+class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate{
     
-
+    
     @IBOutlet weak var tableView: UITableView!
 
-    var data : [DatabaseData] = []
+
     
+    
+    var data : [DatabaseData] = []
     var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
     var refreshControl:UIRefreshControl!
-    
+    var touchedIndexPath : Int = 0
 
-    override func viewDidAppear(_ animated: Bool) {
-        
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +34,10 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        refreshLoadData(1)
     }
     
     @IBAction func refreshLoadData(_ sender: Any) {
@@ -55,7 +55,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     
     @objc func loadData(){
         // 這邊我們用一個延遲讀取的方法，來模擬網路延遲效果（延遲3秒）
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
             // 停止 refreshControl 動畫
             self.refreshControl.endRefreshing()
             
@@ -79,8 +79,24 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         note.url = array["photo"] as? String
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
-                        guard let comment = array["comment"] as? [String:Any] else {return}
-                        note.commentCount = comment.count
+                        
+                        if array["comment"] as? String == "commentData" {
+                            print("0則留言")
+                            note.commentCount = 0
+                        }else {
+                            guard let comment = array["comment"] as? [String:Any] else {return}
+                            note.commentCount = comment.count
+                        }
+                        if array["heart"] as? String == "heartData" {
+                            print("0顆愛心")
+                            note.heartCount = 0
+                        }else {
+                            guard let heart = array["heart"] as? [String:Any] else {return}
+                            note.heartUid = Array(heart.keys)
+                            note.heartCount = heart.count
+                        }
+                        
+//                        note.commentCount = commentCount
                         self!.data.append(note)
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
@@ -102,6 +118,9 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                             loadImageToFile(fileName: "\(photoName).jpg", database: databaseUser)
                             
                         }
+                        
+                        
+                        
                     }
 //                    self!.refreshLoadData(5)
                     DispatchQueue.main.async {
@@ -120,7 +139,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.1
     }
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.data.count + 1
@@ -157,9 +175,27 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell?.photo.image = image(fileName: "\(account).jpg")
         }
         
-        cell?.messageCount.text = "\(dict.commentCount - 1)則留言"
+        cell?.messageCount.text = "\(dict.commentCount)則留言"
         
+        let uid = Auth.auth().currentUser?.uid
+
+        for i in 0 ..< dict.heartCount {
+                print(dict.heartUid[i])
+            if uid == dict.heartUid[i] {
+                cell?.heartImageBtn.setImage(UIImage(named: "fullHeart"), for: .normal)
+            }else{
+                cell?.heartImageBtn.setImage(UIImage(named: "emptyHeart"), for: .normal)
+
+            }
+        }
+
+        cell?.heartImageBtn.tag = indexPath.section * 10
+        cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchDown)
+
+        cell?.heartCount.setTitle("\(dict.heartCount)顆愛心", for: .normal)
+        cell?.heartCount.tag = indexPath.section
         
+
         return cell!
     }
     
@@ -167,18 +203,8 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         
         self.tableView.deselectRow(at: indexPath, animated: false)
         print("\(indexPath.section), \(indexPath.row)")
-        
+  
     }
-    
-    
-    
-    
-    @IBAction func heartBtn(_ sender: Any) {
-        
-        
-        
-    }
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -190,8 +216,57 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 messageVC.messageData = home
                 
             }
-            
         }
+ 
+        if segue.identifier == "heartSegue" {
+         print("heartSegue")
+            guard let index = sender as? UIButton else {return}
+            let indexPath = index.tag
+            print(indexPath)
+            let home = self.data[indexPath - 1]
+            let navigationVC = segue.destination as! UINavigationController
+            let heartVC = navigationVC.topViewController as! HeartViewController
+            heartVC.messageData = home
+        }
+        
+    }
+
+    @objc func heartBtnPressed(sender:UIButton ) {
+        
+        print(sender.tag)
+        let indexPath = (sender.tag) / 10
+        let note = self.data[indexPath - 1]
+        guard let paperName = note.paperName else { return}
+        guard let uid = Auth.auth().currentUser?.uid else { return}
+        guard let account = UserDefaults.standard.string(forKey: "account") else { return}
+        let dataHeart = self.databaseRef.child("Paper").child(paperName).child("heart").child(uid)
+        
+        if sender.imageView?.image == UIImage(named: "emptyHeart") {
+
+            let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
+                                         "account" : account,
+                                         "uid" : uid
+            ]
+            dataHeart.setValue(heart) { (error, database) in
+                if let error = error {
+                    assertionFailure("Fail To postMessage \(error)")
+                }
+                print("上傳愛心成功")
+                //            self.refreshLoadData(1)
+            }
+        }else{
+            sender.setImage(UIImage(named: "emptyHeart"), for: .normal)
+            dataHeart.removeValue { (error, data) in
+                print("刪除愛心成功")
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
         
     }
     

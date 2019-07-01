@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class CustomCellTableViewCell: UITableViewCell {
-    
     
     
     @IBOutlet weak var photo: UIImageView!
@@ -22,29 +23,22 @@ class CustomCellTableViewCell: UITableViewCell {
     
     @IBOutlet var photoView: UIImageView!
 
-    
     @IBOutlet var heartCount: UIButton!
     
     @IBOutlet var messageCount: UILabel!
-    
+
+    @IBOutlet var heartImageBtn: UIButton!
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
-    
-    
-    
-    
-    
-    
-    
 
 }

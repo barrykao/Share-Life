@@ -9,7 +9,7 @@
 import UIKit
 import ImagePicker
 
-class PostViewController: UIViewController {// ,UIImagePickerControllerDelegate , UINavigationControllerDelegate{
+class PostViewController: UIViewController {
 
     @IBOutlet var photoView: UIImageView!
     
@@ -20,21 +20,12 @@ class PostViewController: UIViewController {// ,UIImagePickerControllerDelegate 
 
         currentImage = DatabaseData()
         self.navigationItem.rightBarButtonItem?.isEnabled = false
-        let imagePicker = ImagePickerController()
-        imagePicker.delegate = self
-        self.present(imagePicker, animated: true, completion: nil)
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        
-        
-    }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "postSegue" {
-
             let image = self.photoView.image
             let postVC = segue.destination as! PostMessageViewController
             postVC.image1 = image
@@ -44,33 +35,9 @@ class PostViewController: UIViewController {// ,UIImagePickerControllerDelegate 
     
     
     @IBAction func camera(_ sender: Any) {
-        /*
-        let imagePicker = UIImagePickerController()
-//        imagePicker.allowsEditing = true
-        imagePicker.delegate = self
-        
-        let controller = UIAlertController(title: "變更圖片", message: "請選擇要上傳的照片或啟用相機", preferredStyle: .actionSheet)
-        let names = ["照片圖庫", "相機"]
-        for name in names {
-            let action = UIAlertAction(title: name, style: .default) { (action) in
-                if action.title == "照片圖庫" {
-                    imagePicker.sourceType = .savedPhotosAlbum
-                }
-                if action.title == "相機" {
-                    imagePicker.sourceType = .camera
-                }
-                self.present(imagePicker, animated: true, completion: nil)
-            }
-            controller.addAction(action)
-        }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        controller.addAction(cancelAction)
-        self.present(controller, animated: true, completion: nil)
-        */
         let imagePicker = ImagePickerController()
         imagePicker.delegate = self
         self.present(imagePicker, animated: true, completion: nil)
-    
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -102,7 +69,6 @@ extension PostViewController : ImagePickerDelegate {
         self.photoView.image = image
         self.navigationItem.rightBarButtonItem?.isEnabled = true
         self.dismiss(animated: true)
-        
     }
     
     func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
