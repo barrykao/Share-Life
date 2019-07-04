@@ -77,9 +77,7 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
-  - SDWebImage/Core (5.0.6)
-  - SDWebImage/MapKit (5.0.6):
-    - SDWebImage/Core
+  - PageMenu (2.0.0)
 
 DEPENDENCIES:
   - Firebase/Auth
@@ -88,7 +86,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - ImagePicker
   - IQKeyboardManagerSwift
-  - SDWebImage/MapKit
+  - PageMenu
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -107,7 +105,7 @@ SPEC REPOS:
     - IQKeyboardManagerSwift
     - leveldb-library
     - nanopb
-    - SDWebImage
+    - PageMenu
 
 SPEC CHECKSUMS:
   Firebase: 8432d732974498afd5987e9001a05f90f1a3d625
@@ -125,8 +123,8 @@ SPEC CHECKSUMS:
   IQKeyboardManagerSwift: ed9b04ee0e3067ffba543283462d619f944b05e5
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  SDWebImage: 920f1a2ff1ca8296ad34f6e0510a1ef1d70ac965
+  PageMenu: 9c38fd7e0d9ef4b1408320f55bb907bbc0e538dc
 
-PODFILE CHECKSUM: e2ba5be0f09afa9ffc0a40f96ff49904e5a7caab
+PODFILE CHECKSUM: 4491f1dae0608ce7015c473676e2906479a80ca0
 
 COCOAPODS: 1.6.1

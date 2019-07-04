@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Firebase
 import FirebaseAuth
-import SDWebImage
+
 
 var databaseRef : DatabaseReference!
 var storageRef : StorageReference!
@@ -157,7 +157,7 @@ func image(fileName:String?) -> UIImage? {
             return UIImage(data: imageData)
         }
     }
-    return UIImage(named: "member.png")
+    return UIImage(named: "photoImage.png")
 }
 
 
@@ -189,15 +189,7 @@ func saveToFirebase (controller: UIViewController ,image: UIImage? ,imageName: S
                         return
                     }
                     guard let uid = Auth.auth().currentUser?.uid else {return}
-//                    let postMessage: [String : Any] = ["account" : account,
-//                                                       "date" : dateString,
-//                                                       "message" : message,
-//                                                       "uid" : uid,
-//                                                       "photo" : uploadImageUrl,
-//                                                       "postTime": [".sv":"timestamp"],
-//                                                       "comment" : ["fakeData" : ["postTime" : "123"]
-//                                                                   ]
-//                                                      ]
+                    
                     let postMessage: [String : Any] = ["account" : account,
                                                        "date" : dateString,
                                                        "message" : message,
@@ -207,9 +199,6 @@ func saveToFirebase (controller: UIViewController ,image: UIImage? ,imageName: S
                                                        "comment" : "commentData",
                                                        "heart" : "heartData"
                                                       ]
-                    
-                    
-                    
                     database.setValue(postMessage, withCompletionBlock: { (error, dataRef) in
                         if error != nil{
                             print("Database Error: \(error!.localizedDescription)")

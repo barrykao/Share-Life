@@ -21,33 +21,34 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FMC-RI-WTy">
                                 <rect key="frame" x="10" y="352.66666666666674" width="394" height="383.33333333333326"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="pnT-Bu-mhR">
-                                    <size key="itemSize" width="125" height="125"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dwJ-Fh-tv3">
+                                    <size key="itemSize" width="189" height="167"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GLCell" id="hda-nU-A5t" customClass="PhotoCollectionViewCell" customModule="HellowMyFriends" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="125" height="125"/>
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GLCell" id="hda-nU-A5t" customClass="PhotoCollectionViewCell" customModule="HellowMyFriends" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="189" height="167"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="125" height="125"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="189" height="167"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WNE-Zz-Axh">
-                                                    <rect key="frame" x="0.0" y="0.0" width="125" height="125"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WNE-Zz-Axh">
+                                                    <rect key="frame" x="0.0" y="0.0" width="189" height="167"/>
                                                 </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="WNE-Zz-Axh" secondAttribute="trailing" id="0r4-Bj-kaR"/>
-                                            <constraint firstAttribute="bottom" secondItem="WNE-Zz-Axh" secondAttribute="bottom" id="FkE-SC-HAA"/>
-                                            <constraint firstItem="WNE-Zz-Axh" firstAttribute="top" secondItem="hda-nU-A5t" secondAttribute="top" id="Mdo-iH-NNp"/>
-                                            <constraint firstItem="WNE-Zz-Axh" firstAttribute="leading" secondItem="hda-nU-A5t" secondAttribute="leading" id="vWR-wJ-DDK"/>
+                                            <constraint firstAttribute="trailing" secondItem="WNE-Zz-Axh" secondAttribute="trailing" id="BGL-6S-QmS"/>
+                                            <constraint firstItem="WNE-Zz-Axh" firstAttribute="top" secondItem="hda-nU-A5t" secondAttribute="top" id="CwO-vs-PCk"/>
+                                            <constraint firstItem="WNE-Zz-Axh" firstAttribute="leading" secondItem="hda-nU-A5t" secondAttribute="leading" id="X85-It-1Us"/>
+                                            <constraint firstAttribute="bottom" secondItem="WNE-Zz-Axh" secondAttribute="bottom" id="lMK-4x-7U7"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="photoView" destination="WNE-Zz-Axh" id="yr5-Va-b1j"/>
+                                            <segue destination="zFE-cC-dY2" kind="presentation" identifier="fullSegue" id="69R-S0-hE2"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -64,7 +65,7 @@
                                             <constraint firstAttribute="width" constant="200" id="1Zi-El-UuC"/>
                                             <constraint firstAttribute="height" constant="200" id="n0F-Zc-Wqn"/>
                                         </constraints>
-                                        <state key="normal" image="member.png"/>
+                                        <state key="normal" image="photoImage.png"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="100"/>
@@ -169,7 +170,7 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tnW-a6-oha">
                                 <rect key="frame" x="0.0" y="692" width="414" height="44"/>
                                 <items>
-                                    <barButtonItem title="Item" systemItem="camera" id="EcM-I5-W0s">
+                                    <barButtonItem systemItem="camera" id="EcM-I5-W0s">
                                         <connections>
                                             <action selector="camera:" destination="mH1-c6-oML" id="g9m-Ud-OVi"/>
                                         </connections>
@@ -518,6 +519,55 @@
             </objects>
             <point key="canvasLocation" x="947.82608695652186" y="-529.07608695652175"/>
         </scene>
+        <!--Full Screen View Controller-->
+        <scene sceneID="0gf-Mi-lPO">
+            <objects>
+                <viewController storyboardIdentifier="fullScreenVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="zFE-cC-dY2" customClass="fullScreenViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MwM-5v-dQu">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5zY-9z-je0">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="A3O-Rh-xhE">
+                                    <size key="itemSize" width="414" height="720"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="fullCell" id="6wB-VB-TBI" customClass="PhotoCollectionViewCell" customModule="HellowMyFriends" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="8" width="414" height="720"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="720"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8dd-SF-ROR">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="720"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <connections>
+                                            <outlet property="imageView" destination="8dd-SF-ROR" id="22S-Z8-vc7"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="QIo-vo-SKh"/>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="5zY-9z-je0" id="NQh-ss-11x"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iQ0-gC-MLW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2533" y="-529"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="j2Q-30-oZ6">
             <objects>
@@ -542,6 +592,7 @@
         <image name="background.jpg" width="700" height="1050"/>
         <image name="first.png" width="823" height="482"/>
         <image name="member.png" width="215" height="215"/>
+        <image name="photoImage.png" width="407" height="406"/>
         <image name="profile" width="16" height="16"/>
         <image name="register.png" width="710" height="487"/>
         <image name="reset.png" width="720" height="720"/>

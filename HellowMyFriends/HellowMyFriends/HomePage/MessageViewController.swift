@@ -96,15 +96,11 @@ class MessageViewController: UIViewController {
             self.refreshControl.endRefreshing()
             
             guard let paperName = self.messageData.paperName else { return}
-            
-          
-            
-            
             let databaseRefPaper = self.databaseRef.child("Paper").child(paperName).child("comment")
             databaseRefPaper.observe(.value, with: { [weak self] (snapshot) in
                 guard let uploadDataDic = snapshot.value as? [String:Any] else {return}
                     let dataDic = uploadDataDic
-                    let keyArray = Array(dataDic.keys)
+                    let keyArray = Array(dataDic.keys)  
                     //                    print(dataDic)
                     print(keyArray)
                     self?.commentData = []
@@ -127,7 +123,7 @@ class MessageViewController: UIViewController {
                         self?.tableView.reloadData()
                     }
             })
-//                        self.tableView.reloadData()
+//                            self.tableView.reloadData()
         }
     }
     
@@ -182,7 +178,6 @@ extension MessageViewController: UITableViewDataSource {
     //MARK:  UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        
         return self.commentData.count
     }
     
@@ -213,14 +208,15 @@ extension MessageViewController: UITableViewDelegate {
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.view.endEditing(true)
         print("\(indexPath.section), \(indexPath.row)")
-
+        
+        
 
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         self.tableView.setEditing(editing, animated: false)
     }
-    /*
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if let uid = Auth.auth().currentUser?.uid {
@@ -230,56 +226,47 @@ extension MessageViewController: UITableViewDelegate {
              if editingStyle == .delete {
                  guard let paperName = self.messageData.paperName else { return}
                  guard let commentName = note.commentName else {return}
-                 self.databaseRef.child("Paper").child(paperName).child("comment").child(commentName).removeValue(completionBlock: { (error, data) in
+                
+                    let databasePaperName = self.databaseRef.child("Paper").child(paperName)
+                    databasePaperName.child("comment").child(commentName).removeValue(completionBlock: { (error, data) in
                     print("刪除離留言成功")
-                    print(data)
-                    
-                    
-                    
-                    self.refreshLoadData(1)
+               
+//                    self.refreshLoadData(1)
                     })
+                
+                    databasePaperName.observe(.value, with: { (snapshot) in
+//                        print(snapshot.value)
+                        if (snapshot.hasChild("comment")){
+                            print("comment alive")
+                        }else{
+                            print("comment died")
+
+                            databasePaperName.child("comment").setValue("commentData", withCompletionBlock: { (error, data) in
+                                print("上傳假資料成功")
+                                self.commentData = []
+                                self.refreshLoadData(1)
+
+                            })
+                            
+                        }
+                    }) { (error) in
+                        print("error: \(error)")
+                    }
+                
                  }
+                
             }
         }
         
+
+        
         
     }
-    */
+    
     
     
 }
 
-/*
-
-extension MessageViewController: UITextFieldDelegate {
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        
-        if textField.text != "" {
-            self.postBtn.isEnabled = true
-        }else{
-            self.postBtn.isEnabled = false
-        }
-        
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        if textField.text != "" {
-            self.postBtn.isEnabled = true
-        }else{
-            self.postBtn.isEnabled = false
-        }
-    }
-    
-   
-}
-*/
 
 extension MessageViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
