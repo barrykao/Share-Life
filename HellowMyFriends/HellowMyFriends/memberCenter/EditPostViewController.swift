@@ -70,7 +70,7 @@ class EditPostViewController: UIViewController, UIImagePickerControllerDelegate 
         // save To Server
         self.databaseRef = self.databaseRef.child("Paper").child(fileName)
         saveToFirebase(controller: self, image: self.imageView.image, imageName: fileName, message: self.textView.text, database: self.databaseRef)
-        
+        self.dismiss(animated: true)
     }
     
     @IBAction func camera(_ sender: Any) {

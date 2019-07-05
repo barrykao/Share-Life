@@ -20,8 +20,6 @@ class MessageViewController: UIViewController {
     
     @IBOutlet var message: UILabel!
     
-//    @IBOutlet var textField: UITextField!
-    
     @IBOutlet var postBtn: UIButton!
     
     @IBOutlet var textView: UITextView!
@@ -38,7 +36,7 @@ class MessageViewController: UIViewController {
 
         tableView.dataSource = self
         tableView.delegate = self
-//        textField.delegate = self
+
         textView.delegate = self
         databaseRef = Database.database().reference()
         // Photo
@@ -49,13 +47,11 @@ class MessageViewController: UIViewController {
         self.postBtn.isEnabled = false
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyBoard))
         self.view.addGestureRecognizer(tap) // to Replace "TouchesBegan"
-//        textFieldClearMode(textField: textField)
+
         
         textView.text = "留言......"
         textView.textColor = UIColor.lightGray
-        //        textView.font = UIFont(name: "verdana", size: 13.0)
         textView.returnKeyType = .done
-        
         
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl)
@@ -252,19 +248,10 @@ extension MessageViewController: UITableViewDelegate {
                     }) { (error) in
                         print("error: \(error)")
                     }
-                
                  }
-                
             }
         }
-        
-
-        
-        
     }
-    
-    
-    
 }
 
 

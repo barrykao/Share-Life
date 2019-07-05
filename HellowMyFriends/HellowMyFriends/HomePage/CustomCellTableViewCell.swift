@@ -29,6 +29,7 @@ class CustomCellTableViewCell: UITableViewCell {
 
     @IBOutlet var heartImageBtn: UIButton!
     
+    @IBOutlet var messageBtn: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

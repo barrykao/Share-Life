@@ -20,15 +20,11 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @IBOutlet var imageBtn: UIButton!
     
-    
-    
     var databaseRef : DatabaseReference!
     var storageRef: StorageReference!
-    var currentData: [DatabaseData] = []
+    var memberData: [DatabaseData] = []
     var refreshControl:UIRefreshControl!
     var isNewPhoto : Bool = false
-    
-
     let fullScreenSize = UIScreen.main.bounds.size
 
     override func viewDidLoad() {
@@ -36,56 +32,17 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-//        self.collectionView.layer.borderWidth = CGFloat(integerLiteral: 5)
-//        self.collectionView.layer.borderColor = UIColor.black
             
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
         
-//        let flow = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-//        flow.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
-        
-        // 建立 UICollectionViewFlowLayout
-        let layout = UICollectionViewFlowLayout()
-        
-        // 設置 section 的間距 四個數值分別代表 上、左、下、右 的間距
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
-        
-        // 設置每一行的間距
-        layout.minimumLineSpacing = 5
-        
-        // 設置每個 cell 的尺寸
-//        layout.itemSize = CGSize(width: CGFloat(fullScreenSize.width) / 3, height: 200) //設定cell的size
-        
-        layout.itemSize = CGSize (
-            width: CGFloat(fullScreenSize.width)/3 - 10.0,
-            height: CGFloat(fullScreenSize.width)/3 - 10.0)
-        layout.minimumLineSpacing = 5 //設定cell與cell間的縱距
-
-        // 設置 header 及 footer 的尺寸
-//        layout.headerReferenceSize = CGSize(
-//            width: fullScreenSize.width, height: 40)
-//        layout.footerReferenceSize = CGSize(
-//            width: fullScreenSize.width, height: 40)
-
-        
-//        flow.itemSize = CGSize(width: (fullScreenSize.width/2)-10, height: 100)
-//        flow.minimumLineSpacing = 20
-//        flow.scrollDirection = .vertical
-//        flow.headerReferenceSize = CGSize( width: fullScreenSize.width, height: 10)
-        
+       
         // reload
         refreshControl = UIRefreshControl()
         collectionView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(collectionViewReloadData), for: UIControl.Event.valueChanged)
         reloadAnmiation()
-        
-//        buttonDesign(button: self.account)
-
-        // collectionView
-//        collectionViewReloadData()
-
+   
         // load photoImageViewToFile
         databaseRef = Database.database().reference()
         databaseRef.child("User").observe(.value) { (snapshot) in
@@ -128,19 +85,23 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             let fileName = "\(account).jpg"
             if checkFile(fileName: fileName) {
                print("照片存在")
+                let photoImage = image(fileName: fileName)
+                DispatchQueue.main.async {
+                    self.imageBtn.setImage(photoImage, for: .normal)
+                }
             }else {
                 let uid = Auth.auth().currentUser!.uid
                 databaseRef = databaseRef.child("User").child(uid).child("photo")
                 loadImageToFile(fileName: fileName, database: databaseRef)
-//                let photoImage = image(fileName: fileName)
-//                DispatchQueue.main.async {
-//                    self.imageBtn.setImage(photoImage, for: .normal)
-//                }
+                let photoImage = image(fileName: fileName)
+                DispatchQueue.main.async {
+                    self.imageBtn.setImage(photoImage, for: .normal)
+                }
             }
-            let photoImage = image(fileName: fileName)
-            DispatchQueue.main.async {
-                self.imageBtn.setImage(photoImage, for: .normal)
-            }
+//            let photoImage = image(fileName: fileName)
+//            DispatchQueue.main.async {
+//                self.imageBtn.setImage(photoImage, for: .normal)
+//            }
             // collectionView
 //            reloadAnmiation()
 
@@ -180,7 +141,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @objc func collectionViewReloadData() {
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2){
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3){
             
             self.refreshControl.endRefreshing()
 
@@ -190,7 +151,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)
                     
-                    self.currentData = []
+                    self.memberData = []
                     for i in 0 ..< keyArray.count {
                         if let array = dataDic[keyArray[i]] as? [String:Any] {
                             let uid = Auth.auth().currentUser?.uid
@@ -205,10 +166,26 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                 note.url = array["photo"] as? String
                                 note.uid = array["uid"] as? String
                                 note.postTime = array["postTime"] as? Double
-       
-                                self.currentData.append(note)
+                                
+                                if array["comment"] as? String == "commentData" {
+                                    //                            print("0則留言")
+                                    note.commentCount = 0
+                                }else {
+                                    guard let comment = array["comment"] as? [String:Any] else {return}
+                                    note.commentCount = comment.count
+                                }
+                                if array["heart"] as? String == "heartData" {
+                                    //                            print("0顆愛心")
+                                    note.heartCount = 0
+                                }else {
+                                    guard let heart = array["heart"] as? [String:Any] else {return}
+                                    note.heartUid = Array(heart.keys)
+                                    note.heartCount = heart.count
+                                }
+                                
+                                self.memberData.append(note)
                                 // sort Post
-                                self.currentData.sort(by: { (post1, post2) -> Bool in
+                                self.memberData.sort(by: { (post1, post2) -> Bool in
                                     post1.postTime! > post2.postTime!
                                 })
                                 // PhotoView
@@ -282,20 +259,20 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "fullSegue" {
-            
+        if segue.identifier == "fullSegue"{
             
             guard let collectionCell = sender as? PhotoCollectionViewCell else {return}
             print(collectionCell.photoView.tag)
-            let note = self.currentData[collectionCell.photoView.tag]
+            let note = self.memberData[collectionCell.photoView.tag]
             let index = collectionCell.photoView.tag
             let fullVC = segue.destination as! fullScreenViewController
             fullVC.index = index
-            fullVC.currentImage = collectionCell.photoView.image
             fullVC.currentFullData = note
-            fullVC.fullScreenData = self.currentData
-            
+            fullVC.fullScreenData = self.memberData
+  
         }
+        
+        
     }
     
 
@@ -305,13 +282,13 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
 extension MemberViewController : UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return currentData.count
+        return memberData.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GLCell", for: indexPath) as! PhotoCollectionViewCell
         print(indexPath.row)
 
-        let duc = currentData[indexPath.item]
+        let duc = memberData[indexPath.item]
         if let fileName = duc.imageName {
             print(fileName)
             cell.photoView.tag = indexPath.item
@@ -326,18 +303,11 @@ extension MemberViewController : UICollectionViewDataSource {
 }
 
 extension MemberViewController : UICollectionViewDelegate {
-    /*
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-     
-    }
-    */
+  
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         print("\(indexPath.section),\(indexPath.row)")
-        
-        
-        
-        
+
     }
 }

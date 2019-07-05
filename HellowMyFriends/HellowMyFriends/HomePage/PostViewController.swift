@@ -25,7 +25,7 @@ class PostViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "postSegue" {
+        if segue.identifier == "postMessageSegue" {
             let image = self.photoView.image
             let postVC = segue.destination as! PostMessageViewController
             postVC.image1 = image

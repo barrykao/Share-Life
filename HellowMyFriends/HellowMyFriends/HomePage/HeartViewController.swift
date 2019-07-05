@@ -113,7 +113,7 @@ extension HeartViewController: UITableViewDataSource {
         if let accountView = note.account {
             cell.textLabel?.text = note.account
             cell.imageView?.image = image(fileName: "\(accountView).jpg")
-            cell.detailTextLabel?.text = "給了你愛心"
+            cell.detailTextLabel?.text = "給了你巧克力"
         }
         return cell
         

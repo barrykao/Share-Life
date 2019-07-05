@@ -10,7 +10,9 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-
+protocol PostMessageViewControllerDelegate {
+    func didPostMessage(note : DatabaseData)
+}
 
 class PostMessageViewController: UIViewController ,UITextViewDelegate{
 
@@ -29,7 +31,8 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     var isEdit : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
-
+    var delegate: PostMessageViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         currentName = DatabaseData()
@@ -55,8 +58,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         textView.delegate = self
     }
     
-    
-    
     @IBAction func postToServer(_ sender: Any) {
         
         let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
@@ -74,13 +75,13 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             // save To file
             guard let image1 = thumbmail(image: self.imageView.image!) else {return}
             self.imageView.image = thumbmailImage(image: image1, fileName: "\(fileName).jpg")
-  
+            self.delegate?.didPostMessage(note: self.currentName)
             // save To Server
             self.databaseRef = self.databaseRef.child("Paper").child(fileName)
             saveToFirebase(controller: self, image: self.imageView.image, imageName: fileName, message: self.textView.text, database: self.databaseRef)
+            
         }
         alert.addAction(okAction)
-        
         self.present(alert, animated: true, completion: nil)
         
     }

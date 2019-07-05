@@ -13,7 +13,10 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     @IBOutlet var photoView: UIImageView!
     
     @IBOutlet var imageView: UIImageView!
+    
+    
     /*
+    
     var scrollView:UIScrollView!
     
     override init(frame: CGRect) {
@@ -32,7 +35,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         imageView.frame = scrollView.bounds
         imageView.isUserInteractionEnabled = true
         imageView.contentMode = .scaleAspectFit
-        scrollView.addSubview(imageView)
+//        scrollView.addSubview(imageView)
         
         //双击监听
         let tapDouble=UITapGestureRecognizer(target:self,
@@ -77,10 +80,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     
     //图片双击事件响应
     @objc func tapDoubleDid(_ ges:UITapGestureRecognizer){
-        //隐藏导航栏
-//        if let nav = self.responderViewController()?.navigationController{
-//            nav.setNavigationBarHidden(true, animated: true)
-//        }
         //缩放视图（带有动画效果）
         UIView.animate(withDuration: 0.5, animations: {
             //如果当前不缩放，则放大到3倍。否则就还原
