@@ -20,13 +20,17 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @IBOutlet var imageBtn: UIButton!
     
+    @IBOutlet var heartCount: UILabel!
+    
+    
     var databaseRef : DatabaseReference!
     var storageRef: StorageReference!
     var memberData: [DatabaseData] = []
     var refreshControl:UIRefreshControl!
     var isNewPhoto : Bool = false
     let fullScreenSize = UIScreen.main.bounds.size
-
+    var count: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,7 +45,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         refreshControl = UIRefreshControl()
         collectionView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(collectionViewReloadData), for: UIControl.Event.valueChanged)
-        reloadAnmiation()
+        refreshBtn(1)
    
         // load photoImageViewToFile
         databaseRef = Database.database().reference()
@@ -60,18 +64,20 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
 
     }
     
-    func reloadAnmiation() {
+    @IBAction func refreshBtn(_ sender: Any) {
         refreshControl.beginRefreshing()
         // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
         // 動畫結束之後使用 loadData()
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
-        self.collectionView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
-        
+            self.collectionView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
+            
         }) { (finish) in
             self.collectionViewReloadData()
         }
-    
     }
+    
+    
+   
     
     override func viewDidAppear(_ animated: Bool) {
         print("viewDidAppear")
@@ -181,8 +187,10 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                     guard let heart = array["heart"] as? [String:Any] else {return}
                                     note.heartUid = Array(heart.keys)
                                     note.heartCount = heart.count
+                                    self.count += note.heartCount
+                                    print(self.count)
                                 }
-                                
+                                self.heartCount.text = "\(self.count)塊"
                                 self.memberData.append(note)
                                 // sort Post
                                 self.memberData.sort(by: { (post1, post2) -> Bool in
@@ -265,8 +273,11 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             print(collectionCell.photoView.tag)
             let note = self.memberData[collectionCell.photoView.tag]
             let index = collectionCell.photoView.tag
+            
             let fullVC = segue.destination as! fullScreenViewController
+            
             fullVC.index = index
+            fullVC.currentImage = collectionCell.photoView.image
             fullVC.currentFullData = note
             fullVC.fullScreenData = self.memberData
   

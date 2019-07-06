@@ -10,11 +10,6 @@ import AudioToolbox.AudioServices //加入震動反饋
 
 class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate ,PostMessageViewControllerDelegate{
     
-    func didPostMessage(note: DatabaseData) {
-        print("didPostMessage")
-    }
-    
-    
     @IBOutlet weak var tableView: UITableView!
 
     var data : [DatabaseData] = []
@@ -176,14 +171,15 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell?.photo.image = image(fileName: "\(account).jpg")
         }
         
-        cell?.messageCount.text = "\(note.commentCount)則留言"
 
         cell?.heartImageBtn.tag = indexPath.section * 10
         cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchDown)
 
         cell?.heartCount.setTitle("\(note.heartCount)塊巧克力", for: .normal)
         cell?.heartCount.tag = indexPath.section
-
+        
+        cell?.messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
+        cell?.messageCount.tag = indexPath.section
         cell?.messageBtn.tag = indexPath.section
         
         
@@ -247,7 +243,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             }
             print("上傳巧克力成功")
         }
-
+        self.tableView.reloadData()
 //        func scaleLikeButton() {
 //            UIView.animate(withDuration: 0.2, animations: {
 //                let scaleTransform = CGAffineTransform(scaleX: 1.1, y: 1.1)
@@ -264,6 +260,10 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 //        feedbackGenerator?.impactOccurred()
 
         
+    }
+    
+    func didPostMessage(note: DatabaseData) {
+        print("didPostMessage")
     }
     
 }

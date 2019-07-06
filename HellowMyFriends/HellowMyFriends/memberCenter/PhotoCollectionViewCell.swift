@@ -8,41 +8,41 @@
 
 import UIKit
 
-class PhotoCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet var photoView: UIImageView!
+class fullCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var imageView: UIImageView!
+    //滚动视图
     
-    
-    /*
-    
-    var scrollView:UIScrollView!
+    @IBOutlet var scrollView: UIScrollView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        //scrollView初始化
-        scrollView = UIScrollView(frame: self.contentView.bounds)
-        self.contentView.addSubview(scrollView)
         scrollView.delegate = self
         //scrollView缩放范围 1~3
         scrollView.maximumZoomScale = 3.0
         scrollView.minimumZoomScale = 1.0
-        
+        scrollView.frame = self.contentView.bounds
         //imageView初始化
-
         imageView.frame = scrollView.bounds
         imageView.isUserInteractionEnabled = true
         imageView.contentMode = .scaleAspectFit
-//        scrollView.addSubview(imageView)
+        scrollView.addSubview(imageView)
         
+        
+        //单击监听
+        let tapSingle=UITapGestureRecognizer(target:self,
+                                             action:#selector(tapSingleDid))
+        tapSingle.numberOfTapsRequired = 1
+        tapSingle.numberOfTouchesRequired = 1
         //双击监听
         let tapDouble=UITapGestureRecognizer(target:self,
-                                             action:#selector(tapDoubleDid(_:)))
+                                             action:#selector(tapDoubleDid))
         tapDouble.numberOfTapsRequired = 2
         tapDouble.numberOfTouchesRequired = 1
         //声明点击事件需要双击事件检测失败后才会执行
+        tapSingle.require(toFail: tapDouble)
+        self.imageView.addGestureRecognizer(tapSingle)
         self.imageView.addGestureRecognizer(tapDouble)
     }
     
@@ -77,9 +77,15 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         return CGSize(width: width/ratio, height: height/ratio)
     }
     
-    
+  
+    //图片单击事件响应
+    @objc func tapSingleDid(_ ges:UITapGestureRecognizer){
+        //显示或隐藏导航栏
+        print("123")
+    }
     //图片双击事件响应
     @objc func tapDoubleDid(_ ges:UITapGestureRecognizer){
+    
         //缩放视图（带有动画效果）
         UIView.animate(withDuration: 0.5, animations: {
             //如果当前不缩放，则放大到3倍。否则就还原
@@ -91,14 +97,15 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         })
     }
     
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
+    
+    
 }
 
 //ImagePreviewCell的UIScrollViewDelegate代理实现
-extension PhotoCollectionViewCell: UIScrollViewDelegate {
+extension fullCollectionViewCell:UIScrollViewDelegate{
     
     //缩放视图
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -116,5 +123,10 @@ extension PhotoCollectionViewCell: UIScrollViewDelegate {
         print(centerX,centerY)
         imageView.center = CGPoint(x: centerX, y: centerY)
     }
- */
+}
+
+class PhotoCollectionViewCell: UICollectionViewCell {
+    
+    @IBOutlet var photoView: UIImageView!
+    
 }

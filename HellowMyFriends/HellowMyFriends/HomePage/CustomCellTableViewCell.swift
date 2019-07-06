@@ -24,9 +24,9 @@ class CustomCellTableViewCell: UITableViewCell {
     @IBOutlet var photoView: UIImageView!
 
     @IBOutlet var heartCount: UIButton!
-    
-    @IBOutlet var messageCount: UILabel!
 
+    @IBOutlet var messageCount: UIButton!
+    
     @IBOutlet var heartImageBtn: UIButton!
     
     @IBOutlet var messageBtn: UIButton!

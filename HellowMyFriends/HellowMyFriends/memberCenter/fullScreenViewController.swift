@@ -14,7 +14,6 @@ class fullScreenViewController: UIViewController {
     
     @IBOutlet var collectionView: UICollectionView!
     
-    
     @IBOutlet var topView: UIView!
     
     @IBOutlet var downView: UIView!
@@ -23,8 +22,9 @@ class fullScreenViewController: UIViewController {
     
     @IBOutlet var heartCount: UIButton!
     
-    var fullScreenData: [DatabaseData]!
     
+    
+    var fullScreenData: [DatabaseData]!
     var currentFullData: DatabaseData! = DatabaseData()
     var databaseRef : DatabaseReference!
     var storageRef: StorageReference!
@@ -33,20 +33,26 @@ class fullScreenViewController: UIViewController {
     var pageControl : UIPageControl!
     let fullScreenSize = UIScreen.main.bounds.size
     var flag: Bool = false
+    var indexPath: Int = 0
+    var collectionViewLayout: UICollectionViewFlowLayout!
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
-        
+        self.view.backgroundColor = UIColor.black
+
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.view.backgroundColor = UIColor.black
         topView.isHidden = true
         downView.isHidden = true
-        
+        self.collectionView.backgroundColor = UIColor.black
+
         
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
@@ -56,7 +62,7 @@ class fullScreenViewController: UIViewController {
         
         let indexPath = IndexPath(item: index, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .left, animated: true)
-
+        
         //设置页控制器
         pageControl = UIPageControl()
         pageControl.center = CGPoint(x: UIScreen.main.bounds.width/2,
@@ -65,12 +71,25 @@ class fullScreenViewController: UIViewController {
         pageControl.isUserInteractionEnabled = false
         pageControl.currentPage = index
         view.addSubview(self.pageControl)
-        // tapSingle
-       
-
         
+        let doubleFingers = UITapGestureRecognizer( target:self, action:#selector(tapDoubleDid))
+        // 點幾下才觸發 設置 1 時 則是點一下會觸發 依此類推
+        doubleFingers.numberOfTapsRequired = 2
+        // 幾根指頭觸發
+        doubleFingers.numberOfTouchesRequired = 1
+        // 為視圖加入監聽手勢
+        self.view.addGestureRecognizer(doubleFingers)
         
-        
+        // 單指輕點
+        let singleFinger = UITapGestureRecognizer( target:self, action:#selector(tapSingleDid))
+        // 點幾下才觸發 設置 2 時 則是要點兩下才會觸發 依此類推
+        singleFinger.numberOfTapsRequired = 1
+        // 幾根指頭觸發
+        singleFinger.numberOfTouchesRequired = 1
+        // 雙指輕點沒有觸發時 才會檢測此手勢 以免手勢被蓋過
+        singleFinger.require(toFail: doubleFingers)
+        // 為視圖加入監聽手勢
+        self.view.addGestureRecognizer(singleFinger)
         
         // dismiss fullScreen
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(backBtn(_:)))
@@ -79,24 +98,47 @@ class fullScreenViewController: UIViewController {
         swipeUp.numberOfTouchesRequired = 1
         // 為視圖加入監聽手勢
         self.view.addGestureRecognizer(swipeUp)
-      
     }
-   
-
+    
+    @objc func tapSingleDid(_ ges:UITapGestureRecognizer){
+        //显示或隐藏导航栏
+        flag = !flag
+        if flag {
+            topView.isHidden = false
+            downView.isHidden = false
+        }else {
+            topView.isHidden = true
+            downView.isHidden = true
+        }
+    }
+    
+    //图片双击事件响应
+    @objc func tapDoubleDid(_ ges:UITapGestureRecognizer){
+//        //缩放视图（带有动画效果）
+//        topView.isHidden = true
+//        downView.isHidden = true
+//
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         
         let note = self.fullScreenData[self.index]
         messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
-        heartCount.setTitle("\(note.heartCount)顆愛心", for: .normal)
+        heartCount.setTitle("\(note.heartCount)塊巧克力", for: .normal)
 
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        
+        //重新设置collectionView的尺寸
+        collectionView.frame.size = self.view.bounds.size
+        collectionView.collectionViewLayout.invalidateLayout()
+        
         //将视图滚动到当前图片上
         let indexPath = IndexPath(item: self.pageControl.currentPage, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
-        
+    
         //重新设置页控制器的位置
         pageControl.center = CGPoint(x: UIScreen.main.bounds.width/2,
                                      y: UIScreen.main.bounds.height - 20)
@@ -192,6 +234,8 @@ class fullScreenViewController: UIViewController {
     
 }
 
+
+
 extension fullScreenViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -204,10 +248,14 @@ extension fullScreenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "fullCell", for: indexPath) as! PhotoCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "fullCell", for: indexPath) as! fullCollectionViewCell
         let duc = fullScreenData[indexPath.item]
         cell.imageView.image = image(fileName: duc.imageName)
         
+        cell.imageView.tag = indexPath.item
+        self.indexPath = indexPath.item
+        
+
         return cell
     }
     
@@ -217,37 +265,32 @@ extension fullScreenViewController: UICollectionViewDataSource {
 extension fullScreenViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        flag = !flag
-        if flag {
-            topView.isHidden = false
-            downView.isHidden = false
-        }else {
-            topView.isHidden = true
-            downView.isHidden = true
-        }
         self.index = indexPath.item
 
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? fullCollectionViewCell{
+            //由于单元格是复用的，所以要重置内部元素尺寸
+//            cell.resetSize()
+        }
+    }
     
-    
-//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//
-//    }
     
     //collectionView里某个cell显示完毕
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         //当前显示的单元格
-        let visibleCell = collectionView.visibleCells[0]
+//        let visibleCell = collectionView.visibleCells[0]
+        guard let visibleCell = collectionView.visibleCells.first else {return}
         //设置页控制器当前页
         self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
         
         let note = self.fullScreenData[indexPath.item]
         messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
-        heartCount.setTitle("\(note.heartCount)顆愛心", for: .normal)
+        heartCount.setTitle("\(note.heartCount)塊巧克力", for: .normal)
         topView.isHidden = true
         downView.isHidden = true
-        
+        flag = false
     }
 }
 
@@ -259,9 +302,10 @@ extension fullScreenViewController: UICollectionViewDelegateFlowLayout {
         
     }
     
+   
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
     
 }

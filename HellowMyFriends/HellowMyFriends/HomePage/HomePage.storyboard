@@ -143,15 +143,16 @@
                                                                         <segue destination="VUS-8T-eqg" kind="presentation" identifier="messageSegue" id="oUU-OE-HOK"/>
                                                                     </connections>
                                                                 </button>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0則留言" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EPk-TS-iBb">
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8xW-WR-k7j">
                                                                     <rect key="frame" x="274" y="0.0" width="120" height="30"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="width" constant="120" id="GPR-Nw-WJi"/>
+                                                                        <constraint firstAttribute="width" constant="120" id="Aos-9l-Ecz"/>
                                                                     </constraints>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
+                                                                    <state key="normal" title="0則留言"/>
+                                                                    <connections>
+                                                                        <segue destination="VUS-8T-eqg" kind="presentation" identifier="messageSegue" id="dCe-SJ-GLb"/>
+                                                                    </connections>
+                                                                </button>
                                                             </subviews>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="30" id="u5B-4S-MXT"/>
@@ -173,7 +174,7 @@
                                             <outlet property="heartCount" destination="2ub-WX-h0l" id="eTE-b5-dsJ"/>
                                             <outlet property="heartImageBtn" destination="zRC-ya-8xQ" id="x6R-Pt-TcR"/>
                                             <outlet property="messageBtn" destination="gYv-ML-dSh" id="Acg-rf-687"/>
-                                            <outlet property="messageCount" destination="EPk-TS-iBb" id="AAt-5q-0md"/>
+                                            <outlet property="messageCount" destination="8xW-WR-k7j" id="Je6-FF-vXp"/>
                                             <outlet property="photo" destination="RkL-rb-EVn" id="R5w-sU-VGT"/>
                                             <outlet property="photoView" destination="TMz-mw-d2h" id="dv1-HB-qkh"/>
                                             <outlet property="textView" destination="mvV-xp-fuX" id="4Ba-Ze-nU8"/>
@@ -336,7 +337,6 @@
         <!--Navigation Controller-->
         <scene sceneID="Tum-gA-ccL">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="s5W-Oo-snx" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="86r-GS-4WI" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="RDF-Gw-6ed">
@@ -348,6 +348,7 @@
                         <segue destination="7Ua-Bf-KAH" kind="relationship" relationship="rootViewController" id="Tek-ZJ-pv0"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s5W-Oo-snx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1399" y="-1312"/>
         </scene>
@@ -637,12 +638,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N31-KJ-jb7">
                                 <rect key="frame" x="0.0" y="70" width="414" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KUD-Hd-d9b">
-                                        <rect key="frame" x="40" y="14" width="35" height="33"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="返回">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KUD-Hd-d9b">
+                                        <rect key="frame" x="40" y="14" width="37" height="33"/>
+                                        <state key="normal" title="返回"/>
                                         <connections>
                                             <action selector="backBtn:" destination="Sip-Aj-xPq" eventType="touchUpInside" id="GTv-AX-GKr"/>
                                         </connections>
@@ -650,10 +648,11 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="KUD-Hd-d9b" secondAttribute="bottom" constant="13" id="4Le-sr-eFI"/>
-                                    <constraint firstItem="KUD-Hd-d9b" firstAttribute="top" secondItem="N31-KJ-jb7" secondAttribute="top" constant="14" id="7pg-8Z-qtl"/>
-                                    <constraint firstItem="KUD-Hd-d9b" firstAttribute="leading" secondItem="N31-KJ-jb7" secondAttribute="leading" constant="40" id="eyg-wn-vpN"/>
+                                    <constraint firstItem="KUD-Hd-d9b" firstAttribute="top" secondItem="N31-KJ-jb7" secondAttribute="top" constant="14" id="QZu-xe-NRo"/>
+                                    <constraint firstAttribute="trailing" secondItem="KUD-Hd-d9b" secondAttribute="trailing" constant="337" id="iQE-n6-JM1"/>
                                     <constraint firstAttribute="height" constant="60" id="odp-KA-7FT"/>
+                                    <constraint firstAttribute="bottom" secondItem="KUD-Hd-d9b" secondAttribute="bottom" constant="13" id="rgs-uf-I5t"/>
+                                    <constraint firstItem="KUD-Hd-d9b" firstAttribute="leading" secondItem="N31-KJ-jb7" secondAttribute="leading" constant="40" id="zhp-g8-WqF"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wEb-Ch-TsQ">
@@ -680,7 +679,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="0qW-jR-n84" firstAttribute="top" secondItem="wEb-Ch-TsQ" secondAttribute="top" constant="14" id="0Uv-ar-1ly"/>
                                     <constraint firstItem="eUy-Yf-Tdi" firstAttribute="leading" secondItem="wEb-Ch-TsQ" secondAttribute="leading" constant="40" id="KhH-Y1-ltd"/>
@@ -691,22 +690,35 @@
                                     <constraint firstAttribute="bottom" secondItem="eUy-Yf-Tdi" secondAttribute="bottom" constant="13" id="li7-bP-CnE"/>
                                 </constraints>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QwT-Nh-Utf">
-                                <rect key="frame" x="0.0" y="138" width="414" height="480"/>
-                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UbD-Lm-cYN">
+                                <rect key="frame" x="0.0" y="130" width="414" height="496"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QwT-Nh-Utf">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="496"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="QwT-Nh-Utf" firstAttribute="leading" secondItem="UbD-Lm-cYN" secondAttribute="leading" id="4fb-rQ-IEV"/>
+                                    <constraint firstItem="QwT-Nh-Utf" firstAttribute="top" secondItem="UbD-Lm-cYN" secondAttribute="top" id="L5B-Ku-ZEX"/>
+                                    <constraint firstItem="QwT-Nh-Utf" firstAttribute="centerX" secondItem="UbD-Lm-cYN" secondAttribute="centerX" id="RbL-h5-mv5"/>
+                                    <constraint firstItem="QwT-Nh-Utf" firstAttribute="centerY" secondItem="UbD-Lm-cYN" secondAttribute="centerY" id="iuS-Mz-BTu"/>
+                                    <constraint firstAttribute="bottom" secondItem="QwT-Nh-Utf" secondAttribute="bottom" id="o0h-tr-e7S"/>
+                                    <constraint firstAttribute="trailing" secondItem="QwT-Nh-Utf" secondAttribute="trailing" id="qBk-n1-8g6"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="N31-KJ-jb7" firstAttribute="top" secondItem="WzJ-De-RFp" secondAttribute="top" constant="50" id="3fg-0M-fFj"/>
-                            <constraint firstItem="wEb-Ch-TsQ" firstAttribute="top" secondItem="QwT-Nh-Utf" secondAttribute="bottom" id="9Wt-Le-I5i"/>
-                            <constraint firstItem="QwT-Nh-Utf" firstAttribute="leading" secondItem="WzJ-De-RFp" secondAttribute="leading" id="DSz-vm-zUP"/>
                             <constraint firstItem="N31-KJ-jb7" firstAttribute="trailing" secondItem="WzJ-De-RFp" secondAttribute="trailing" id="FMq-45-O7X"/>
                             <constraint firstItem="wEb-Ch-TsQ" firstAttribute="leading" secondItem="WzJ-De-RFp" secondAttribute="leading" id="GjS-mO-H1L"/>
-                            <constraint firstItem="QwT-Nh-Utf" firstAttribute="top" secondItem="N31-KJ-jb7" secondAttribute="bottom" id="HOL-NO-Ujv"/>
+                            <constraint firstItem="UbD-Lm-cYN" firstAttribute="leading" secondItem="WzJ-De-RFp" secondAttribute="leading" id="Hnh-1s-34w"/>
                             <constraint firstItem="N31-KJ-jb7" firstAttribute="leading" secondItem="WzJ-De-RFp" secondAttribute="leading" id="NOO-23-Qmz"/>
                             <constraint firstItem="wEb-Ch-TsQ" firstAttribute="trailing" secondItem="WzJ-De-RFp" secondAttribute="trailing" id="aQY-C0-kb6"/>
+                            <constraint firstItem="wEb-Ch-TsQ" firstAttribute="top" secondItem="UbD-Lm-cYN" secondAttribute="bottom" id="iU2-fe-x0V"/>
+                            <constraint firstItem="UbD-Lm-cYN" firstAttribute="trailing" secondItem="WzJ-De-RFp" secondAttribute="trailing" id="jDc-AT-FIN"/>
                             <constraint firstItem="WzJ-De-RFp" firstAttribute="bottom" secondItem="wEb-Ch-TsQ" secondAttribute="bottom" constant="50" id="jmx-qx-mXH"/>
-                            <constraint firstItem="QwT-Nh-Utf" firstAttribute="trailing" secondItem="WzJ-De-RFp" secondAttribute="trailing" id="r58-CA-TfE"/>
+                            <constraint firstItem="UbD-Lm-cYN" firstAttribute="top" secondItem="N31-KJ-jb7" secondAttribute="bottom" id="olc-0H-mlW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WzJ-De-RFp"/>
                     </view>
@@ -715,12 +727,13 @@
                         <outlet property="heartCount" destination="eUy-Yf-Tdi" id="SBB-vK-ilf"/>
                         <outlet property="imageView" destination="QwT-Nh-Utf" id="GBR-RZ-N0k"/>
                         <outlet property="messageCount" destination="0qW-jR-n84" id="VyB-24-Gg4"/>
+                        <outlet property="scrollView" destination="UbD-Lm-cYN" id="QB6-pO-w9Y"/>
                         <outlet property="topView" destination="N31-KJ-jb7" id="HZe-8p-Gx7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ypu-L7-dFR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4042" y="-487"/>
+            <point key="canvasLocation" x="4040.579710144928" y="-487.50000000000006"/>
         </scene>
     </scenes>
     <resources>
@@ -731,6 +744,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="x3j-19-JQO"/>
-        <segue reference="oUU-OE-HOK"/>
+        <segue reference="dCe-SJ-GLb"/>
     </inferredMetricsTieBreakers>
 </document>
