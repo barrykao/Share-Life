@@ -1,4 +1,5 @@
 PODS:
+  - Cache (5.2.0)
   - Firebase/Auth (6.3.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.1.2)
@@ -70,8 +71,12 @@ PODS:
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.2)
   - ImagePicker (3.1.0)
+  - Imaginary (4.2.0):
+    - Cache (~> 5.0)
   - IQKeyboardManagerSwift (6.4.0)
   - leveldb-library (1.20)
+  - Lightbox (2.3.0):
+    - Imaginary (~> 4.0)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -86,10 +91,12 @@ DEPENDENCIES:
   - Firebase/Storage
   - ImagePicker
   - IQKeyboardManagerSwift
+  - Lightbox
   - PageMenu
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Cache
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -102,12 +109,15 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMSessionFetcher
     - ImagePicker
+    - Imaginary
     - IQKeyboardManagerSwift
     - leveldb-library
+    - Lightbox
     - nanopb
     - PageMenu
 
 SPEC CHECKSUMS:
+  Cache: 807c5d86d01a177f06ede9865add3aea269bbfd4
   Firebase: 8432d732974498afd5987e9001a05f90f1a3d625
   FirebaseAnalytics: 470ddab7253b21ad5a40bebd4a9903d7ae19386a
   FirebaseAuth: 7fa2cc010b93770831a4e7a60651b52c3b8d111a
@@ -120,11 +130,13 @@ SPEC CHECKSUMS:
   GoogleUtilities: 996e0db07153674fd1b54b220fda3a3dc3547cba
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   ImagePicker: db1fd7626337b2577c523bef5f499bbbe5a37079
+  Imaginary: dae33d06dbc2ada22f98afef5eb45cc061311a2c
   IQKeyboardManagerSwift: ed9b04ee0e3067ffba543283462d619f944b05e5
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  Lightbox: d317750e4132bfb871a5307cfe0a2c7d6a583c65
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PageMenu: 9c38fd7e0d9ef4b1408320f55bb907bbc0e538dc
 
-PODFILE CHECKSUM: 4491f1dae0608ce7015c473676e2906479a80ca0
+PODFILE CHECKSUM: 4d057e1c6704ab0153f7165171082bfe574a2829
 
 COCOAPODS: 1.6.1

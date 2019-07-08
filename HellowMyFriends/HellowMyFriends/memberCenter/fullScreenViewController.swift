@@ -37,7 +37,6 @@ class fullScreenViewController: UIViewController {
     var collectionViewLayout: UICollectionViewFlowLayout!
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,8 +48,8 @@ class fullScreenViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.view.backgroundColor = UIColor.black
-        topView.isHidden = true
-        downView.isHidden = true
+//        topView.isHidden = true
+//        downView.isHidden = true
         self.collectionView.backgroundColor = UIColor.black
 
         
@@ -72,13 +71,13 @@ class fullScreenViewController: UIViewController {
         pageControl.currentPage = index
         view.addSubview(self.pageControl)
         
-        let doubleFingers = UITapGestureRecognizer( target:self, action:#selector(tapDoubleDid))
-        // 點幾下才觸發 設置 1 時 則是點一下會觸發 依此類推
-        doubleFingers.numberOfTapsRequired = 2
-        // 幾根指頭觸發
-        doubleFingers.numberOfTouchesRequired = 1
-        // 為視圖加入監聽手勢
-        self.view.addGestureRecognizer(doubleFingers)
+//        let doubleFingers = UITapGestureRecognizer( target:self, action:#selector(tapDoubleDid))
+//        // 點幾下才觸發 設置 1 時 則是點一下會觸發 依此類推
+//        doubleFingers.numberOfTapsRequired = 2
+//        // 幾根指頭觸發
+//        doubleFingers.numberOfTouchesRequired = 1
+//        // 為視圖加入監聽手勢
+//        self.view.addGestureRecognizer(doubleFingers)
         
         // 單指輕點
         let singleFinger = UITapGestureRecognizer( target:self, action:#selector(tapSingleDid))
@@ -87,7 +86,7 @@ class fullScreenViewController: UIViewController {
         // 幾根指頭觸發
         singleFinger.numberOfTouchesRequired = 1
         // 雙指輕點沒有觸發時 才會檢測此手勢 以免手勢被蓋過
-        singleFinger.require(toFail: doubleFingers)
+//        singleFinger.require(toFail: doubleFingers)
         // 為視圖加入監聽手勢
         self.view.addGestureRecognizer(singleFinger)
         
@@ -98,6 +97,8 @@ class fullScreenViewController: UIViewController {
         swipeUp.numberOfTouchesRequired = 1
         // 為視圖加入監聽手勢
         self.view.addGestureRecognizer(swipeUp)
+      
+        
     }
     
     @objc func tapSingleDid(_ ges:UITapGestureRecognizer){
@@ -110,21 +111,40 @@ class fullScreenViewController: UIViewController {
             topView.isHidden = true
             downView.isHidden = true
         }
+        
     }
     
-    //图片双击事件响应
-    @objc func tapDoubleDid(_ ges:UITapGestureRecognizer){
-//        //缩放视图（带有动画效果）
-//        topView.isHidden = true
-//        downView.isHidden = true
-//
+    
+    func refreshBtn() {
+        let note = self.fullScreenData[self.index]
+        let databaseRefPaper = Database.database().reference().child("Paper").child(note.paperName!)
+            databaseRefPaper.observe(.value, with: { (snapshot) in
+                if let uploadDataDic = snapshot.value as? [String:Any] {
+                        if uploadDataDic["comment"] as? String == "commentData" {
+                            print("0則留言")
+                            note.commentCount = 0
+                        }else{
+                            guard let comment = uploadDataDic["comment"] as? [String:Any] else {return}
+                            note.commentCount = comment.count
+                        }
+                        self.messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
+                    
+                        if uploadDataDic["heart"] as? String == "heartData" {
+                            print("0塊巧克力")
+                            note.heartCount = 0
+                        }else{
+                            guard let heart = uploadDataDic["heart"] as? [String:Any] else {return}
+                            note.heartUid = Array(heart.keys)
+                            note.heartCount = heart.count
+                        }
+                        self.heartCount.setTitle("\(note.heartCount)塊巧克力", for: .normal)
+                }
+            })
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
-        let note = self.fullScreenData[self.index]
-        messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
-        heartCount.setTitle("\(note.heartCount)塊巧克力", for: .normal)
+        refreshBtn()
 
     }
 
@@ -218,7 +238,6 @@ class fullScreenViewController: UIViewController {
             let navigationVC = segue.destination as! UINavigationController
             let messageVC = navigationVC.topViewController as! MessageViewController
             messageVC.messageData = note
-
         }
         
         if segue.identifier == "heartSegue" {
@@ -233,8 +252,6 @@ class fullScreenViewController: UIViewController {
     }
     
 }
-
-
 
 extension fullScreenViewController: UICollectionViewDataSource {
 
@@ -272,7 +289,7 @@ extension fullScreenViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? fullCollectionViewCell{
             //由于单元格是复用的，所以要重置内部元素尺寸
-//            cell.resetSize()
+            cell.resetSize()
         }
     }
     

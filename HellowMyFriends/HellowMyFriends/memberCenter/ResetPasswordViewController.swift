@@ -25,6 +25,8 @@ class ResetPasswordViewController: UIViewController ,UITextFieldDelegate {
         self.emailText.delegate = self
         buttonDesign(button: sendBtn)
         buttonDesign(button: backBtn)
+        
+        textFieldClearMode(textField: emailText)
         // Do any additional setup after loading the view.
     }
     

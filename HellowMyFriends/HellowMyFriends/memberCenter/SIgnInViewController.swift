@@ -40,10 +40,30 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         
         textFieldClearMode(textField: account)
         textFieldClearMode(textField: password)
-
+        
         // Do any additional setup after loading the view.
     }
-    
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+            self.centerAlignUsername.constant += self.view.bounds.width
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseOut, animations: {
+            self.centerAlignPassword.constant += self.view.bounds.width
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        
+        UIView.animateWithDuration(0.5, delay: 0.4, options: .CurveEaseOut, animations: {
+            self.loginButton.alpha = 1
+        }, completion: nil)
+        
+        
+    }
+    */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }

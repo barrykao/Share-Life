@@ -48,7 +48,6 @@
                                         </constraints>
                                         <connections>
                                             <outlet property="photoView" destination="WNE-Zz-Axh" id="yr5-Va-b1j"/>
-                                            <segue destination="zFE-cC-dY2" kind="presentation" identifier="fullSegue" id="6pi-l2-AVi"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -107,20 +106,12 @@
                                                             <constraint firstItem="EaF-Zl-t2t" firstAttribute="leading" secondItem="4Bw-ow-xhT" secondAttribute="leading" id="zPw-LI-ShP"/>
                                                         </constraints>
                                                     </view>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mUO-D8-Qfq">
-                                                        <rect key="frame" x="20" y="67.333333333333343" width="70" height="33.666666666666657"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <state key="normal" title="我的好友"/>
-                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="mUO-D8-Qfq" secondAttribute="bottom" constant="99" id="3Ra-yU-MpC"/>
-                                                    <constraint firstItem="mUO-D8-Qfq" firstAttribute="leading" secondItem="UkX-mi-CwL" secondAttribute="leading" constant="20" id="5KS-fw-pL7"/>
                                                     <constraint firstItem="4Bw-ow-xhT" firstAttribute="top" secondItem="UkX-mi-CwL" secondAttribute="top" id="6MZ-FG-vOp"/>
                                                     <constraint firstItem="4Bw-ow-xhT" firstAttribute="leading" secondItem="UkX-mi-CwL" secondAttribute="leading" constant="14" id="SHc-6Z-ZY8"/>
                                                     <constraint firstAttribute="trailing" secondItem="4Bw-ow-xhT" secondAttribute="trailing" constant="14" id="hO7-8b-fXa"/>
-                                                    <constraint firstItem="mUO-D8-Qfq" firstAttribute="top" secondItem="4Bw-ow-xhT" secondAttribute="bottom" constant="8" id="s0h-yf-x9n"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -306,7 +297,7 @@
                                     </textField>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ose-sB-U5R">
                                         <rect key="frame" x="0.0" y="128" width="294" height="60"/>
-                                        <color key="backgroundColor" red="0.35140942110000001" green="0.81397749350000004" blue="0.3574182091" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="JI9-e3-nf5"/>
                                         </constraints>
@@ -320,7 +311,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xqG-SR-hbl">
                                         <rect key="frame" x="0.0" y="212" width="294" height="40"/>
-                                        <color key="backgroundColor" red="0.35140942110000001" green="0.81397749350000004" blue="0.3574182091" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="Ct9-qP-HW2"/>
                                         </constraints>
@@ -334,7 +325,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uTJ-Tf-BWn">
                                         <rect key="frame" x="0.0" y="276" width="294" height="40"/>
-                                        <color key="backgroundColor" red="0.35140942110000001" green="0.81397749350000004" blue="0.3574182091" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="yQm-i5-ooo"/>
                                         </constraints>
@@ -387,7 +378,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background 2.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="evg-Ci-d4P">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="evg-Ci-d4P">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4oc-58-7yx">
@@ -404,7 +395,7 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="khe-ga-u56">
                                         <rect key="frame" x="0.0" y="70" width="314" height="50"/>
-                                        <color key="backgroundColor" red="0.35140942110000001" green="0.81397749350000004" blue="0.3574182091" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="p1a-1s-FYH"/>
                                         </constraints>
@@ -418,7 +409,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6It-PT-vd8">
                                         <rect key="frame" x="0.0" y="140" width="314" height="50"/>
-                                        <color key="backgroundColor" red="0.35140942110000001" green="0.81397749350000004" blue="0.3574182091" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="rHV-gf-FmK"/>
                                         </constraints>
@@ -471,7 +462,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background 2.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="TPQ-en-988">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="TPQ-en-988">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="KNP-xy-sot">
@@ -497,7 +488,7 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H83-Fu-G8E">
                                         <rect key="frame" x="0.0" y="140" width="314" height="50"/>
-                                        <color key="backgroundColor" red="0.35140942110000001" green="0.81397749350000004" blue="0.3574182091" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="iFq-xg-m3N"/>
                                         </constraints>
@@ -511,7 +502,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ze-Yi-cnX">
                                         <rect key="frame" x="0.0" y="210" width="314" height="50"/>
-                                        <color key="backgroundColor" red="0.35140942110000001" green="0.81397749350000004" blue="0.3574182091" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="LMW-Fz-dv7"/>
                                         </constraints>
@@ -732,7 +723,7 @@
         <!--heartVC-->
         <scene sceneID="AWK-ur-SdL">
             <objects>
-                <viewControllerPlaceholder storyboardName="HomePage" referencedIdentifier="heartVC" id="mIq-az-vC7" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardIdentifier="heartVC" storyboardName="HomePage" referencedIdentifier="heartVC" id="mIq-az-vC7" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NZI-Wg-MUG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2341" y="-121"/>
@@ -740,10 +731,10 @@
         <!--messageVC-->
         <scene sceneID="AOl-go-gou">
             <objects>
-                <viewControllerPlaceholder storyboardName="HomePage" referencedIdentifier="messageVC" id="VmP-i2-3Qo" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardIdentifier="messageVC" storyboardName="HomePage" referencedIdentifier="messageVC" id="VmP-i2-3Qo" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kPx-Sl-wpC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3672" y="-132"/>
+            <point key="canvasLocation" x="2325" y="-404"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="j2Q-30-oZ6">
@@ -765,7 +756,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="background 2.jpg" width="2000" height="2400"/>
         <image name="background.jpg" width="700" height="1050"/>
         <image name="first.png" width="823" height="482"/>
         <image name="member.png" width="215" height="215"/>

@@ -13,6 +13,7 @@ target 'HellowMyFriends' do
  pod 'IQKeyboardManagerSwift'
  pod 'ImagePicker'
  pod 'PageMenu'
+ pod 'Lightbox'
 
 
 end

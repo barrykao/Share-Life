@@ -52,12 +52,21 @@ class MessageViewController: UIViewController {
         textView.text = "留言......"
         textView.textColor = UIColor.lightGray
         textView.returnKeyType = .done
-        
+//        animateTable()
+
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
-   
+        
+        let swipeLeft = UISwipeGestureRecognizer(
+            target:self,
+            action:#selector(backBtn(_:)))
+        swipeLeft.direction = .right
+        
+        // 為視圖加入監聽手勢
+        self.view.addGestureRecognizer(swipeLeft)
+        
         // Do any additional setup after loading the view.
     }
     
@@ -79,14 +88,18 @@ class MessageViewController: UIViewController {
         // 動畫結束之後使用 loadData()
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
             self.tableView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
-            
         }) { (finish) in
             self.loadData()
         }
+        
+        
+        
+        
     }
     
     @objc func loadData(){
         // 這邊我們用一個延遲讀取的方法，來模擬網路延遲效果（延遲3秒）
+        
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
             // 停止 refreshControl 動畫
             self.refreshControl.endRefreshing()
@@ -121,6 +134,7 @@ class MessageViewController: UIViewController {
             })
 //                            self.tableView.reloadData()
         }
+        
     }
     
     
@@ -150,7 +164,7 @@ class MessageViewController: UIViewController {
             print("上傳留言成功")
         }
         self.textView.text = ""
-//        self.textField.text = ""
+
     }
     
     @IBAction func backBtn(_ sender: Any) {
@@ -205,12 +219,10 @@ extension MessageViewController: UITableViewDelegate {
         self.view.endEditing(true)
         print("\(indexPath.section), \(indexPath.row)")
         
-        
-
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
-        self.tableView.setEditing(editing, animated: false)
+        self.tableView.setEditing(editing, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

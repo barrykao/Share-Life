@@ -15,9 +15,9 @@ class fullCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var scrollView: UIScrollView!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    
+    override func awakeFromNib() {
+        print("123")
         scrollView.delegate = self
         //scrollView缩放范围 1~3
         scrollView.maximumZoomScale = 3.0
@@ -31,12 +31,12 @@ class fullCollectionViewCell: UICollectionViewCell {
         
         
         //单击监听
-        let tapSingle=UITapGestureRecognizer(target:self,
+        let tapSingle = UITapGestureRecognizer(target:self,
                                              action:#selector(tapSingleDid))
         tapSingle.numberOfTapsRequired = 1
         tapSingle.numberOfTouchesRequired = 1
         //双击监听
-        let tapDouble=UITapGestureRecognizer(target:self,
+        let tapDouble = UITapGestureRecognizer(target:self,
                                              action:#selector(tapDoubleDid))
         tapDouble.numberOfTapsRequired = 2
         tapDouble.numberOfTouchesRequired = 1
@@ -44,6 +44,12 @@ class fullCollectionViewCell: UICollectionViewCell {
         tapSingle.require(toFail: tapDouble)
         self.imageView.addGestureRecognizer(tapSingle)
         self.imageView.addGestureRecognizer(tapDouble)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+       
     }
     
     //重置单元格内元素尺寸
@@ -58,6 +64,7 @@ class fullCollectionViewCell: UICollectionViewCell {
             //imageView居中
             imageView.center = scrollView.center
         }
+    
     }
     
     //视图布局改变时（横竖屏切换时cell尺寸也会变化）
@@ -100,7 +107,6 @@ class fullCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-    
     
 }
 

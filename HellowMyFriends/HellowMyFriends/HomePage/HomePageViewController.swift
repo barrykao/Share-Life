@@ -38,15 +38,48 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
+        animateTable()
         feedbackGenerator?.prepare()
         
         postMessageVC.delegate = self
 
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-//        refreshLoadData(1)
+
+
+    override func viewWillAppear(_ animated: Bool) {
+        
+//        animateTable()
+
     }
+    
+    func animateTable() {
+        
+        self.tableView.reloadData()
+        
+        
+        let cells = tableView.visibleCells
+        let tableHeight: CGFloat = tableView.bounds.size.height
+        
+        for i in cells {
+            let cell: CustomCellTableViewCell = i as! CustomCellTableViewCell
+            cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
+        }
+        
+        var index = 0
+        
+        for a in cells {
+            let cell: CustomCellTableViewCell = a as! CustomCellTableViewCell
+            
+            
+            UIView.animate(withDuration: 1.5, delay: 0.05 * Double(index), options: .transitionCurlUp, animations: {
+                cell.transform = CGAffineTransform(translationX: 0, y: 0)
+            }, completion: nil)
+            index += 1
+        }
+    }
+    
+    
     
     @IBAction func refreshLoadData(_ sender: Any) {
         

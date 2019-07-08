@@ -252,7 +252,7 @@ open class ImagePickerController: UIViewController {
 
     NotificationCenter.default.addObserver(self,
       selector: #selector(handleRotation(_:)),
-      name: UIDevice.orientationDidChangeNotification   ,
+      name: UIDevice.orientationDidChangeNotification,
       //name: NSNotification.Name.orientationDidChangeNotification,
       object: nil)
   }

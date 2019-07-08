@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
+
 
 class FullViewController: UIViewController ,UIScrollViewDelegate{
 
@@ -27,11 +30,13 @@ class FullViewController: UIViewController ,UIScrollViewDelegate{
     
     
     var currentImage: UIImage?
-    var currentData: DatabaseData!
+    var currentData: DatabaseData! = DatabaseData()
     var flag: Bool = false
-    
+    var databaseRef : DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        databaseRef = Database.database().reference()
 
         self.view.backgroundColor = UIColor.black
         imageView.image = currentImage
@@ -81,10 +86,36 @@ class FullViewController: UIViewController ,UIScrollViewDelegate{
         
     }
     
+    func refreshBtn() {
+        
+        let databaseRefPaper = Database.database().reference().child("Paper").child(currentData.paperName!)
+        databaseRefPaper.observe(.value, with: { (snapshot) in
+            if let uploadDataDic = snapshot.value as? [String:Any] {
+                if uploadDataDic["comment"] as? String == "commentData" {
+                    print("0則留言")
+                    self.currentData.commentCount = 0
+                }else{
+                    guard let comment = uploadDataDic["comment"] as? [String:Any] else {return}
+                    self.currentData.commentCount = comment.count
+                }
+                self.messageCount.setTitle("\(self.currentData.commentCount)則留言", for: .normal)
+                
+                if uploadDataDic["heart"] as? String == "heartData" {
+                    print("0塊巧克力")
+                    self.currentData.heartCount = 0
+                }else{
+                    guard let heart = uploadDataDic["heart"] as? [String:Any] else {return}
+                    self.currentData.heartUid = Array(heart.keys)
+                    self.currentData.heartCount = heart.count
+                }
+                self.heartCount.setTitle("\(self.currentData.heartCount)塊巧克力", for: .normal)
+            }
+        })
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         
-        messageCount.setTitle("\(currentData.commentCount)則留言", for: .normal)
-        heartCount.setTitle("\(currentData.heartCount)塊巧克力", for: .normal)
+        refreshBtn()
         
     }
     
