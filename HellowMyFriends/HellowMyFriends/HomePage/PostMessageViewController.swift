@@ -25,22 +25,44 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     
     @IBOutlet weak var imageView: UIImageView!
     
+    
+    @IBOutlet var collectionView: UICollectionView!
+    
+    
     var currentName : DatabaseData!
     
-    var image1 : UIImage?
+    var images : [UIImage] = []
     var isEdit : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
     var delegate: PostMessageViewControllerDelegate?
-    
+    let fullScreenSize = UIScreen.main.bounds.size
+    var index: Int!
+    var pageControl : UIPageControl!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+
         currentName = DatabaseData()
-        self.imageView.image = image1
-        self.textView.text = currentName.message
         
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
+        
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
+        self.collectionView.isPagingEnabled = true
+        
+        //设置页控制器
+        pageControl = UIPageControl()
+        pageControl.center = CGPoint(x: UIScreen.main.bounds.width/2,
+                                     y: UIScreen.main.bounds.height - 20)
+        pageControl.numberOfPages = images.count
+        pageControl.isUserInteractionEnabled = true
+        pageControl.tintColor = UIColor.gray
+        pageControl.pageIndicatorTintColor = UIColor.gray
+        pageControl.currentPageIndicatorTintColor = UIColor.black
+        view.addSubview(self.pageControl)
         
         if let account = UserDefaults.standard.string(forKey: "account") {
             let photoName = "\(account).jpg"
@@ -67,18 +89,21 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                 self.textView.text = ""
             }
             self.currentName.message = self.textView.text
-            let uuidString = UUID().uuidString
-            self.currentName.paperName = uuidString
-            guard let fileName = self.currentName.paperName else {return}
-            print(fileName)
             
-            // save To file
-            guard let image1 = thumbmail(image: self.imageView.image!) else {return}
-            self.imageView.image = thumbmailImage(image: image1, fileName: "\(fileName).jpg")
-            self.delegate?.didPostMessage(note: self.currentName)
-            // save To Server
-            self.databaseRef = self.databaseRef.child("Paper").child(fileName)
-            saveToFirebase(controller: self, image: self.imageView.image, imageName: fileName, message: self.textView.text, database: self.databaseRef)
+            for i in 0 ..< self.images.count {
+                let uuidString = UUID().uuidString
+                self.currentName.paperName = uuidString
+                guard let fileName = self.currentName.paperName else {return}
+                print(fileName)
+                // save To file
+                guard let image1 = thumbmail(image: self.images[i]) else {return}
+                guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
+                
+//                self.delegate?.didPostMessage(note: self.currentName)
+                // save To Server
+                self.databaseRef = self.databaseRef.child("Paper").child(fileName)
+                saveToFirebase(controller: self, image: image2, imageName: fileName, message: self.textView.text, database: self.databaseRef)
+            }
             
         }
         alert.addAction(okAction)
@@ -129,4 +154,54 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         }
     }
    
+}
+
+extension PostMessageViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "postMessageCell", for: indexPath) as! PostMessageCollectionViewCell
+        
+        cell.imageView.image = images[indexPath.item]
+        
+        return cell
+    }
+    
+}
+extension PostMessageViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        self.index = indexPath.item
+        
+    }
+    //collectionView里某个cell显示完毕
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let visibleCell = collectionView.visibleCells.first else {return}
+        self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
+        
+    }
+}
+
+
+extension PostMessageViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return fullScreenSize
+        
+    }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
 }

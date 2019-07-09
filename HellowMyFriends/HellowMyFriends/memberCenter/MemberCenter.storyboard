@@ -641,9 +641,6 @@
                                         <state key="normal" title="0則留言">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
-                                        <connections>
-                                            <segue destination="VmP-i2-3Qo" kind="presentation" identifier="messageSegue" id="vIC-4S-8NZ"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>

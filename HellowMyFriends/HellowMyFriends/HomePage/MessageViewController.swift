@@ -70,6 +70,13 @@ class MessageViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        
+        
+        
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
         isEditing()
@@ -170,6 +177,7 @@ class MessageViewController: UIViewController {
     @IBAction func backBtn(_ sender: Any) {
         
         self.dismiss(animated: true)
+        
         
     }
     

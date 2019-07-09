@@ -214,7 +214,9 @@ open class LightboxController: UIViewController {
   open override var prefersStatusBarHidden: Bool {
     return LightboxConfig.hideStatusBar
   }
-
+    
+  
+    
   // MARK: - Rotation
 
   override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

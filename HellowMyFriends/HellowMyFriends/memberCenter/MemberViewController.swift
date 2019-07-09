@@ -11,9 +11,9 @@ import Firebase
 import FirebaseAuth
 import Lightbox
 
+
 class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
 
-    
     @IBOutlet var account: UILabel!
 
     @IBOutlet var collectionView: UICollectionView!
@@ -38,7 +38,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     var lightboxImages: [LightboxImage] = []
     var flag: Bool = true
     var index: Int!
-    
+    var lightboxController: LightboxController = LightboxController()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,23 +49,27 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
         
-       
         // reload
         refreshControl = UIRefreshControl()
         collectionView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(collectionViewReloadData), for: UIControl.Event.valueChanged)
         refreshBtn(1)
         
-        messageButton = UIButton(frame:  CGRect(x: 350, y: 600, width: 50, height: 50))
-        messageButton.setTitle("留言", for: .normal)
+        messageButton = UIButton(frame:  CGRect(x: 350, y: 580, width: 50, height: 50))
+
+        messageButton.setImage(UIImage(named: "message"), for: .normal)
         messageButton.setTitleColor(UIColor.white, for: .normal)
         
-        heartButton = UIButton(frame:  CGRect(x: 10, y: 600, width: 100, height: 50))
-        heartButton.setTitle("巧克力", for: .normal)
+        heartButton = UIButton(frame:  CGRect(x: 10, y: 580, width: 100, height: 50))
+
+        heartButton.setImage(UIImage(named: "chocolate"), for: .normal)
+
         heartButton.setTitleColor(UIColor.white, for: .normal)
         
         editButton = UIButton(frame:  CGRect(x: 350, y: 100, width: 50, height: 50))
-        editButton.setTitle("....", for: .normal)
+
+        editButton.setImage(UIImage(named: "file"), for: .normal)
+
         editButton.setTitleColor(UIColor.white, for: .normal)
         
         guard let account = UserDefaults.standard.string(forKey: "account") else {return}
@@ -100,11 +105,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear")
-        
         if Auth.auth().currentUser != nil {
             print("登入成功")
-        
         }else{
             print("尚未登入")
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
@@ -112,7 +114,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                 present(signVC, animated: true, completion: nil)
             }
         }
-        
     }
 
     @IBAction func refreshBtn(_ sender: Any) {
@@ -286,29 +287,31 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         self.dismiss(animated: true, completion: nil)
     }
     
+    
+    
     @objc func messageVC () {
         print("messageVC")
-        self.dismiss(animated: true)
         let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
         let messageVC = navigationVC.topViewController as! MessageViewController
         let note = self.memberData[self.index]
         messageVC.messageData = note
-        present(navigationVC, animated: true, completion: nil)
+        lightboxController.present(navigationVC, animated: true)
     }
+    
     
     @objc func heartVC() {
         print("heartVC")
-        self.dismiss(animated: true)
+        
         let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "heartVC") as! UINavigationController
         let messageVC = navigationVC.topViewController as! HeartViewController
         let note = self.memberData[self.index]
         messageVC.messageData = note
-        present(navigationVC, animated: true, completion: nil)
+        lightboxController.present(navigationVC, animated: true, completion: nil)
     }
     
     @objc func editVC() {
         
-        self.dismiss(animated: true)
+        
         let controller = UIAlertController(title: "修改貼文", message: "請選擇操作功能", preferredStyle: .actionSheet)
         let names = ["編輯貼文", "刪除貼文"]
         for name in names {
@@ -354,7 +357,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                     controller.addAction(okAction)
                     let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
                     controller.addAction(cancelAction)
-                    self.present(controller, animated: true, completion: nil)
+                    self.lightboxController.present(controller, animated: true, completion: nil)
                 }
             }
             controller.addAction(action)
@@ -362,13 +365,11 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         }
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         controller.addAction(cancelAction)
-        self.present(controller, animated: true, completion: nil)
+        lightboxController.present(controller, animated: true, completion: nil)
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        
         
         
     }
@@ -407,24 +408,26 @@ extension MemberViewController : UICollectionViewDelegate {
         print("\(indexPath.section),\(indexPath.row)")
         
         guard images.count > 0 else { return }
-       
-        let lightboxController = LightboxController(images: self.lightboxImages, startIndex: indexPath.item)
+        
+        
+        lightboxController = LightboxController(images: self.lightboxImages, startIndex: indexPath.item)
         lightboxController.dynamicBackground = true
         lightboxController.imageTouchDelegate = self
         lightboxController.pageDelegate = self
-        self.present(lightboxController, animated: true, completion: nil)
         
-        messageButton.addTarget(self, action: #selector(messageVC), for: .touchUpInside)
-        heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
-        editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
+        self.present(lightboxController, animated: true, completion: nil)
         lightboxController.view.addSubview(messageButton)
         lightboxController.view.addSubview(heartButton)
         lightboxController.view.addSubview(editButton)
-
-
-//        messageButton.isHidden = false
-        self.index = indexPath.item
         
+        
+        messageButton.addTarget(self, action: #selector(messageVC), for: .touchUpInside)
+        
+        
+        heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
+        
+        self.index = indexPath.item
         
     }
 }
@@ -435,21 +438,13 @@ extension MemberViewController: LightboxControllerTouchDelegate, LightboxControl
     
     func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
         print("didMoveToPage")
-//        print(page)
-//        flag = false
         self.index = page
-        
-        
     }
     
     func lightboxController(_ controller: LightboxController, didTouch image: LightboxImage, at index: Int) {
         print("didTouch")
         
-//        print(index)
-//        print(image)
-        
         flag = !flag
-        print(flag)
         if flag {
             messageButton.isHidden = false
             heartButton.isHidden = false

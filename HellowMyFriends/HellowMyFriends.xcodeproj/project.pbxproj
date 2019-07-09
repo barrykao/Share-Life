@@ -12,7 +12,6 @@
 		C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */; };
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
 		C61E7D0122D1E41F00473FA6 /* OpenSegueAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */; };
-		C61E7D0322D1EEFC00473FA6 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61E7D0222D1EEFC00473FA6 /* PhotoViewController.swift */; };
 		C64882BB22BBE4C900D0CB9E /* PostMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64882BA22BBE4C900D0CB9E /* PostMessageViewController.swift */; };
 		C64882BF22BBE6A500D0CB9E /* ReisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */; };
 		C64D914622BF9152002A7F2F /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64D914522BF9152002A7F2F /* CoreDataHelper.swift */; };
@@ -53,7 +52,6 @@
 		C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIgnInViewController.swift; sourceTree = "<group>"; };
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSegueAnimation.swift; sourceTree = "<group>"; };
-		C61E7D0222D1EEFC00473FA6 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		C64882BA22BBE4C900D0CB9E /* PostMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostMessageViewController.swift; sourceTree = "<group>"; };
 		C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReisterViewController.swift; sourceTree = "<group>"; };
 		C64D914522BF9152002A7F2F /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 			isa = PBXGroup;
 			children = (
 				C65A131822B88F36002C2881 /* HomePage.storyboard */,
-				C61E7D0222D1EEFC00473FA6 /* PhotoViewController.swift */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
 				C6D3C39622CF2CF4008043A7 /* FullViewController.swift */,
 				C6008FFF22C88CC900F93F8D /* HeartViewController.swift */,
@@ -356,7 +353,6 @@
 			files = (
 				C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */,
 				C64882BF22BBE6A500D0CB9E /* ReisterViewController.swift in Sources */,
-				C61E7D0322D1EEFC00473FA6 /* PhotoViewController.swift in Sources */,
 				C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */,
 				C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */,
 				C65F50BF22C1E71F00CAB067 /* PhotoCollectionViewCell.swift in Sources */,

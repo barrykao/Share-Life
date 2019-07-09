@@ -34,7 +34,6 @@ class fullScreenViewController: UIViewController {
     let fullScreenSize = UIScreen.main.bounds.size
     var flag: Bool = false
     var indexPath: Int = 0
-    var collectionViewLayout: UICollectionViewFlowLayout!
     
     
     override func viewDidLoad() {

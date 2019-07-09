@@ -15,8 +15,6 @@ import FirebaseAuth
 var databaseRef : DatabaseReference!
 var storageRef : StorageReference!
 
-
-
 func isEmpty(controller: UIViewController){
     let alert = UIAlertController(title: "警告", message: "請輸入E-mail及密碼!", preferredStyle: .alert)
     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -35,7 +33,6 @@ func buttonDesign (button: AnyObject) {
     button.layer.shadowOpacity = 0.3
     
 }
-
 
 //MARK: func - check file exist
 func checkFile (fileName : String) -> Bool {
@@ -160,59 +157,6 @@ func image(fileName:String?) -> UIImage? {
     return UIImage(named: "photoImage.png")
 }
 
-
-func saveToFirebase (controller: UIViewController ,image: UIImage? ,imageName: String ,message: String ,database: DatabaseReference){
-    
-    let now:Date = Date()
-    let dateFormat:DateFormatter = DateFormatter()
-    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    let dateString:String = dateFormat.string(from: now)
-    
-    if let image = image ,
-        let imageData = image.jpegData(compressionQuality: 1) ,
-         let account = UserDefaults.standard.string(forKey: "account") {
-            storageRef = Storage.storage().reference().child(account).child("\(imageName).jpg")
-            let metadata = StorageMetadata()
-            storageRef.putData(imageData, metadata: metadata) { (data, error) in
-                if error != nil {
-                    print("Error: \(error!.localizedDescription)")
-                    return
-                }
-                storageRef.downloadURL(completion: { (url, error) in
-                    if error != nil {
-                        print("Error: \(error!.localizedDescription)")
-                        return
-                    }
-                    guard let uploadImageUrl = url?.absoluteString else {
-//                        print("Photo Url: \(uploadImageUrl)")
-                        // Save to Database
-                        return
-                    }
-                    guard let uid = Auth.auth().currentUser?.uid else {return}
-                    
-                    let postMessage: [String : Any] = ["account" : account,
-                                                       "date" : dateString,
-                                                       "message" : message,
-                                                       "uid" : uid,
-                                                       "photo" : uploadImageUrl,
-                                                       "postTime": [".sv":"timestamp"],
-                                                       "comment" : "commentData",
-                                                       "heart" : "heartData"
-                                                      ]
-                    database.setValue(postMessage, withCompletionBlock: { (error, dataRef) in
-                        if error != nil{
-                            print("Database Error: \(error!.localizedDescription)")
-                        }else{
-                            print("圖片已儲存")
-                        }
-                    })
-                })
-            }
-        controller.dismiss(animated: true)
-    }
-    controller.dismiss(animated: true)
-}
-
 func loadImageToFile(fileName: String , database : DatabaseReference){
   
         database.observe(.value) { (snapshot) in
@@ -237,10 +181,67 @@ func loadImageToFile(fileName: String , database : DatabaseReference){
         }
 }
 
-
 func textFieldClearMode (textField: UITextField) {
 //    textField.clearButtonMode = .whileEditing //編輯時出現清除按鈕
 //    textField.clearButtonMode = .unlessEditing //編輯時不出現,編輯後才出現清除按鈕
     textField.clearButtonMode = .always //一直顯示清除按鈕
 
+}
+
+func saveToFirebase (controller: UIViewController ,image: UIImage? ,imageName: String ,message: String ,database: DatabaseReference){
+    
+    let now:Date = Date()
+    let dateFormat:DateFormatter = DateFormatter()
+    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let dateString:String = dateFormat.string(from: now)
+    
+    if let image = image ,
+        let imageData = image.jpegData(compressionQuality: 1) ,
+        let account = UserDefaults.standard.string(forKey: "account") {
+        storageRef = Storage.storage().reference().child(account).child("\(imageName).jpg")
+        let metadata = StorageMetadata()
+        storageRef.putData(imageData, metadata: metadata) { (data, error) in
+            if error != nil {
+                print("Error: \(error!.localizedDescription)")
+                return
+            }
+            storageRef.downloadURL(completion: { (url, error) in
+                if error != nil {
+                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
+                guard let uploadImageUrl = url?.absoluteString else {return}
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                
+                let postMessage: [String : Any] = ["account" : account,
+                                                   "date" : dateString,
+                                                   "message" : message,
+                                                   "uid" : uid,
+                                                   "photo" : [imageName : uploadImageUrl],
+                                                   "postTime": [".sv":"timestamp"],
+                                                   "comment" : "commentData",
+                                                   "heart" : "heartData"]
+                
+                database.child(imageName).updateChildValues(postMessage, withCompletionBlock: { (error, dataRef) in
+                    if error != nil{
+                        print("Database Error: \(error!.localizedDescription)")
+                    }else{
+                        print("圖片已儲存")
+                    }
+                })
+                
+            })
+        }
+        controller.dismiss(animated: true)
+    }
+//    controller.dismiss(animated: true)
+    
+    func saveToDatabase () {
+        
+        
+        
+    }
+    
+    
+    
 }

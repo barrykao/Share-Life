@@ -11,35 +11,75 @@ import ImagePicker
 import Lightbox
 
 class PostViewController: UIViewController {
-
-    @IBOutlet var photoView: UIImageView!
+    
+   
+    @IBOutlet var collectionView: UICollectionView!
     
     @IBOutlet var clearPhotoBtn: UIBarButtonItem!
     
     var currentImage : DatabaseData!
+    var images: [UIImage] = []
+    var index: Int = 0
+    let fullScreenSize = UIScreen.main.bounds.size
+    var pageControl : UIPageControl!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.view.backgroundColor = UIColor.black
+        
+        
+        
         let imagePicker = ImagePickerController()
         imagePicker.delegate = self
         self.present(imagePicker, animated: true, completion: nil)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        if photoView.image != nil {
-            clearPhotoBtn.isEnabled = true
-
+        
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
+        self.collectionView.isPagingEnabled = true
+        
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = false
         }
+        
+        
+        
+        
+//        self.clearPhotoBtn.isEnabled = false
+//        self.navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if images.count != 0 {
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
+            self.clearPhotoBtn.isEnabled = true
+            //设置页控制器
+            pageControl = UIPageControl()
+            pageControl.center = CGPoint(x: UIScreen.main.bounds.width/2,
+                                         y: UIScreen.main.bounds.height - 80)
+            pageControl.numberOfPages = images.count
+            pageControl.isUserInteractionEnabled = true
+            pageControl.tintColor = UIColor.gray
+            pageControl.pageIndicatorTintColor = UIColor.gray
+            pageControl.currentPageIndicatorTintColor = UIColor.black
+            view.addSubview(self.pageControl)
+        }else{
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+            self.clearPhotoBtn.isEnabled = false
+        }
+        
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "postMessageSegue" {
-            let image = self.photoView.image
-            let postVC = segue.destination as! PostMessageViewController
-            postVC.image1 = image
+       
+            let postMessageVC = segue.destination as! PostMessageViewController
+            postMessageVC.images = images
+            
         }
         
     }
@@ -50,34 +90,72 @@ class PostViewController: UIViewController {
         imagePicker.delegate = self
         self.present(imagePicker, animated: true, completion: nil)
     }
-    /*
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        guard let image = info[.originalImage] as? UIImage else {return}
-        DispatchQueue.main.async {
-            self.photoView.image = image
-        }
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        self.dismiss(animated: true, completion: nil)
-        self.navigationItem.rightBarButtonItem?.isEnabled = true
-    }
-    */
+    
     @IBAction func back(_ sender: Any) {
-        
         self.dismiss(animated: true)
     }
     
     
     @IBAction func clearPhotoBtn(_ sender: Any) {
         
-        if photoView.image != nil {
-            photoView.image = nil
-            clearPhotoBtn.isEnabled = false
+        self.images = []
+        self.collectionView.reloadData()
+        self.clearPhotoBtn.isEnabled = false
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
 
-        }
+    }
+    
+    
+}
+
+extension PostViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "postCell", for: indexPath) as! PostCollectionViewCell
+        
+        cell.imageView.image = images[indexPath.item]
+        
+        return cell
+    }
+    
+}
+extension PostViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+    }
+    //collectionView里某个cell显示完毕
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        //当前显示的单元格
+        //        let visibleCell = collectionView.visibleCells[0]
+        guard let visibleCell = collectionView.visibleCells.first else {return}
+        //设置页控制器当前页
+        self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
+    }
+}
+
+
+extension PostViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return fullScreenSize
         
     }
     
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
     
 }
 
@@ -100,18 +178,18 @@ extension PostViewController : ImagePickerDelegate {
     func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
         print("doneButtonDidPress")
         
-        
-            guard let image = images.first else {return}
-            self.photoView.image = image
-            self.navigationItem.rightBarButtonItem?.isEnabled = true
-            self.dismiss(animated: true)
-       
+        self.images = images
+        self.dismiss(animated: true)
+        self.collectionView.reloadData()
+//        self.clearPhotoBtn.isEnabled = true
+//        self.navigationItem.rightBarButtonItem?.isEnabled = true
+
     }
     
     func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
         print("cancelButtonDidPress")
         imagePicker.dismiss(animated: true)
-        self.dismiss(animated: true)
+        
     }
     
     
