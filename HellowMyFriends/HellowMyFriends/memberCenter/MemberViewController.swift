@@ -178,7 +178,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         if let array = dataDic[keyArray[i]] as? [String:Any] {
                             let uid = Auth.auth().currentUser?.uid
                             if uid == array["uid"] as? String {
-                                
                                 let note = DatabaseData()
                                 note.imageName = "\(keyArray[i]).jpg"
                                 note.paperName = keyArray[i]
@@ -188,7 +187,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                 note.url = array["photo"] as? String
                                 note.uid = array["uid"] as? String
                                 note.postTime = array["postTime"] as? Double
-                                
                                 if array["comment"] as? String == "commentData" {
                                     //                            print("0則留言")
                                     note.commentCount = 0
@@ -272,19 +270,54 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         let fileName = "\(account).jpg"
         guard let thumbImage = thumbmail(image: image) else {return}
         let photoImage = circleImage(image: thumbImage , fileName: fileName)
-        
-        DispatchQueue.main.async {
-            self.imageBtn.setImage(photoImage, for: .normal)
-        }
         self.imageBtn.setImage(photoImage, for: .normal)
-
+        
+        // upload to firebase
         guard let uid = Auth.auth().currentUser?.uid else {return}
         self.databaseRef = self.databaseRef.child("User").child(uid)
-        saveToFirebase(controller: self, image: photoImage, imageName: account, message: account, database: self.databaseRef)
+        let now:Date = Date()
+        let dateFormat:DateFormatter = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString:String = dateFormat.string(from: now)
+        if let image = photoImage ,
+            let imageData = image.jpegData(compressionQuality: 1) ,
+            let account = UserDefaults.standard.string(forKey: "account") {
+            storageRef = Storage.storage().reference().child(account).child(fileName)
+            let metadata = StorageMetadata()
+            storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                if error != nil {
+                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
+                self.storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print("Error: \(error!.localizedDescription)")
+                        return
+                    }
+                    guard let uploadImageUrl = url?.absoluteString else {return}
+                    guard let uid = Auth.auth().currentUser?.uid else {return}
+                    
+                    let postMessage: [String : Any] = ["account" : account,
+                                                       "date" : dateString,
+                                                       "uid" : uid,
+                                                       "photo" : uploadImageUrl,
+                                                       "postTime": [".sv":"timestamp"],
+                                                      ]
+                    
+                    self.databaseRef.updateChildValues(postMessage, withCompletionBlock: { (error, dataRef) in
+                        if error != nil{
+                            print("Database Error: \(error!.localizedDescription)")
+                        }else{
+                            print("圖片已儲存")
+                        }
+                    })
+                    
+                })
+            }
+//            picker.dismiss(animated: true)
+        }
         
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        self.isNewPhoto = true
-        self.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true)
     }
     
     

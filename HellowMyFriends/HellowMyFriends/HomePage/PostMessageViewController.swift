@@ -23,7 +23,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     
     @IBOutlet weak var textView: UITextView!
     
-    @IBOutlet weak var imageView: UIImageView!
+    
     
     
     @IBOutlet var collectionView: UICollectionView!
@@ -32,6 +32,8 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     var currentName : DatabaseData!
     
     var images : [UIImage] = []
+    var imageNames: [String] = []
+    var urlStrings: [String] = []
     var isEdit : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
@@ -78,39 +80,100 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
 //        textView.font = UIFont(name: "verdana", size: 13.0)
         textView.returnKeyType = .done
         textView.delegate = self
+        
+        
     }
     
     @IBAction func postToServer(_ sender: Any) {
         
         let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-        
+            
             if self.textView.text == "在想些什麼?"{
                 self.textView.text = ""
             }
             self.currentName.message = self.textView.text
+         
+                self.postPhotoBtn()
+                self.databaseRef = self.databaseRef.child("Paper").child(self.imageNames[0])
+                self.uploadToDatabase()
+
             
-            for i in 0 ..< self.images.count {
-                let uuidString = UUID().uuidString
-                self.currentName.paperName = uuidString
-                guard let fileName = self.currentName.paperName else {return}
-                print(fileName)
-                // save To file
-                guard let image1 = thumbmail(image: self.images[i]) else {return}
-                guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
-                
-//                self.delegate?.didPostMessage(note: self.currentName)
-                // save To Server
-                self.databaseRef = self.databaseRef.child("Paper").child(fileName)
-                saveToFirebase(controller: self, image: image2, imageName: fileName, message: self.textView.text, database: self.databaseRef)
-            }
-            
+            self.dismiss(animated: true)
         }
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
         
     }
    
+    func postPhotoBtn() {
+        
+        print("postPhotoBtn")
+        for i in 0 ..< self.images.count {
+            let uuidString = UUID().uuidString
+            self.currentName.paperName = uuidString
+            guard let fileName = self.currentName.paperName else {return}
+            print(fileName)
+            // save To file
+            guard let image1 = thumbmail(image: self.images[i]) else {return}
+            guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
+            self.imageNames.append(fileName)
+            // save To Server
+            guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
+            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+            self.storageRef = Storage.storage().reference().child(account).child("\(fileName).jpg")
+            let metadata = StorageMetadata()
+            self.storageRef.putData(imageData, metadata: metadata)
+            self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                print("執行putData")
+                if error != nil {
+                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
+                self.storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print("Error: \(error!.localizedDescription)")
+                        return
+                    }
+                    print("執行downloadURL")
+                    guard let uploadImageUrl = url?.absoluteString else {return}
+                    self.urlStrings.append(uploadImageUrl)
+                    
+                    let now: Date = Date()
+                    let dateFormat:DateFormatter = DateFormatter()
+                    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let dateString:String = dateFormat.string(from: now)
+                    guard let uid = Auth.auth().currentUser?.uid else {return}
+                    guard let message = self.textView.text else { return}
+                    guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                    let postMessage: [String : Any] = ["account" : account,
+                                                       "date" : dateString,
+                                                       "message" : message,
+                                                       "uid" : uid,
+                                                       "photo" : self.imageNames,
+                                                       "photourl" : self.urlStrings,
+                                                       "postTime": [".sv":"timestamp"],
+                                                       "comment" : "commentData",
+                                                       "heart" : "heartData"]
+                    
+                    print("\(self.imageNames) : \(self.urlStrings)")
+                    self.databaseRef.setValue(postMessage) { (error, data) in
+                        if error != nil {
+                            assertionFailure()
+                        }else {
+                            print("上傳成功")
+                        }
+                    }
+                })
+            }
+        }
+    }
+    
+    func uploadToDatabase() {
+        
+    }
+    
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "在想些什麼?" {
             textView.text = ""

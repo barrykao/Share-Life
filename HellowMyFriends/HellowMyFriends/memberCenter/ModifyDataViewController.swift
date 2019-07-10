@@ -42,7 +42,12 @@ class ModifyDataViewController: UIViewController { //, UIImagePickerControllerDe
             let fileName = "\(self.account).jpg"
             self.photo.image = thumbmailImage(image: self.photo.image! , fileName: fileName)
             self.databaseRef = self.databaseRef.child("User").child(self.uid)
-            saveToFirebase(controller: self, image: self.photo.image, imageName: self.account, message: self.account, database: self.databaseRef)
+            let urlString = saveToFirebase(image: self.photo.image, imageName: self.account)
+            saveToDatabase(message: "" , imageName: self.account, urlString: urlString)
+            
+            
+            
+            
             
         }
         alert.addAction(okAction)

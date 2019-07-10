@@ -25,7 +25,7 @@ class DatabaseData {
     var heartCount: Int = 0
     var heartUid: [String] = []
     var flag: Bool = false
-
+    var urlString: [String] = []
 
     init() {
 

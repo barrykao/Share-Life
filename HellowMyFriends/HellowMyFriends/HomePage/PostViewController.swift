@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 import ImagePicker
 import Lightbox
 
@@ -17,12 +19,17 @@ class PostViewController: UIViewController {
     
     @IBOutlet var clearPhotoBtn: UIBarButtonItem!
     
-    var currentImage : DatabaseData!
+    
+    var databaseRef: DatabaseReference! = Database.database().reference()
+    var storageRef: StorageReference! = Storage.storage().reference()
+    var currentName : DatabaseData! = DatabaseData()
     var images: [UIImage] = []
     var index: Int = 0
     let fullScreenSize = UIScreen.main.bounds.size
     var pageControl : UIPageControl!
-
+    var urlStrings: [String] = []
+    var imageNames: [String] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,18 +80,6 @@ class PostViewController: UIViewController {
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "postMessageSegue" {
-       
-            let postMessageVC = segue.destination as! PostMessageViewController
-            postMessageVC.images = images
-            
-        }
-        
-    }
-    
-    
     @IBAction func camera(_ sender: Any) {
         let imagePicker = ImagePickerController()
         imagePicker.delegate = self
@@ -106,6 +101,20 @@ class PostViewController: UIViewController {
     }
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "postMessageSegue" {
+            
+            
+            let postMessageVC = segue.destination as! PostMessageViewController
+            
+            postMessageVC.images = images
+//            postMessageVC.imageNames = imageNames
+//            postMessageVC.urlStrings = urlStrings
+            postMessageVC.currentName = currentName
+        }
+        
+    }
 }
 
 extension PostViewController: UICollectionViewDataSource {
@@ -181,6 +190,8 @@ extension PostViewController : ImagePickerDelegate {
         self.images = images
         self.dismiss(animated: true)
         self.collectionView.reloadData()
+        
+
 //        self.clearPhotoBtn.isEnabled = true
 //        self.navigationItem.rightBarButtonItem?.isEnabled = true
 
