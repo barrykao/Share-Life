@@ -68,7 +68,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         
         if let account = UserDefaults.standard.string(forKey: "account") {
             let photoName = "\(account).jpg"
-            photo.image = image(fileName: photoName)
+            photo.image = loadImage(fileName: photoName)
             self.account.text = account
         }
         
@@ -93,10 +93,9 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                 self.textView.text = ""
             }
             self.currentName.message = self.textView.text
-         
+            
                 self.postPhotoBtn()
-                self.databaseRef = self.databaseRef.child("Paper").child(self.imageNames[0])
-                self.uploadToDatabase()
+            
 
             
             self.dismiss(animated: true)
@@ -108,10 +107,12 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
    
     func postPhotoBtn() {
         
+        self.databaseRef = self.databaseRef.child("Paper").child(self.imageNames[0])
         print("postPhotoBtn")
         for i in 0 ..< self.images.count {
             let uuidString = UUID().uuidString
             self.currentName.paperName = uuidString
+            self.imageNames.append(uuidString)
             guard let fileName = self.currentName.paperName else {return}
             print(fileName)
             // save To file
@@ -167,10 +168,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                 })
             }
         }
-    }
-    
-    func uploadToDatabase() {
-        
     }
     
     

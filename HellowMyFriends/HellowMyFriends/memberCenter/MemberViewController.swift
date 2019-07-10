@@ -50,10 +50,10 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         storageRef = Storage.storage().reference()
         
         // reload
-        refreshControl = UIRefreshControl()
-        collectionView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action: #selector(collectionViewReloadData), for: UIControl.Event.valueChanged)
-        refreshBtn(1)
+//        refreshControl = UIRefreshControl()
+//        collectionView.addSubview(refreshControl)
+//        refreshControl.addTarget(self, action: #selector(collectionViewReloadData), for: UIControl.Event.valueChanged)
+//        refreshBtn(1)
         
         messageButton = UIButton(frame:  CGRect(x: 350, y: 580, width: 50, height: 50))
 
@@ -78,7 +78,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         let fileName = "\(account).jpg"
         if checkFile(fileName: fileName) {
             print("照片存在")
-            let photoImage = image(fileName: fileName)
+            let photoImage = loadImage(fileName: fileName)
             self.imageBtn.setImage(photoImage, for: .normal)
             
         }else {
@@ -124,7 +124,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             self.collectionView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
             
         }) { (finish) in
-            self.collectionViewReloadData()
+//            self.collectionViewReloadData()
         }
     }
 
@@ -151,7 +151,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                 }
             })
     }
-    
+    /*
     @objc func collectionViewReloadData() {
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3){
@@ -236,7 +236,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             
         }
     }
-    
+    */
     @IBAction func imageBtn(_ sender: Any) {
         
         let imagePicker = UIImagePickerController()
@@ -341,7 +341,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         messageVC.messageData = note
         lightboxController.present(navigationVC, animated: true, completion: nil)
     }
-    
+    /*
     @objc func editVC() {
         
         
@@ -401,7 +401,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         lightboxController.present(controller, animated: true, completion: nil)
         
     }
-    
+    */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         
@@ -418,7 +418,7 @@ extension MemberViewController : UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GLCell", for: indexPath) as! PhotoCollectionViewCell
         print(indexPath.row)
-
+        /*
         let duc = memberData[indexPath.item]
         if let fileName = duc.imageName {
             print(fileName)
@@ -428,6 +428,7 @@ extension MemberViewController : UICollectionViewDataSource {
             cell.photoView.layer.shadowOpacity = 0.5
 
         }
+        */
         return cell
     }
 
@@ -458,7 +459,7 @@ extension MemberViewController : UICollectionViewDelegate {
         
         
         heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
-        editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
+//        editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
         
         self.index = indexPath.item
         

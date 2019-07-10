@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreData
-
+import UIKit
 
 
 class DatabaseData {
@@ -19,14 +19,15 @@ class DatabaseData {
     var message : String?
     var url : String?
     var uid : String?
-    var imageName : String?
     var postTime : Double?
     var commentCount: Int = 0
     var heartCount: Int = 0
     var heartUid: [String] = []
     var flag: Bool = false
-    var urlString: [String] = []
-
+    var images: [UIImage] = []
+    var imageName : [String] = []
+    var imageURL: [String] = []
+    
     init() {
 
     }

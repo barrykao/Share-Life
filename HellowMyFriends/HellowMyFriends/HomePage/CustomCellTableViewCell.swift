@@ -11,8 +11,7 @@ import Firebase
 import FirebaseAuth
 
 class CustomCellTableViewCell: UITableViewCell {
-    
-    
+
     @IBOutlet weak var photo: UIImageView!
     
     @IBOutlet weak var account: UILabel!
@@ -20,8 +19,6 @@ class CustomCellTableViewCell: UITableViewCell {
     @IBOutlet weak var date: UILabel!
     
     @IBOutlet weak var textView: UITextView!
-    
-    @IBOutlet var photoView: UIImageView!
 
     @IBOutlet var heartCount: UIButton!
 
@@ -30,10 +27,16 @@ class CustomCellTableViewCell: UITableViewCell {
     @IBOutlet var heartImageBtn: UIButton!
     
     @IBOutlet var messageBtn: UIButton!
+
+    @IBOutlet var collectionView: UICollectionView!
     
+    var currentData: DatabaseData! = DatabaseData()
+    let fullScreenSize = UIScreen.main.bounds.size
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -42,4 +45,51 @@ class CustomCellTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+}
+
+class CustomCollectionViewCell: UITableViewCell {
+    
+    
+    
+    
+}
+
+extension CustomCellTableViewCell: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return currentData.imageName.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeell", for: indexPath) as! HomeCollectionViewCell
+        let note = self.currentData.imageName[indexPath.item]
+        print(note)
+        cell.photoView.image = loadImage(fileName: "\(note).jpg")
+        return cell
+    }
+    
+    
+}
+
+
+extension CustomCellTableViewCell: UICollectionViewDelegate {
+    
+}
+
+extension CustomCellTableViewCell: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    
+    return fullScreenSize
+    
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
 }

@@ -38,7 +38,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
-        animateTable()
+//        animateTable()
         feedbackGenerator?.prepare()
         
         postMessageVC.delegate = self
@@ -79,8 +79,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         }
     }
     
-    
-    
     @IBAction func refreshLoadData(_ sender: Any) {
         
         refreshControl.beginRefreshing()
@@ -110,11 +108,11 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         let array = dataDic[keyArray[i]] as! [String:Any]
                         let note = DatabaseData()
                         note.paperName = keyArray[i]
-                        note.imageName = "\(keyArray[i]).jpg"
                         note.account = array["account"] as? String
                         note.message = array["message"] as? String
                         note.date = array["date"] as? String
-                        note.url = array["photo"] as? String
+                        note.imageName = array["photo"] as! [String]
+                        note.imageURL = array["photourl"] as! [String]
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
                         
@@ -138,11 +136,11 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
                         })
+                        
                         // PhotoView
-                        guard let fileName = note.imageName,
-                            let photoName = note.account else {
-                            return
-                        }
+                        let fileName = note.imageName[i]
+                        guard let photoName = note.account else {return}
+                        
                         if checkFile(fileName: fileName) && checkFile(fileName: "\(photoName).jpg") {
 //                            print("file exist.")
                         }else{
@@ -151,6 +149,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                             let databaseUser = self!.databaseRef.child("User").child(note.uid!).child("photo")
                             loadImageToFile(fileName: "\(photoName).jpg", database: databaseUser)
                         }
+ 
                     }
                     DispatchQueue.main.async {
                         self!.tableView.reloadData()
@@ -186,31 +185,33 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? CustomCellTableViewCell
             cell?.textLabel?.text = "想與我們分享些什麼嗎?"
             if let account = UserDefaults.standard.string(forKey: "account") {
-                cell?.imageView?.image = image(fileName: "\(account).jpg")
+                cell?.imageView?.image = loadImage(fileName: "\(account).jpg")
             }
             return cell!
         }
+        
       
+        
         let note = self.data[indexPath.section - 1]
+        cell?.currentData = note
+        cell?.collectionView.dataSource = cell
+        cell?.collectionView.delegate = cell
+        
+        
+        
         cell?.account.text = note.account
         cell?.textView.text = note.message
         cell?.date.text = note.date
-        
-        cell?.photoView.image = image(fileName: note.imageName)
-        cell?.photoView.layer.cornerRadius = 30
-        cell?.photoView.layer.shadowOpacity = 0.5
-
         if let account = note.account {
-            cell?.photo.image = image(fileName: "\(account).jpg")
+            cell?.photo.image = loadImage(fileName: "\(account).jpg")
         }
-        
 
         cell?.heartImageBtn.tag = indexPath.section * 10
         cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchDown)
-
+        
         cell?.heartCount.setTitle("\(note.heartCount)塊巧克力", for: .normal)
         cell?.heartCount.tag = indexPath.section
-        
+    
         cell?.messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
         cell?.messageCount.tag = indexPath.section
         cell?.messageBtn.tag = indexPath.section
@@ -233,7 +234,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 let note = self.data[indexPath.section - 1]
                 let fullVC = segue.destination as! FullViewController
                 fullVC.currentData = note
-                fullVC.currentImage = image(fileName: note.imageName)
+//                fullVC.currentImage = image(fileName: note.imageName)
             }
         }
  

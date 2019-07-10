@@ -136,6 +136,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     @IBOutlet var photoView: UIImageView!
     
 }
+
 class PostCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet var imageView: UIImageView!
@@ -145,5 +146,11 @@ class PostCollectionViewCell: UICollectionViewCell {
 class PostMessageCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var imageView: UIImageView!
+    
+}
+
+class HomeCollectionViewCell: UICollectionViewCell {
+    
+    @IBOutlet var photoView: UIImageView!
     
 }

@@ -5,7 +5,7 @@
 //  Created by 高琨淯 on 2019/7/2.
 //  Copyright © 2019 Appcoda. All rights reserved.
 //
-
+/*
 import UIKit
 import Firebase
 import FirebaseAuth
@@ -325,3 +325,4 @@ extension fullScreenViewController: UICollectionViewDelegateFlowLayout {
     }
     
 }
+*/

@@ -30,7 +30,6 @@
 		C676073322D05AEC00848AFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C676073222D05AEB00848AFF /* ViewController.swift */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67AF9B322AD1740001E51E4 /* ModifyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */; };
-		C67AFAAF22CAFD6800F9DE1C /* fullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AFAAE22CAFD6800F9DE1C /* fullScreenViewController.swift */; };
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
@@ -70,7 +69,6 @@
 		C676073222D05AEB00848AFF /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyDataViewController.swift; sourceTree = "<group>"; };
-		C67AFAAE22CAFD6800F9DE1C /* fullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fullScreenViewController.swift; sourceTree = "<group>"; };
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
@@ -133,7 +131,6 @@
 				C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */,
 				C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */,
 				C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */,
-				C67AFAAE22CAFD6800F9DE1C /* fullScreenViewController.swift */,
 				C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */,
 				C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */,
 				C67AF9B222AD1740001E51E4 /* ModifyDataViewController.swift */,
@@ -358,7 +355,6 @@
 				C65F50BF22C1E71F00CAB067 /* PhotoCollectionViewCell.swift in Sources */,
 				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
 				C600900022C88CC900F93F8D /* HeartViewController.swift in Sources */,
-				C67AFAAF22CAFD6800F9DE1C /* fullScreenViewController.swift in Sources */,
 				C6D3C39722CF2CF4008043A7 /* FullViewController.swift in Sources */,
 				C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */,
 				C64D914922BF918E002A7F2F /* DataModel.xcdatamodeld in Sources */,

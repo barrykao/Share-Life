@@ -146,7 +146,7 @@ func fileDocumentsPath(fileName: String) -> URL {
 }
 
 //MARK: func - checkfilePhoto
-func image(fileName:String?) -> UIImage? {
+func loadImage(fileName:String?) -> UIImage? {
     
     if let fileName = fileName {
         let fileURL = fileDocumentsPath(fileName: fileName)

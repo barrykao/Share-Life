@@ -38,7 +38,7 @@ class EditPostViewController: UIViewController, UIImagePickerControllerDelegate 
         databaseRef = Database.database().reference()
         
         let account = "\(editData.account!).jpg"
-        photo.image = image(fileName: account)
+        photo.image = loadImage(fileName: account)
         self.account.text = editData.account
         self.textView.text = editData.message
         self.imageView.image = editImage

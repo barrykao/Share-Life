@@ -27,9 +27,6 @@ class PostViewController: UIViewController {
     var index: Int = 0
     let fullScreenSize = UIScreen.main.bounds.size
     var pageControl : UIPageControl!
-    var urlStrings: [String] = []
-    var imageNames: [String] = []
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,11 +47,6 @@ class PostViewController: UIViewController {
             self.automaticallyAdjustsScrollViewInsets = false
         }
         
-        
-        
-        
-//        self.clearPhotoBtn.isEnabled = false
-//        self.navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -109,8 +101,6 @@ class PostViewController: UIViewController {
             let postMessageVC = segue.destination as! PostMessageViewController
             
             postMessageVC.images = images
-//            postMessageVC.imageNames = imageNames
-//            postMessageVC.urlStrings = urlStrings
             postMessageVC.currentName = currentName
         }
         
@@ -188,13 +178,9 @@ extension PostViewController : ImagePickerDelegate {
         print("doneButtonDidPress")
         
         self.images = images
+        self.currentName.images = images
         self.dismiss(animated: true)
         self.collectionView.reloadData()
-        
-
-//        self.clearPhotoBtn.isEnabled = true
-//        self.navigationItem.rightBarButtonItem?.isEnabled = true
-
     }
     
     func cancelButtonDidPress(_ imagePicker: ImagePickerController) {

@@ -41,7 +41,7 @@ class MessageViewController: UIViewController {
         databaseRef = Database.database().reference()
         // Photo
         guard let messageAccount = messageData.account else {return}
-        photo.image = image(fileName:"\(messageAccount).jpg" )
+        photo.image = loadImage(fileName:"\(messageAccount).jpg" )
         // Meesage
         message.text = messageData.message
         self.postBtn.isEnabled = false
@@ -209,7 +209,7 @@ extension MessageViewController: UITableViewDataSource {
         
         if let accountView = note.account {
             cell.textLabel?.text = note.account
-            cell.imageView?.image = image(fileName: "\(accountView).jpg")
+            cell.imageView?.image = loadImage(fileName: "\(accountView).jpg")
             cell.detailTextLabel?.text = note.comment
         }
         
