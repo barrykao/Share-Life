@@ -9,11 +9,10 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import ImagePicker
+import Lightbox
 
-
-
-
-class EditPostViewController: UIViewController, UIImagePickerControllerDelegate , UINavigationControllerDelegate{
+class EditPostViewController: UIViewController {
 
     var editData : DatabaseData! = DatabaseData()
     
@@ -24,12 +23,14 @@ class EditPostViewController: UIViewController, UIImagePickerControllerDelegate 
     
     @IBOutlet var textView: UITextView!
     
-    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var collectionView: UICollectionView!
     
-    var editImage: UIImage?
+    var currentName: DatabaseData! = DatabaseData()
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
     var isEdit : Bool = false
+    var images: [UIImage] = []
+    let fullScreenSize = UIScreen.main.bounds.size
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,11 +38,13 @@ class EditPostViewController: UIViewController, UIImagePickerControllerDelegate 
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
         
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
+        
         let account = "\(editData.account!).jpg"
         photo.image = loadImage(fileName: account)
         self.account.text = editData.account
         self.textView.text = editData.message
-        self.imageView.image = editImage
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         // Do any additional setup after loading the view.
 //        textView.text = "在想些什麼?"
@@ -53,64 +56,98 @@ class EditPostViewController: UIViewController, UIImagePickerControllerDelegate 
     
 
     @IBAction func saveData(_ sender: Any) {
-        
-        if self.textView.text == "在想些什麼?"{
-            self.textView.text = ""
+        let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+            
+            if self.textView.text == "在想些什麼?"{
+                self.textView.text = ""
+            }
+            
+            self.currentName.message = self.textView.text
+            
+            self.postPhotoBtn()
+            
+            
+            
+            self.dismiss(animated: true)
         }
-        self.editData.message = self.textView.text
-    
-        guard let fileName = self.editData.paperName else {return}
-        print(fileName)
-        
-        // save To file
-        guard let image1 = thumbmail(image: self.imageView.image!) else {return}
-        self.imageView.image = thumbmailImage(image: image1, fileName: "\(fileName).jpg")
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+      
+    }
+    func postPhotoBtn() {
         
         
-        // save To Server
-//        self.databaseRef = self.databaseRef.child("Paper").child(fileName)
-//        saveToFirebase(controller: self, image: self.imageView.image, imageName: fileName, message: self.textView.text, database: self.databaseRef)
-        self.dismiss(animated: true)
+        
+        
+        
+        self.databaseRef = self.databaseRef.child("Paper").child(self.currentName.imageName[0])
+        print("postPhotoBtn")
+        for i in 0 ..< self.images.count {
+            let uuidString = UUID().uuidString
+            self.currentName.imageName.append(uuidString)
+            guard let fileName = self.currentName.imageName.first else {return}
+            print(fileName)
+            // save To file
+            guard let image1 = thumbmail(image: self.images[i]) else {return}
+            guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
+            // save To Server
+            guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
+            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+            self.storageRef = Storage.storage().reference().child(account).child("\(fileName).jpg")
+            let metadata = StorageMetadata()
+            self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                print("執行putData")
+                if error != nil {
+                    print("Error: \(error!.localizedDescription)")
+                    return
+                }
+                self.storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print("Error: \(error!.localizedDescription)")
+                        return
+                    }
+                    print("執行downloadURL")
+                    guard let uploadImageUrl = url?.absoluteString else {return}
+                    self.currentName.imageURL.append(uploadImageUrl)
+                    
+                    let now: Date = Date()
+                    let dateFormat:DateFormatter = DateFormatter()
+                    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let dateString:String = dateFormat.string(from: now)
+                    guard let uid = Auth.auth().currentUser?.uid else {return}
+                    guard let message = self.textView.text else { return}
+                    guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                    let postMessage: [String : Any] = ["account" : account,
+                                                       "date" : dateString,
+                                                       "message" : message,
+                                                       "uid" : uid,
+                                                       "photo" : self.currentName.imageName,
+                                                       "photourl" : self.currentName.imageURL,
+                                                       "postTime": [".sv":"timestamp"],
+                                                       "comment" : "commentData",
+                                                       "heart" : "heartData"]
+                    
+                    self.databaseRef.setValue(postMessage) { (error, data) in
+                        if error != nil {
+                            assertionFailure()
+                        }else {
+                            print("上傳成功")
+                        }
+                    }
+                })
+            }
+        }
     }
     
     @IBAction func camera(_ sender: Any) {
         
-        
-        let imagePicker = UIImagePickerController()
-        //        imagePicker.allowsEditing = true
+        let imagePicker = ImagePickerController()
         imagePicker.delegate = self
-        
-        let controller = UIAlertController(title: "變更圖片", message: "請選擇要上傳的照片或啟用相機", preferredStyle: .actionSheet)
-        let names = ["照片圖庫", "相機"]
-        for name in names {
-            let action = UIAlertAction(title: name, style: .default) { (action) in
-                if action.title == "照片圖庫" {
-                    imagePicker.sourceType = .savedPhotosAlbum
-                }
-                if action.title == "相機" {
-                    imagePicker.sourceType = .camera
-                }
-                self.present(imagePicker, animated: true, completion: nil)
-            }
-            controller.addAction(action)
-        }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        controller.addAction(cancelAction)
-        self.present(controller, animated: true, completion: nil)
+        self.present(imagePicker, animated: true, completion: nil)
         
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        guard let image = info[.originalImage] as? UIImage else {return}
-        DispatchQueue.main.async {
-            self.imageView.image = image
-        }
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        self.dismiss(animated: true, completion: nil)
-        self.navigationItem.rightBarButtonItem?.isEnabled = true
-    }
-        
         
     
     
@@ -121,17 +158,78 @@ class EditPostViewController: UIViewController, UIImagePickerControllerDelegate 
         self.dismiss(animated: true)
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+   
 
 }
+
+extension EditPostViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "postMessageCell", for: indexPath) as! PostMessageCollectionViewCell
+        
+        cell.imageView.image = images[indexPath.item]
+        
+        return cell
+    }
+    
+}
+
+
+
+extension EditPostViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return fullScreenSize
+        
+    }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+}
+
+extension EditPostViewController : ImagePickerDelegate {
+    
+    
+    func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        print("wrapperDidPress")
+        
+        guard images.count > 0 else { return }
+        
+        let lightboxImages = images.map {
+            LightboxImage(image: $0)
+        }
+        let lightbox = LightboxController(images: lightboxImages, startIndex: 0)
+        imagePicker.present(lightbox, animated: true, completion: nil)
+        
+    }
+    
+    func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        print("doneButtonDidPress")
+        self.images = images
+        self.dismiss(animated: true)
+        self.collectionView.reloadData()
+    }
+    func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
+        print("cancelButtonDidPress")
+        imagePicker.dismiss(animated: true)
+    }
+}
+
+
+
 extension EditPostViewController : UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "在想些什麼?" {

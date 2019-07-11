@@ -45,11 +45,8 @@ class CustomCellTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-}
+   
 
-class CustomCollectionViewCell: UITableViewCell {
-    
-    
     
     
 }
@@ -72,8 +69,6 @@ extension CustomCellTableViewCell: UICollectionViewDataSource {
         cell.photoView.image = loadImage(fileName: "\(note).jpg")
         return cell
     }
-    
-    
 }
 
 

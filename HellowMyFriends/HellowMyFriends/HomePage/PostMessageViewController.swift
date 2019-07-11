@@ -16,15 +16,11 @@ protocol PostMessageViewControllerDelegate {
 
 class PostMessageViewController: UIViewController ,UITextViewDelegate{
 
-    
     @IBOutlet weak var account: UILabel!
     
     @IBOutlet weak var photo: UIImageView!
     
     @IBOutlet weak var textView: UITextView!
-    
-    
-    
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -32,8 +28,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     var currentName : DatabaseData!
     
     var images : [UIImage] = []
-    var imageNames: [String] = []
-    var urlStrings: [String] = []
     var isEdit : Bool = false
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
@@ -46,7 +40,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
 
-        currentName = DatabaseData()
+        
         
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
@@ -93,8 +87,8 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                 self.textView.text = ""
             }
             self.currentName.message = self.textView.text
-            
-                self.postPhotoBtn()
+            self.databaseRef = self.databaseRef.child("Paper").child(self.currentName.imageName[0])
+            self.postPhotoBtn()
             
 
             
@@ -107,24 +101,19 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
    
     func postPhotoBtn() {
         
-        self.databaseRef = self.databaseRef.child("Paper").child(self.imageNames[0])
         print("postPhotoBtn")
         for i in 0 ..< self.images.count {
-            let uuidString = UUID().uuidString
-            self.currentName.paperName = uuidString
-            self.imageNames.append(uuidString)
-            guard let fileName = self.currentName.paperName else {return}
+            
+            let fileName = self.currentName.imageName[i]
             print(fileName)
             // save To file
             guard let image1 = thumbmail(image: self.images[i]) else {return}
             guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
-            self.imageNames.append(fileName)
             // save To Server
             guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
             guard let account = UserDefaults.standard.string(forKey: "account") else {return}
             self.storageRef = Storage.storage().reference().child(account).child("\(fileName).jpg")
             let metadata = StorageMetadata()
-            self.storageRef.putData(imageData, metadata: metadata)
             self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
                 print("執行putData")
                 if error != nil {
@@ -138,7 +127,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                     }
                     print("執行downloadURL")
                     guard let uploadImageUrl = url?.absoluteString else {return}
-                    self.urlStrings.append(uploadImageUrl)
+                    self.currentName.imageURL.append(uploadImageUrl)
                     
                     let now: Date = Date()
                     let dateFormat:DateFormatter = DateFormatter()
@@ -151,13 +140,12 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                                                        "date" : dateString,
                                                        "message" : message,
                                                        "uid" : uid,
-                                                       "photo" : self.imageNames,
-                                                       "photourl" : self.urlStrings,
+                                                       "photo" : self.currentName.imageName,
+                                                       "photourl" : self.currentName.imageURL,
                                                        "postTime": [".sv":"timestamp"],
                                                        "comment" : "commentData",
                                                        "heart" : "heartData"]
                     
-                    print("\(self.imageNames) : \(self.urlStrings)")
                     self.databaseRef.setValue(postMessage) { (error, data) in
                         if error != nil {
                             assertionFailure()
@@ -169,7 +157,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             }
         }
     }
-    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "在想些什麼?" {

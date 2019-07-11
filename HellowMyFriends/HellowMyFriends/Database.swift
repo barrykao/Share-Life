@@ -23,13 +23,11 @@ class DatabaseData {
     var commentCount: Int = 0
     var heartCount: Int = 0
     var heartUid: [String] = []
-    var flag: Bool = false
-    var images: [UIImage] = []
     var imageName : [String] = []
     var imageURL: [String] = []
-    
+    var imageNameUUID: String
     init() {
-
+        self.imageNameUUID = UUID().uuidString
     }
  
 }

@@ -35,7 +35,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     var count: Int = 0
     var images: [UIImage] = []
     var message: [String] = []
-    var lightboxImages: [LightboxImage] = []
+    var lightboxImages: [[LightboxImage]] = [[]]
     var flag: Bool = true
     var index: Int!
     var lightboxController: LightboxController = LightboxController()
@@ -50,10 +50,10 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         storageRef = Storage.storage().reference()
         
         // reload
-//        refreshControl = UIRefreshControl()
-//        collectionView.addSubview(refreshControl)
-//        refreshControl.addTarget(self, action: #selector(collectionViewReloadData), for: UIControl.Event.valueChanged)
-//        refreshBtn(1)
+        refreshControl = UIRefreshControl()
+        collectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(collectionViewReloadData), for: UIControl.Event.valueChanged)
+        refreshBtn(1)
         
         messageButton = UIButton(frame:  CGRect(x: 350, y: 580, width: 50, height: 50))
 
@@ -124,7 +124,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             self.collectionView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
             
         }) { (finish) in
-//            self.collectionViewReloadData()
+            self.collectionViewReloadData()
         }
     }
 
@@ -151,7 +151,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                 }
             })
     }
-    /*
+    
     @objc func collectionViewReloadData() {
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3){
@@ -159,7 +159,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             self.refreshControl.endRefreshing()
             guard let account = UserDefaults.standard.string(forKey: "account") else {return}
             let fileName = "\(account).jpg"
-            let photoImage = image(fileName: fileName)
+            let photoImage = loadImage(fileName: fileName)
             self.imageBtn.setImage(photoImage, for: .normal)
             
             let databaseRefPaper = Database.database().reference().child("Paper")
@@ -172,21 +172,27 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                     self.memberData = []
                     self.images = []
                     self.message = []
-                    self.lightboxImages = []
+                    self.lightboxImages = [[]]
+                    
+                    
+
                     
                     for i in 0 ..< keyArray.count {
+                        
                         if let array = dataDic[keyArray[i]] as? [String:Any] {
                             let uid = Auth.auth().currentUser?.uid
                             if uid == array["uid"] as? String {
+                                
                                 let note = DatabaseData()
-                                note.imageName = "\(keyArray[i]).jpg"
                                 note.paperName = keyArray[i]
                                 note.account = array["account"] as? String
                                 note.message = array["message"] as? String
                                 note.date = array["date"] as? String
-                                note.url = array["photo"] as? String
+                                note.imageName = array["photo"] as! [String]
+                                note.imageURL = array["photourl"] as! [String]
                                 note.uid = array["uid"] as? String
                                 note.postTime = array["postTime"] as? Double
+                                
                                 if array["comment"] as? String == "commentData" {
                                     //                            print("0則留言")
                                     note.commentCount = 0
@@ -204,30 +210,38 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                     self.count += note.heartCount
                                 }
                                 self.heartCount.text = "\(self.count)塊"
-
-                                // PhotoView
-                                guard let fileName = note.imageName else {return}
-                                if checkFile(fileName: fileName) {
-                                    
-                                }else{
-                                    let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photo")
-                                    loadImageToFile(fileName: fileName, database: databaseImageView)
-                                }
+                                
                                 
                                 self.memberData.append(note)
                                 // sort Post
                                 self.memberData.sort(by: { (post1, post2) -> Bool in
                                     post1.postTime! > post2.postTime!
                                 })
+                                
+                                for j in 0 ..< note.imageName.count {
+                                    // PhotoView
+                                    let fileName = "\(note.imageName[j]).jpg"
+                                    if checkFile(fileName: fileName) {
+                                    }else{
+                                        let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photourl").child("\(i)")
+                                        loadImageToFile(fileName: fileName, database: databaseImageView)
+                                    }
+                                    
+                                    self.images.append(loadImage(fileName: "\(note.imageName[j]).jpg")!)
+                                    
+                                    print("\(note.imageName[j]).jpg")
+                                    self.message.append(note.message!)
+                                    let lightbox = LightboxImage(image: self.images[j], text: self.message[j])
+                                    self.lightboxImages[i].append(lightbox)
+                                    
+                                }
+                                self.images = []
+                                self.message = []
                             }
                         }
                     }
-                    for j in 0 ..< keyArray.count {
-                        let note1 = self.memberData[j]
-                        self.images.append(image(fileName: note1.imageName)!)
-                        self.message.append(note1.message!)
-                        self.lightboxImages.append(LightboxImage(image: self.images[j], text: self.message[j]))
-                    }
+                    
+                    
                     DispatchQueue.main.async {
                         self.collectionView.reloadData()
                     }
@@ -236,7 +250,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             
         }
     }
-    */
+    
     @IBAction func imageBtn(_ sender: Any) {
         
         let imagePicker = UIImagePickerController()
@@ -402,10 +416,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         
     }
     */
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        
-    }
+    
     
 }
 
@@ -418,17 +429,19 @@ extension MemberViewController : UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GLCell", for: indexPath) as! PhotoCollectionViewCell
         print(indexPath.row)
-        /*
-        let duc = memberData[indexPath.item]
-        if let fileName = duc.imageName {
-            print(fileName)
+        
+        let note = self.memberData[indexPath.item]
+        let fileName = note.imageName[indexPath.item]
             cell.photoView.tag = indexPath.item
-            cell.photoView.image = image(fileName: fileName)
+            cell.photoView.image = loadImage(fileName: "\(fileName).jpg")
             cell.photoView.layer.cornerRadius = 20
             cell.photoView.layer.shadowOpacity = 0.5
-
+            print(fileName)
+        if note.imageName.count > 1 {
+            cell.label.text = "\(note.imageName.count)"
+        }else {
+            cell.label.text = nil
         }
-        */
         return cell
     }
 
@@ -439,12 +452,14 @@ extension MemberViewController : UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print("\(indexPath.section),\(indexPath.row)")
+        print("\(indexPath.section),\(indexPath.item)")
         
-        guard images.count > 0 else { return }
+        guard self.memberData[indexPath.item].imageName.count > 0 else { return }
         
+        print(self.lightboxImages)
+        let lightbox = self.lightboxImages[indexPath.item]
+        lightboxController = LightboxController(images: lightbox, startIndex: 0)
         
-        lightboxController = LightboxController(images: self.lightboxImages, startIndex: indexPath.item)
         lightboxController.dynamicBackground = true
         lightboxController.imageTouchDelegate = self
         lightboxController.pageDelegate = self
@@ -456,8 +471,6 @@ extension MemberViewController : UICollectionViewDelegate {
         
         
         messageButton.addTarget(self, action: #selector(messageVC), for: .touchUpInside)
-        
-        
         heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
 //        editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
         
@@ -472,7 +485,8 @@ extension MemberViewController: LightboxControllerTouchDelegate, LightboxControl
     
     func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
         print("didMoveToPage")
-        self.index = page
+        
+        print(page)
     }
     
     func lightboxController(_ controller: LightboxController, didTouch image: LightboxImage, at index: Int) {
@@ -487,11 +501,7 @@ extension MemberViewController: LightboxControllerTouchDelegate, LightboxControl
             messageButton.isHidden = true
             heartButton.isHidden = true
             editButton.isHidden = true
-
         }
-        self.index = index
-
-        
     }
     
     

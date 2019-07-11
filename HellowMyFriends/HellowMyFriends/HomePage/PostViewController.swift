@@ -31,8 +31,6 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         let imagePicker = ImagePickerController()
         imagePicker.delegate = self
         self.present(imagePicker, animated: true, completion: nil)
@@ -127,6 +125,7 @@ extension PostViewController: UICollectionViewDataSource {
     }
     
 }
+
 extension PostViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -178,7 +177,10 @@ extension PostViewController : ImagePickerDelegate {
         print("doneButtonDidPress")
         
         self.images = images
-        self.currentName.images = images
+        for _ in 0 ..< images.count {
+            let uuidString = UUID().uuidString
+            self.currentName.imageName.append(uuidString)
+        }
         self.dismiss(animated: true)
         self.collectionView.reloadData()
     }

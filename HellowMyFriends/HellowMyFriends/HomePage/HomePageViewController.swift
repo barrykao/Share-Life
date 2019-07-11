@@ -30,6 +30,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
         self.tableView.dataSource = self
         self.tableView.delegate = self
+
         databaseRef = Database.database().reference()
         guard let uid = Auth.auth().currentUser?.uid else { return}
         self.uid = uid
@@ -131,20 +132,19 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                             note.heartUid = Array(heart.keys)
                             note.heartCount = heart.count
                         }
-                        
+
                         self!.data.append(note)
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
                         })
-                        
                         // PhotoView
-                        let fileName = note.imageName[i]
+                        let fileName = "\(note.imageName[i]).jpg"
                         guard let photoName = note.account else {return}
                         
                         if checkFile(fileName: fileName) && checkFile(fileName: "\(photoName).jpg") {
 //                            print("file exist.")
                         }else{
-                            let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photo")
+                            let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photourl").child("\(i)")
                             loadImageToFile(fileName: fileName, database: databaseImageView)
                             let databaseUser = self!.databaseRef.child("User").child(note.uid!).child("photo")
                             loadImageToFile(fileName: "\(photoName).jpg", database: databaseUser)
@@ -190,12 +190,12 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             return cell!
         }
         
-      
+        
         
         let note = self.data[indexPath.section - 1]
         cell?.currentData = note
-        cell?.collectionView.dataSource = cell
-        cell?.collectionView.delegate = cell
+        cell?.collectionView.delegate = self
+        cell?.collectionView.dataSource = self
         
         
         
@@ -300,5 +300,27 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         print("didPostMessage")
     }
     
+}
+
+
+extension HomePageViewController: UICollectionViewDataSource, UICollectionViewDelegate{
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(self.data[section].imageName.count)
+        return self.data[section].imageName.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as! HomeCollectionViewCell
+        let note = self.data[indexPath.item - 1].imageName[indexPath.item]
+        print(note)
+        cell.photoView.image = loadImage(fileName: "\(note).jpg")
+        return cell
+    }
 }
 

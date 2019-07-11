@@ -12,11 +12,9 @@ import FirebaseAuth
 import ImagePicker
 
 
-class ModifyDataViewController: UIViewController { //, UIImagePickerControllerDelegate ,UINavigationControllerDelegate {
+class ModifyDataViewController: UIViewController {
 
     let uid = Auth.auth().currentUser!.uid
-
-    @IBOutlet weak var photo: UIImageView!
     
     var photoImageView : UIImage?
     
@@ -29,7 +27,7 @@ class ModifyDataViewController: UIViewController { //, UIImagePickerControllerDe
         super.viewDidLoad()
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
-        self.photo.image = self.photoImageView
+        
         self.navigationItem.rightBarButtonItem?.isEnabled = false
 
     }

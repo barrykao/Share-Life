@@ -38,15 +38,23 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WNE-Zz-Axh">
                                                     <rect key="frame" x="0.0" y="0.0" width="189" height="167"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k2j-Vl-PZj">
+                                                    <rect key="frame" x="145.66666666666666" y="8" width="23.333333333333343" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </view>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="WNE-Zz-Axh" secondAttribute="trailing" id="BGL-6S-QmS"/>
                                             <constraint firstItem="WNE-Zz-Axh" firstAttribute="top" secondItem="hda-nU-A5t" secondAttribute="top" id="CwO-vs-PCk"/>
+                                            <constraint firstItem="k2j-Vl-PZj" firstAttribute="top" secondItem="hda-nU-A5t" secondAttribute="top" constant="8" id="IGj-FC-Q5q"/>
                                             <constraint firstItem="WNE-Zz-Axh" firstAttribute="leading" secondItem="hda-nU-A5t" secondAttribute="leading" id="X85-It-1Us"/>
                                             <constraint firstAttribute="bottom" secondItem="WNE-Zz-Axh" secondAttribute="bottom" id="lMK-4x-7U7"/>
+                                            <constraint firstAttribute="trailing" secondItem="k2j-Vl-PZj" secondAttribute="trailing" constant="20" id="pPk-Hn-a6N"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="label" destination="k2j-Vl-PZj" id="WnP-ku-3Pd"/>
                                             <outlet property="photoView" destination="WNE-Zz-Axh" id="yr5-Va-b1j"/>
                                         </connections>
                                     </collectionViewCell>
@@ -175,7 +183,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="9P6-Yb-hNp">
-                                <rect key="frame" x="20" y="74" width="374" height="588"/>
+                                <rect key="frame" x="20" y="74" width="374" height="260"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="i9U-lA-aJe">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="60"/>
@@ -209,9 +217,6 @@
                                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d1K-rY-OGV">
-                                        <rect key="frame" x="0.0" y="280" width="374" height="308"/>
-                                    </imageView>
                                 </subviews>
                             </stackView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tnW-a6-oha">
@@ -224,15 +229,52 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="C6G-2b-uuC">
+                                <rect key="frame" x="0.0" y="384" width="414" height="308"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Aic-Nc-ii5">
+                                    <size key="itemSize" width="409" height="309.66666666666669"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="modifyCell" id="aji-Bl-ngl" customClass="ModifyCollectionViewCell" customModule="HellowMyFriends" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="-1" width="409" height="309.66666666666669"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="409" height="309.66666666666669"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d1K-rY-OGV">
+                                                    <rect key="frame" x="0.0" y="0.0" width="409" height="309.66666666666669"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="d1K-rY-OGV" firstAttribute="top" secondItem="aji-Bl-ngl" secondAttribute="top" id="2fx-tA-Twe"/>
+                                            <constraint firstAttribute="trailing" secondItem="d1K-rY-OGV" secondAttribute="trailing" id="81E-ji-ncq"/>
+                                            <constraint firstItem="d1K-rY-OGV" firstAttribute="leading" secondItem="aji-Bl-ngl" secondAttribute="leading" id="Kmk-1E-Uz5"/>
+                                            <constraint firstAttribute="bottom" secondItem="d1K-rY-OGV" secondAttribute="bottom" id="sb3-5f-qlC"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="photoView" destination="d1K-rY-OGV" id="T2k-Qh-c0w"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="9P6-Yb-hNp" firstAttribute="centerY" secondItem="uLH-n7-Z2C" secondAttribute="centerY" id="2wf-it-4Tp"/>
                             <constraint firstItem="Srj-2n-gUV" firstAttribute="trailing" secondItem="tnW-a6-oha" secondAttribute="trailing" id="53S-3b-Nc6"/>
                             <constraint firstItem="tnW-a6-oha" firstAttribute="leading" secondItem="uLH-n7-Z2C" secondAttribute="leading" id="5Dm-oz-JQB"/>
+                            <constraint firstItem="tnW-a6-oha" firstAttribute="top" secondItem="C6G-2b-uuC" secondAttribute="bottom" id="5bs-8a-yl4"/>
+                            <constraint firstItem="C6G-2b-uuC" firstAttribute="leading" secondItem="uLH-n7-Z2C" secondAttribute="leading" id="96A-tk-FuU"/>
                             <constraint firstItem="Srj-2n-gUV" firstAttribute="trailing" secondItem="9P6-Yb-hNp" secondAttribute="trailing" constant="20" id="9Te-9a-sVz"/>
                             <constraint firstItem="9P6-Yb-hNp" firstAttribute="top" secondItem="Srj-2n-gUV" secondAttribute="top" constant="10" id="Kge-1G-iKt"/>
+                            <constraint firstItem="C6G-2b-uuC" firstAttribute="top" secondItem="9P6-Yb-hNp" secondAttribute="bottom" constant="50" id="RQP-U7-UZh"/>
                             <constraint firstItem="9P6-Yb-hNp" firstAttribute="leading" secondItem="Srj-2n-gUV" secondAttribute="leading" constant="20" id="n5Z-3e-qPc"/>
+                            <constraint firstAttribute="trailing" secondItem="C6G-2b-uuC" secondAttribute="trailing" id="rMP-Qt-Slq"/>
                             <constraint firstItem="tnW-a6-oha" firstAttribute="bottom" secondItem="Srj-2n-gUV" secondAttribute="bottom" id="tcK-0h-hQr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Srj-2n-gUV"/>
@@ -251,7 +293,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="account" destination="JcB-Bo-rkk" id="MUx-Vj-jav"/>
-                        <outlet property="imageView" destination="d1K-rY-OGV" id="hhv-Fg-N2u"/>
+                        <outlet property="collectionView" destination="C6G-2b-uuC" id="AFR-Id-fkK"/>
                         <outlet property="photo" destination="AkO-a6-3wz" id="FBP-hp-HQr"/>
                         <outlet property="textView" destination="mf0-R0-xXM" id="Yze-tA-eUj"/>
                     </connections>
