@@ -5,7 +5,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import AudioToolbox.AudioServices //加入震動反饋
-
+import Lightbox
 
 
 class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate ,PostMessageViewControllerDelegate{
@@ -17,13 +17,12 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     var refreshControl:UIRefreshControl!
     var touchedIndexPath : Int = 0
     var uid: String?
-    
+    var lightboxImages: [[LightboxImage]] = [[]]
+    var images: [UIImage] = []
+    var message: [String] = []
     var postMessageVC: PostMessageViewController = PostMessageViewController()
-    var flag: Bool = false
-    var feedbackGenerator : UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .heavy)
-    deinit {
-        feedbackGenerator = nil
-    }
+    var lightboxController: LightboxController = LightboxController()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,10 +39,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
 //        animateTable()
-        feedbackGenerator?.prepare()
-        
-        postMessageVC.delegate = self
-
     }
     
 
@@ -104,8 +99,20 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 if let uploadDataDic = snapshot.value as? [String:Any] {
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)
+                    
                     self?.data = []
+                    self?.images = []
+                    self?.message = []
+                    self?.lightboxImages = [[]]
+                    
                     for i in 0 ..< keyArray.count {
+                        
+                        let aaa = LightboxImage(image: UIImage())
+                        self?.lightboxImages.append([aaa])
+                        if i > 0 {
+                            self?.lightboxImages[i].remove(at: 0)
+                        }
+                        
                         let array = dataDic[keyArray[i]] as! [String:Any]
                         let note = DatabaseData()
                         note.paperName = keyArray[i]
@@ -137,19 +144,27 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
                         })
-                        // PhotoView
-                        let fileName = "\(note.imageName[i]).jpg"
-                        guard let photoName = note.account else {return}
                         
-                        if checkFile(fileName: fileName) && checkFile(fileName: "\(photoName).jpg") {
-//                            print("file exist.")
-                        }else{
-                            let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photourl").child("\(i)")
-                            loadImageToFile(fileName: fileName, database: databaseImageView)
-                            let databaseUser = self!.databaseRef.child("User").child(note.uid!).child("photo")
-                            loadImageToFile(fileName: "\(photoName).jpg", database: databaseUser)
-                        }
- 
+                         for j in 0 ..< note.imageName.count {
+                         // PhotoView
+                            let fileName = "\(note.imageName[j]).jpg"
+                             if checkFile(fileName: fileName) {
+                             }else{
+                                let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photourl").child("\(i)")
+                             loadImageToFile(fileName: fileName, database: databaseImageView)
+                             }
+                            
+                            self?.images.append(loadImage(fileName: "\(note.imageName[j]).jpg")!)
+                            
+                             print("\(note.imageName[j]).jpg")
+                            let lightbox = LightboxImage(image: ((self?.images[j])!), text: note.message!)
+                            self?.lightboxImages[i].append(lightbox)
+                         
+                         }
+                        self?.images = []
+                        self?.message = []
+                        
+                        // PhotoView
                     }
                     DispatchQueue.main.async {
                         self!.tableView.reloadData()
@@ -224,6 +239,10 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         
         self.tableView.deselectRow(at: indexPath, animated: false)
         print("\(indexPath.section), \(indexPath.row)")
+        if indexPath.section > 0 {
+            let lightbox = self.lightboxImages[indexPath.section - 1]
+            lightboxController = LightboxController(images: lightbox, startIndex: 0)
+        }
        
     }
     

@@ -174,11 +174,12 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                     self.message = []
                     self.lightboxImages = [[]]
                     
-                    
-
-                    
                     for i in 0 ..< keyArray.count {
-                        
+                        let aaa = LightboxImage(image: UIImage())
+                        self.lightboxImages.append([aaa])
+                        if i > 0 {
+                            self.lightboxImages[i].remove(at: 0)
+                        }
                         if let array = dataDic[keyArray[i]] as? [String:Any] {
                             let uid = Auth.auth().currentUser?.uid
                             if uid == array["uid"] as? String {
@@ -217,7 +218,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                 self.memberData.sort(by: { (post1, post2) -> Bool in
                                     post1.postTime! > post2.postTime!
                                 })
-                                
+                                /*
                                 for j in 0 ..< note.imageName.count {
                                     // PhotoView
                                     let fileName = "\(note.imageName[j]).jpg"
@@ -237,6 +238,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                 }
                                 self.images = []
                                 self.message = []
+ */
                             }
                         }
                     }
@@ -431,16 +433,17 @@ extension MemberViewController : UICollectionViewDataSource {
         print(indexPath.row)
         
         let note = self.memberData[indexPath.item]
-        let fileName = note.imageName[indexPath.item]
-            cell.photoView.tag = indexPath.item
-            cell.photoView.image = loadImage(fileName: "\(fileName).jpg")
-            cell.photoView.layer.cornerRadius = 20
-            cell.photoView.layer.shadowOpacity = 0.5
-            print(fileName)
-        if note.imageName.count > 1 {
-            cell.label.text = "\(note.imageName.count)"
-        }else {
-            cell.label.text = nil
+        if let fileName = note.imageName.first {
+                cell.photoView.tag = indexPath.item
+                cell.photoView.image = loadImage(fileName: "\(fileName).jpg")
+                cell.photoView.layer.cornerRadius = 20
+                cell.photoView.layer.shadowOpacity = 0.5
+                print(fileName)
+            if note.imageName.count > 1 {
+                cell.label.text = "\(note.imageName.count)"
+            }else {
+                cell.label.text = nil
+            }
         }
         return cell
     }
@@ -455,11 +458,16 @@ extension MemberViewController : UICollectionViewDelegate {
         print("\(indexPath.section),\(indexPath.item)")
         
         guard self.memberData[indexPath.item].imageName.count > 0 else { return }
-        
+        let note = self.memberData[indexPath.item]
+        let fileName = note.imageName
+        var light: [LightboxImage] = []
+        for i in 0 ..< note.imageName.count {
+            light.append(LightboxImage(image: loadImage(fileName: "\(fileName[i]).jpg")!, text: note.message!))
+        }
         print(self.lightboxImages)
-        let lightbox = self.lightboxImages[indexPath.item]
-        lightboxController = LightboxController(images: lightbox, startIndex: 0)
-        
+//        let lightbox = self.lightboxImages[indexPath.item]
+//        lightboxController = LightboxController(images: lightbox, startIndex: 0)
+        lightboxController = LightboxController(images: light, startIndex: 0)
         lightboxController.dynamicBackground = true
         lightboxController.imageTouchDelegate = self
         lightboxController.pageDelegate = self
