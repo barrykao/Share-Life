@@ -3,7 +3,7 @@ import Firebase
 import FirebaseAuth
 
 protocol RegisterViewControllerDelegate : class{
-    func didFinishRegister(account:String? ,password:String? )
+    func didFinishRegister(account:String?, password:String?, nickName: String?)
 }
 
 class RegisterViewController: UIViewController ,UITextFieldDelegate {
@@ -13,13 +13,13 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
     
     @IBOutlet weak var newPassword: UITextField!
     
+    @IBOutlet var nickName: UITextField!
     
     @IBOutlet weak var signUpBtn: UIButton!
     
-    
     @IBOutlet weak var backBtn: UIButton!
     
-    var ref : DatabaseReference!
+    var databaseRef : DatabaseReference!
     
     
     weak var delegate : RegisterViewControllerDelegate?
@@ -29,15 +29,14 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
         
         self.newAccount.delegate = self
         self.newPassword.delegate = self
-        ref = Database.database().reference()
-        
+        databaseRef = Database.database().reference()
         
         buttonDesign(button: signUpBtn)
         buttonDesign(button: backBtn)
         
         textFieldClearMode(textField: newAccount)
         textFieldClearMode(textField: newPassword)
-        
+        textFieldClearMode(textField: nickName)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,7 +57,7 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
     
     @IBAction func SignUp(_ sender: Any) {
         
-        guard self.newAccount.text != "" && self.newPassword.text != "" else {
+        guard self.newAccount.text != "" && self.newPassword.text != "" && self.nickName.text != "" else {
             isEmpty(controller: self)
             return
         }
@@ -66,15 +65,15 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
         Auth.auth().createUser(withEmail: newAccount.text!, password: newPassword.text!) { (user, error) in
             if error == nil {
                 print("You have successfully signed up")
-                
                 let alert = UIAlertController(title: "註冊", message: "註冊成功!", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default, handler: { (ok) in
                     
-                    self.delegate?.didFinishRegister(account: self.newAccount.text, password: self.newPassword.text)
+                    self.delegate?.didFinishRegister(account: self.newAccount.text, password: self.newPassword.text, nickName: self.nickName.text)
                     
                     let uid = Auth.auth().currentUser!.uid
-                    let accoutdict = ["id":self.newAccount.text!]
-                    self.ref.child("User").child("\(uid)").setValue(accoutdict)
+                    let accoutdict = ["account":self.newAccount.text!, "nickName": self.nickName.text!]
+                    
+                    self.databaseRef.child("User").child("\(uid)").setValue(accoutdict)
                     
                     self.dismiss(animated: true, completion: nil)
                 })

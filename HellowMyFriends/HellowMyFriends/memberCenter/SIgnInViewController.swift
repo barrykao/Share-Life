@@ -12,17 +12,18 @@ import FirebaseAuth
 
 class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewControllerDelegate {
     
-
     @IBOutlet weak var account: UITextField!
     
     @IBOutlet weak var password: UITextField!
-    
     
     @IBOutlet weak var signInBtn: UIButton!
     
     @IBOutlet weak var registerBtn: UIButton!
     
     @IBOutlet weak var resetPwdBtn: UIButton!
+    
+    var databaseRef: DatabaseReference! = Database.database().reference()
+    var nickName: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,7 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         self.password.delegate = self
         self.account.text = UserDefaults.standard.string(forKey: "account")
         self.password.text = UserDefaults.standard.string(forKey: "password")
+        self.nickName = UserDefaults.standard.string(forKey: "nickName")
         buttonDesign(button: signInBtn)
         buttonDesign(button: registerBtn)
         buttonDesign(button: resetPwdBtn)
@@ -38,32 +40,12 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         buttonDesign(button: self.password)
 
         
+        
         textFieldClearMode(textField: account)
         textFieldClearMode(textField: password)
         
         // Do any additional setup after loading the view.
     }
-    /*
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
-            self.centerAlignUsername.constant += self.view.bounds.width
-            self.view.layoutIfNeeded()
-        }, completion: nil)
-        
-        UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseOut, animations: {
-            self.centerAlignPassword.constant += self.view.bounds.width
-            self.view.layoutIfNeeded()
-        }, completion: nil)
-        
-        UIView.animateWithDuration(0.5, delay: 0.4, options: .CurveEaseOut, animations: {
-            self.loginButton.alpha = 1
-        }, completion: nil)
-        
-        
-    }
-    */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -77,6 +59,8 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         
         UserDefaults.standard.set(self.account.text, forKey: "account")
         UserDefaults.standard.set(self.password.text, forKey: "password")
+        UserDefaults.standard.set(self.nickName, forKey: "nickName")
+    
         guard self.account.text != "" && self.password.text != "" else {
             isEmpty(controller: self)
             return
@@ -89,9 +73,10 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
                     print("log in!")
                     let alert = UIAlertController(title: "登入成功", message: "你好", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
-//                    self.user.insert(str, at: 0)
                     self.dismiss(animated: true)
                 })
+                    guard let uid = Auth.auth().currentUser?.uid else {return}
+                    UserDefaults.standard.set(uid, forKey: "uid")
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
 
@@ -112,9 +97,10 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         
     }
     
-    func didFinishRegister(account: String?, password: String?) {
+    func didFinishRegister(account: String?, password: String?, nickName: String?) {
         self.account.text = account
         self.password.text = password
+        self.nickName = nickName
     }
     /*
      // MARK: - Navigation

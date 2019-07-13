@@ -24,8 +24,10 @@ class MessageViewController: UIViewController {
     
     @IBOutlet var textView: UITextView!
     
+    @IBOutlet var nickName: UILabel!
+    
     var databaseRef: DatabaseReference!
-    var messageData: DatabaseData! = DatabaseData()
+    var messageData: DatabaseData!
     var commentData: [CommentData] = []
     let commentName: String = UUID().uuidString
     var refreshControl:UIRefreshControl!
@@ -36,7 +38,13 @@ class MessageViewController: UIViewController {
 
         tableView.dataSource = self
         tableView.delegate = self
-
+        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 100
+        
+        guard let nickName = messageData.nickName else {return}
+        self.nickName.text = nickName
+        
         textView.delegate = self
         databaseRef = Database.database().reference()
         // Photo
@@ -48,12 +56,15 @@ class MessageViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyBoard))
         self.view.addGestureRecognizer(tap) // to Replace "TouchesBegan"
 
-        
+//        buttonDesign(button: textView)
         textView.text = "留言......"
         textView.textColor = UIColor.lightGray
+        textView.layer.borderWidth = 0.5
+        textView.layer.cornerRadius = 5.0
+     
         textView.returnKeyType = .done
 //        animateTable()
-
+//        textView.layer.borderColor
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
@@ -129,6 +140,7 @@ class MessageViewController: UIViewController {
                         note.comment = array["comment"] as? String
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
+                        note.nickName = array["nickName"] as? String
                         self?.commentData.append(note)
                         self?.commentData.sort(by: { (post1, post2) -> Bool in
                             post1.postTime ?? 0.0 > post2.postTime ?? 0.0
@@ -152,6 +164,7 @@ class MessageViewController: UIViewController {
         guard let message = self.messageData.message else { return}
         guard let uid = Auth.auth().currentUser?.uid else { return}
         guard let account = UserDefaults.standard.string(forKey: "account") else { return}
+        guard let nickName = UserDefaults.standard.string(forKey: "nickName") else { return}
 
         print(paperName)
         print(message)
@@ -160,7 +173,8 @@ class MessageViewController: UIViewController {
         let postMessage: [String : Any] = [ "comment" : self.textView.text!,
                                             "postTime": [".sv":"timestamp"],
                                             "account" : account,
-                                            "uid" : uid
+                                            "uid" : uid,
+                                            "nickName" :nickName
                                           ]
         
         print(self.commentName)
@@ -171,7 +185,7 @@ class MessageViewController: UIViewController {
             print("上傳留言成功")
         }
         self.textView.text = ""
-
+        dismissKeyBoard()
     }
     
     @IBAction func backBtn(_ sender: Any) {
@@ -201,16 +215,16 @@ extension MessageViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        print(self.commentData.count)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
       
 
         let note = self.commentData[indexPath.row]
         
-        if let accountView = note.account {
-            cell.textLabel?.text = note.account
-            cell.imageView?.image = loadImage(fileName: "\(accountView).jpg")
-            cell.detailTextLabel?.text = note.comment
+        if let accountView = note.account ,
+            let nickName = note.nickName {
+            cell.account.text = nickName
+            cell.photo.image = loadImage(fileName: "\(accountView).jpg")
+            cell.message.text = note.comment
         }
         
         
@@ -265,9 +279,7 @@ extension MessageViewController: UITableViewDelegate {
                             })
                             
                         }
-                    }) { (error) in
-                        print("error: \(error)")
-                    }
+                    })
                  }
             }
         }

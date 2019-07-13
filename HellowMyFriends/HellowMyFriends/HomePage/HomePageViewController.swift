@@ -5,23 +5,22 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import AudioToolbox.AudioServices //加入震動反饋
-import Lightbox
 
 
-class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate ,PostMessageViewControllerDelegate{
+class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate ,PostMessageViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
 
     var data : [DatabaseData] = []
     var databaseRef : DatabaseReference!
+    var storageRef : StorageReference!
+
+
     var refreshControl:UIRefreshControl!
     var touchedIndexPath : Int = 0
-    var uid: String?
-    var lightboxImages: [[LightboxImage]] = [[]]
-    var images: [UIImage] = []
-    var message: [String] = []
+    
     var postMessageVC: PostMessageViewController = PostMessageViewController()
-    var lightboxController: LightboxController = LightboxController()
+    
 
 
     override func viewDidLoad() {
@@ -31,22 +30,38 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         self.tableView.delegate = self
 
         databaseRef = Database.database().reference()
-        guard let uid = Auth.auth().currentUser?.uid else { return}
-        self.uid = uid
+        storageRef = Storage.storage().reference()
+
+
+        
         
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
+        
+        postMessageVC.delegate = self
 //        animateTable()
+        // load photoImageViewToFile
+        databaseRef = Database.database().reference()
+        databaseRef.child("User").observe(.value) { (snapshot) in
+            
+            guard let uploadDataDic = snapshot.value as? [String:Any] else {return}
+            let dataDic = uploadDataDic
+            let keyArray = Array(dataDic.keys)
+            for i in 0 ..< keyArray.count {
+                let array = dataDic[keyArray[i]] as! [String:Any]
+                let databasePhoto = self.databaseRef.child("User").child(keyArray[i]).child("photo")
+                guard let photoName = array["account"] as? String else {return}
+                loadImageToFile(fileName: "\(photoName).jpg", database: databasePhoto)
+            }
+        }
+        
+        
     }
     
-
-
-    override func viewWillAppear(_ animated: Bool) {
-        
-//        animateTable()
-
+    override func viewDidAppear(_ animated: Bool) {
+        self.loadData()
     }
     
     func animateTable() {
@@ -96,23 +111,12 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             
             let databaseRefPaper = self.databaseRef.child("Paper")
             databaseRefPaper.observe(.value, with: { [weak self] (snapshot) in
+                
                 if let uploadDataDic = snapshot.value as? [String:Any] {
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)
-                    
                     self?.data = []
-                    self?.images = []
-                    self?.message = []
-                    self?.lightboxImages = [[]]
-                    
                     for i in 0 ..< keyArray.count {
-                        
-                        let aaa = LightboxImage(image: UIImage())
-                        self?.lightboxImages.append([aaa])
-                        if i > 0 {
-                            self?.lightboxImages[i].remove(at: 0)
-                        }
-                        
                         let array = dataDic[keyArray[i]] as! [String:Any]
                         let note = DatabaseData()
                         note.paperName = keyArray[i]
@@ -120,10 +124,10 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         note.message = array["message"] as? String
                         note.date = array["date"] as? String
                         note.imageName = array["photo"] as! [String]
-                        note.imageURL = array["photourl"] as! [String]
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
-                        
+                        note.nickName = array["nickName"] as? String
+
                         if array["comment"] as? String == "commentData" {
 //                            print("0則留言")
                             note.commentCount = 0
@@ -144,27 +148,21 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
                         })
-                        
                          for j in 0 ..< note.imageName.count {
-                         // PhotoView
+                         // loadImageToFile
                             let fileName = "\(note.imageName[j]).jpg"
-                             if checkFile(fileName: fileName) {
-                             }else{
-                                let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photourl").child("\(i)")
-                             loadImageToFile(fileName: fileName, database: databaseImageView)
-                             }
-                            
-                            self?.images.append(loadImage(fileName: "\(note.imageName[j]).jpg")!)
-                            
-                             print("\(note.imageName[j]).jpg")
-                            let lightbox = LightboxImage(image: ((self?.images[j])!), text: note.message!)
-                            self?.lightboxImages[i].append(lightbox)
-                         
-                         }
-                        self?.images = []
-                        self?.message = []
-                        
-                        // PhotoView
+                            print(fileName)
+                            guard let storageRefPhoto = self?.storageRef.child(note.account!).child(fileName) else {return}
+                            storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in
+                                guard let imageData = data else {return}
+                                let filePath = fileDocumentsPath(fileName: fileName)
+                                do {
+                                    try imageData.write(to: filePath)
+                                }catch{
+                                    print("error: \(error)")
+                                }
+                            }
+                        }
                     }
                     DispatchQueue.main.async {
                         self!.tableView.reloadData()
@@ -173,6 +171,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 
             })
 //            self.tableView.reloadData()
+            
         }
     }
     
@@ -195,32 +194,40 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         var cell: CustomCellTableViewCell? = tableView.dequeueReusableCell(withIdentifier: "customCell") as? CustomCellTableViewCell
-        
         if indexPath.section == 0 {
             cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? CustomCellTableViewCell
-            cell?.textLabel?.text = "想與我們分享些什麼嗎?"
-            if let account = UserDefaults.standard.string(forKey: "account") {
+        
+            if let account = UserDefaults.standard.string(forKey: "account"),
+               let nickName = UserDefaults.standard.string(forKey: "nickName") {
+                cell?.textLabel?.text = nickName
                 cell?.imageView?.image = loadImage(fileName: "\(account).jpg")
             }
+            cell?.detailTextLabel?.text = "想與我們分享些什麼嗎?"
             return cell!
         }
         
-        
+        cell?.collectionViewData = self.data
         
         let note = self.data[indexPath.section - 1]
         cell?.currentData = note
-        cell?.collectionView.delegate = self
-        cell?.collectionView.dataSource = self
+        cell?.collectionView.delegate = cell
+        cell?.collectionView.dataSource = cell
+        cell?.collectionView.reloadData()
         
-        
-        
-        cell?.account.text = note.account
-        cell?.textView.text = note.message
+        cell?.account.text = note.nickName
+        cell?.label.text = note.message
         cell?.date.text = note.date
         if let account = note.account {
             cell?.photo.image = loadImage(fileName: "\(account).jpg")
         }
-
+        
+        if note.imageName.count > 1 {
+            cell?.photoCount.image = UIImage(named: "pictures")
+        }else{
+            cell?.photoCount.image = nil
+        }
+        
+        
         cell?.heartImageBtn.tag = indexPath.section * 10
         cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchDown)
         
@@ -239,23 +246,10 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         
         self.tableView.deselectRow(at: indexPath, animated: false)
         print("\(indexPath.section), \(indexPath.row)")
-        if indexPath.section > 0 {
-            let lightbox = self.lightboxImages[indexPath.section - 1]
-            lightboxController = LightboxController(images: lightbox, startIndex: 0)
-        }
        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-   
-        if segue.identifier == "fullSegue"{
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let note = self.data[indexPath.section - 1]
-                let fullVC = segue.destination as! FullViewController
-                fullVC.currentData = note
-//                fullVC.currentImage = image(fileName: note.imageName)
-            }
-        }
  
         if segue.identifier == "messageSegue" {
             guard let index = sender as? UIButton else {return}
@@ -279,24 +273,125 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         }
     }
 
-    @objc func heartBtnPressed(sender:UIButton ) {
+    @objc func heartBtnPressed(sender:UIButton) {
         
-        
+        guard let account = UserDefaults.standard.string(forKey: "account") else { return}
+        guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+        guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+
         let indexPath = (sender.tag) / 10
         let note = self.data[indexPath - 1]
+
         guard let paperName = note.paperName else { return}
-        guard let account = UserDefaults.standard.string(forKey: "account") else { return}
         let databasePaperName = self.databaseRef.child("Paper").child(paperName)
-        let heart: [String : Any] = ["postTime": [".sv":"timestamp"],"account" : account,"uid" : self.uid!]
         
-        databasePaperName.child("heart").child(self.uid!).setValue(heart)
+        databasePaperName.child("heart").observe(.value, with: { (snapshot) in
+            
+            guard let uidDict = snapshot.value as? [String:Any] else { return}
+            let uidArray = Array(uidDict.keys)
+            print(uidArray)
+            for i in 0 ..< uidArray.count {
+                if uid == uidArray[i] {
+                    // delete heart
+                    databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
+                        print("刪除離留言成功")
+                        // give fake heart
+                        databasePaperName.observe(.value, with: { (snapshot) in
+                            if (snapshot.hasChild("heart")){
+                                print("comment alive")
+                            }else{
+                                print("comment died")
+                                databasePaperName.child("heart").setValue("heartData", withCompletionBlock: { (error, data) in
+                                    print("上傳假資料成功")
+                                    self.refreshLoadData(1)
+                                })
+                            }
+                    })
+                    
+                    
+                    })
+                }else {
+                    // add heart
+                    guard let paperName = note.paperName else { return}
+                    let databasePaperName = self.databaseRef.child("Paper").child(paperName)
+                    let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
+                                                 "account" : account,
+                                                 "uid" : uid,
+                                                 "nickName" : nickName]
+                    databasePaperName.child("heart").child(uid).setValue(heart)
+                    { (error, database) in
+                        if let error = error {
+                            assertionFailure("Fail To postMessage \(error)")
+                        }
+                        print("上傳巧克力成功")
+                    }
+                }
+            }
+            
+            
+            
+            
+            
+        })
+        
+        /*
+        // give heart
+        guard let paperName = note.paperName else { return}
+        let databasePaperName = self.databaseRef.child("Paper").child(paperName)
+        let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
+                                     "account" : account,
+                                     "uid" : uid,
+                                     "nickName" : nickName]
+        databasePaperName.child("heart").child(uid).setValue(heart)
         { (error, database) in
             if let error = error {
                 assertionFailure("Fail To postMessage \(error)")
             }
             print("上傳巧克力成功")
         }
-        self.tableView.reloadData()
+        
+        
+        
+        
+        databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
+            print("刪除離留言成功")
+         
+            //                    self.refreshLoadData(1)
+        })
+        databasePaperName.observe(.value, with: { (snapshot) in
+            //                        print(snapshot.value)
+            if (snapshot.hasChild("comment")){
+                print("comment alive")
+            }else{
+                print("comment died")
+                databasePaperName.child("comment").setValue("commentData", withCompletionBlock: { (error, data) in
+                    print("上傳假資料成功")
+                    self.commentData = []
+                    self.refreshLoadData(1)
+         
+                })
+         
+            }
+        })
+        */
+        
+    
+
+        
+    }
+    
+    func didPostMessage(note: DatabaseData) {
+        print("didPostMessage")
+        
+    }
+    
+}
+
+
+
+
+
+//        self.tableView.reloadData()
 //        func scaleLikeButton() {
 //            UIView.animate(withDuration: 0.2, animations: {
 //                let scaleTransform = CGAffineTransform(scaleX: 1.1, y: 1.1)
@@ -311,35 +406,3 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 //        scaleLikeButton()
 //
 //        feedbackGenerator?.impactOccurred()
-
-        
-    }
-    
-    func didPostMessage(note: DatabaseData) {
-        print("didPostMessage")
-    }
-    
-}
-
-
-extension HomePageViewController: UICollectionViewDataSource, UICollectionViewDelegate{
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(self.data[section].imageName.count)
-        return self.data[section].imageName.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as! HomeCollectionViewCell
-        let note = self.data[indexPath.item - 1].imageName[indexPath.item]
-        print(note)
-        cell.photoView.image = loadImage(fileName: "\(note).jpg")
-        return cell
-    }
-}
-

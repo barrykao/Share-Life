@@ -10,6 +10,18 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+class MessageTableViewCell: UITableViewCell {
+    
+    
+    @IBOutlet var photo: UIImageView!
+    
+    @IBOutlet var account: UILabel!
+    
+    @IBOutlet var message: UILabel!
+    
+}
+
+
 class CustomCellTableViewCell: UITableViewCell {
 
     @IBOutlet weak var photo: UIImageView!
@@ -18,8 +30,12 @@ class CustomCellTableViewCell: UITableViewCell {
     
     @IBOutlet weak var date: UILabel!
     
-    @IBOutlet weak var textView: UITextView!
+//    @IBOutlet weak var textView: UITextView!
 
+    
+    @IBOutlet var label: UILabel!
+    
+    
     @IBOutlet var heartCount: UIButton!
 
     @IBOutlet var messageCount: UIButton!
@@ -28,11 +44,15 @@ class CustomCellTableViewCell: UITableViewCell {
     
     @IBOutlet var messageBtn: UIButton!
 
-    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var photoCount: UIImageView!
     
-    var currentData: DatabaseData! = DatabaseData()
-    let fullScreenSize = UIScreen.main.bounds.size
+    
+    @IBOutlet var collectionView: UICollectionView!
 
+    var currentData: DatabaseData!
+    var collectionViewData: [DatabaseData] = []
+    let fullScreenSize = UIScreen.main.bounds.size
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -45,13 +65,9 @@ class CustomCellTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-   
-
-    
-    
 }
 
-extension CustomCellTableViewCell: UICollectionViewDataSource {
+extension CustomCellTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -63,24 +79,24 @@ extension CustomCellTableViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeell", for: indexPath) as! HomeCollectionViewCell
-        let note = self.currentData.imageName[indexPath.item]
-        print(note)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as! HomeCollectionViewCell
+        
+        let note = self.currentData.imageName[indexPath.row]
+        
         cell.photoView.image = loadImage(fileName: "\(note).jpg")
+        
         return cell
     }
-}
-
-
-extension CustomCellTableViewCell: UICollectionViewDelegate {
+    
     
 }
 
 extension CustomCellTableViewCell: UICollectionViewDelegateFlowLayout {
+
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     
-    return fullScreenSize
+    return CGSize(width: (fullScreenSize.width - 16), height: fullScreenSize.height )
     
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

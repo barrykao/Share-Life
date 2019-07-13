@@ -134,7 +134,8 @@ extension fullCollectionViewCell:UIScrollViewDelegate{
 class PhotoCollectionViewCell: UICollectionViewCell {
     
     
-    @IBOutlet var label: UILabel!
+    @IBOutlet var picturesView: UIImageView!
+    
     
     @IBOutlet var photoView: UIImageView!
 
@@ -159,7 +160,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
 }
 
-class ModifyCollectionViewCell: UICollectionViewCell {
+class EditCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var photoView: UIImageView!
     

@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>134873668188-7buevc1hbppmu7leiu41g5vtl3jsn2ac.apps.googleusercontent.com</string>
+	<string>830376521590-gsliomo5fc026otmf5036tn1hfnj55n3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.134873668188-7buevc1hbppmu7leiu41g5vtl3jsn2ac</string>
+	<string>com.googleusercontent.apps.830376521590-gsliomo5fc026otmf5036tn1hfnj55n3</string>
 	<key>API_KEY</key>
-	<string>AIzaSyABw0bzZNMMT3kEso1DDZo2_lu6LsP51vs</string>
+	<string>AIzaSyAnVxmV2cPa_P_0QXhscReffdpctmaAzog</string>
 	<key>GCM_SENDER_ID</key>
-	<string>134873668188</string>
+	<string>830376521590</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.www.HellowMyFriends1</string>
 	<key>PROJECT_ID</key>
-	<string>testproject-30ba9</string>
+	<string>my-project-3c4e3</string>
 	<key>STORAGE_BUCKET</key>
-	<string>testproject-30ba9.appspot.com</string>
+	<string>my-project-3c4e3.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:134873668188:ios:ce39f2e896d69ca8</string>
+	<string>1:830376521590:ios:ce39f2e896d69ca8</string>
 	<key>DATABASE_URL</key>
-	<string>https://testproject-30ba9.firebaseio.com</string>
+	<string>https://my-project-3c4e3.firebaseio.com</string>
 </dict>
 </plist>

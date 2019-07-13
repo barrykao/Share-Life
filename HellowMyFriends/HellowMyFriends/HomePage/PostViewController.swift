@@ -22,7 +22,7 @@ class PostViewController: UIViewController {
     
     var databaseRef: DatabaseReference! = Database.database().reference()
     var storageRef: StorageReference! = Storage.storage().reference()
-    var currentName : DatabaseData! = DatabaseData()
+    var currentData : DatabaseData! = DatabaseData()
     var images: [UIImage] = []
     var index: Int = 0
     let fullScreenSize = UIScreen.main.bounds.size
@@ -99,7 +99,7 @@ class PostViewController: UIViewController {
             let postMessageVC = segue.destination as! PostMessageViewController
             
             postMessageVC.images = images
-            postMessageVC.currentName = currentName
+            postMessageVC.currentData = currentData
         }
         
     }
@@ -179,7 +179,7 @@ extension PostViewController : ImagePickerDelegate {
         self.images = images
         for _ in 0 ..< images.count {
             let uuidString = UUID().uuidString
-            self.currentName.imageName.append(uuidString)
+            self.currentData.imageName.append(uuidString)
         }
         self.dismiss(animated: true)
         self.collectionView.reloadData()

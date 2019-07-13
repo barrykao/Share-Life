@@ -155,7 +155,7 @@ func loadImage(fileName:String?) -> UIImage? {
             return UIImage(data: imageData)
         }
     }
-    return UIImage(named: "photoImage.png")
+    return UIImage(named: "member.png")
 }
 
 func loadImageToFile(fileName: String , database : DatabaseReference){

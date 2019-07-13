@@ -22,18 +22,17 @@
 		C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65EB18322B6458F0093AAC6 /* MessageViewController.swift */; };
 		C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */; };
 		C65F50BF22C1E71F00CAB067 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */; };
-		C65F50C522C22B5200CAB067 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C65F50C422C22B5200CAB067 /* GoogleService-Info.plist */; };
 		C65F50C722C22DEE00CAB067 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50C622C22DEE00CAB067 /* first.png */; };
 		C65F50C922C22E2D00CAB067 /* register.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50C822C22E2D00CAB067 /* register.png */; };
 		C65F50CD22C22E8400CAB067 /* reset.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50CC22C22E8300CAB067 /* reset.png */; };
 		C65F510B22C5D26C00CAB067 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */; };
 		C676073322D05AEC00848AFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C676073222D05AEB00848AFF /* ViewController.swift */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
+		C67D3A5622D9EAF600EFF778 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C67D3A5522D9EAF600EFF778 /* GoogleService-Info.plist */; };
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
 		C6CF777B22CD1B04004FFE6C /* photoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C6CF777A22CD1B03004FFE6C /* photoImage.png */; };
-		C6D3C39722CF2CF4008043A7 /* FullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D3C39622CF2CF4008043A7 /* FullViewController.swift */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
@@ -60,18 +59,17 @@
 		C65EB18322B6458F0093AAC6 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MemberCenter.storyboard; sourceTree = "<group>"; };
 		C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
-		C65F50C422C22B5200CAB067 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C65F50C622C22DEE00CAB067 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
 		C65F50C822C22E2D00CAB067 /* register.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register.png; sourceTree = "<group>"; };
 		C65F50CC22C22E8300CAB067 /* reset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reset.png; sourceTree = "<group>"; };
 		C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		C676073222D05AEB00848AFF /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
+		C67D3A5522D9EAF600EFF778 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
 		C6CF777A22CD1B03004FFE6C /* photoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photoImage.png; sourceTree = "<group>"; };
-		C6D3C39622CF2CF4008043A7 /* FullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullViewController.swift; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6EE2DFD22BF929700844D38 /* DataModel2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel2.0.xcdatamodel; sourceTree = "<group>"; };
 		C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
@@ -110,7 +108,6 @@
 			children = (
 				C65A131822B88F36002C2881 /* HomePage.storyboard */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
-				C6D3C39622CF2CF4008043A7 /* FullViewController.swift */,
 				C6008FFF22C88CC900F93F8D /* HeartViewController.swift */,
 				C65EB18322B6458F0093AAC6 /* MessageViewController.swift */,
 				C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */,
@@ -180,8 +177,8 @@
 				C65EB18222B642B00093AAC6 /* HomePage */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
+				C67D3A5522D9EAF600EFF778 /* GoogleService-Info.plist */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
-				C65F50C422C22B5200CAB067 /* GoogleService-Info.plist */,
 				C6F65692226F14F000706BEA /* Info.plist */,
 				C6A897FA22AF896F008C7BF5 /* images */,
 			);
@@ -257,7 +254,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C65F50C522C22B5200CAB067 /* GoogleService-Info.plist in Resources */,
+				C67D3A5622D9EAF600EFF778 /* GoogleService-Info.plist in Resources */,
 				C6A897FD22AF8970008C7BF5 /* member.png in Resources */,
 				C65F50CD22C22E8400CAB067 /* reset.png in Resources */,
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
@@ -351,7 +348,6 @@
 				C65F50BF22C1E71F00CAB067 /* PhotoCollectionViewCell.swift in Sources */,
 				C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */,
 				C600900022C88CC900F93F8D /* HeartViewController.swift in Sources */,
-				C6D3C39722CF2CF4008043A7 /* FullViewController.swift in Sources */,
 				C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */,
 				C64D914922BF918E002A7F2F /* DataModel.xcdatamodeld in Sources */,
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,

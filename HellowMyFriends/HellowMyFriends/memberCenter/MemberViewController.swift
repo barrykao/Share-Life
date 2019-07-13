@@ -22,6 +22,10 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @IBOutlet var heartCount: UILabel!
     
+    @IBOutlet var memberView: UIView!
+    
+    @IBOutlet var nickName: UILabel!
+    
     var messageButton: UIButton!
     var heartButton: UIButton!
     var editButton: UIButton!
@@ -43,9 +47,18 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        memberView.layer.borderWidth = 0.5
+        memberView.layer.cornerRadius = 5.0
+        account.layer.borderWidth = 0.5
+        account.layer.cornerRadius = 5.0
+        
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-        
+        self.nickName.text = ""
+//        guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+//        self.nickName.text = nickName
+
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
         
@@ -56,57 +69,60 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         refreshBtn(1)
         
         messageButton = UIButton(frame:  CGRect(x: 350, y: 580, width: 50, height: 50))
-
         messageButton.setImage(UIImage(named: "message"), for: .normal)
         messageButton.setTitleColor(UIColor.white, for: .normal)
         
         heartButton = UIButton(frame:  CGRect(x: 10, y: 580, width: 100, height: 50))
-
         heartButton.setImage(UIImage(named: "chocolate"), for: .normal)
-
         heartButton.setTitleColor(UIColor.white, for: .normal)
         
         editButton = UIButton(frame:  CGRect(x: 350, y: 100, width: 50, height: 50))
-
         editButton.setImage(UIImage(named: "file"), for: .normal)
-
         editButton.setTitleColor(UIColor.white, for: .normal)
         
-        guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-        self.account.text = account
-        print("顯示圖片")
-        let fileName = "\(account).jpg"
-        if checkFile(fileName: fileName) {
-            print("照片存在")
-            let photoImage = loadImage(fileName: fileName)
-            self.imageBtn.setImage(photoImage, for: .normal)
-            
-        }else {
-            let uid = Auth.auth().currentUser!.uid
-            databaseRef = databaseRef.child("User").child(uid).child("photo")
-            loadImageToFile(fileName: fileName, database: databaseRef)
-        }
         
+ 
         // load photoImageViewToFile
-        databaseRef = Database.database().reference()
-        databaseRef.child("User").observe(.value) { (snapshot) in
-            
+        self.databaseRef.child("User").observe(.value) { (snapshot) in
             guard let uploadDataDic = snapshot.value as? [String:Any] else {return}
             let dataDic = uploadDataDic
             let keyArray = Array(dataDic.keys)
+            print(keyArray)
             for i in 0 ..< keyArray.count {
                 let array = dataDic[keyArray[i]] as! [String:Any]
                 let databasePhoto = self.databaseRef.child("User").child(keyArray[i]).child("photo")
                 guard let photoName = array["account"] as? String else {return}
                 loadImageToFile(fileName: "\(photoName).jpg", database: databasePhoto)
+               
             }
         }
+       
 
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        self.databaseRef.child("User").child(uid).child("nickName").observe(.value, with: { (snapshot) in
+            guard let nickName = snapshot.value as? String else {return}
+            self.nickName.text = nickName
+            print(nickName)
+            UserDefaults.standard.set(nickName, forKey: "nickName")
+        })
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         if Auth.auth().currentUser != nil {
             print("登入成功")
+            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+            self.account.text = account
+            print("顯示圖片")
+            let fileName = "\(account).jpg"
+            let photoImage = loadImage(fileName: fileName)
+            self.imageBtn.setImage(photoImage, for: .normal)
+            guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+            self.nickName.text = nickName
+            
         }else{
             print("尚未登入")
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
@@ -115,7 +131,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             }
         }
     }
-
+    
     @IBAction func refreshBtn(_ sender: Any) {
         refreshControl.beginRefreshing()
         // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
@@ -127,41 +143,14 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             self.collectionViewReloadData()
         }
     }
-
-    @IBAction func signOut(_ sender: Any) {
-        
-            let alert = UIAlertController(title: "登出成功", message: "謝謝", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-                
-                if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
-                {
-                    self.present(signVC, animated: true, completion: nil)
-                }
-//                self.photo.image = UIImage(named: "member.png")
-                self.imageBtn.imageView?.image = UIImage(named: "member.png")
-
-            }
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: {
-                        
-                do {
-                    try Auth.auth().signOut()
-                } catch let error as NSError {
-                    print(error.localizedDescription)
-                }
-            })
-    }
     
     @objc func collectionViewReloadData() {
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3){
             
             self.refreshControl.endRefreshing()
-            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-            let fileName = "\(account).jpg"
-            let photoImage = loadImage(fileName: fileName)
-            self.imageBtn.setImage(photoImage, for: .normal)
             
+           
             let databaseRefPaper = Database.database().reference().child("Paper")
             databaseRefPaper.observe(.value, with: { (snapshot) in
                 if let uploadDataDic = snapshot.value as? [String:Any] {
@@ -172,14 +161,9 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                     self.memberData = []
                     self.images = []
                     self.message = []
-                    self.lightboxImages = [[]]
                     
                     for i in 0 ..< keyArray.count {
-                        let aaa = LightboxImage(image: UIImage())
-                        self.lightboxImages.append([aaa])
-                        if i > 0 {
-                            self.lightboxImages[i].remove(at: 0)
-                        }
+                        
                         if let array = dataDic[keyArray[i]] as? [String:Any] {
                             let uid = Auth.auth().currentUser?.uid
                             if uid == array["uid"] as? String {
@@ -190,19 +174,17 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                 note.message = array["message"] as? String
                                 note.date = array["date"] as? String
                                 note.imageName = array["photo"] as! [String]
-                                note.imageURL = array["photourl"] as! [String]
                                 note.uid = array["uid"] as? String
                                 note.postTime = array["postTime"] as? Double
+                                note.nickName = array["nickName"] as? String
                                 
                                 if array["comment"] as? String == "commentData" {
-                                    //                            print("0則留言")
                                     note.commentCount = 0
                                 }else {
                                     guard let comment = array["comment"] as? [String:Any] else {return}
                                     note.commentCount = comment.count
                                 }
                                 if array["heart"] as? String == "heartData" {
-                                    //                            print("0顆愛心")
                                     note.heartCount = 0
                                 }else {
                                     guard let heart = array["heart"] as? [String:Any] else {return}
@@ -211,42 +193,32 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                     self.count += note.heartCount
                                 }
                                 self.heartCount.text = "\(self.count)塊"
-                                
-                                
                                 self.memberData.append(note)
                                 // sort Post
                                 self.memberData.sort(by: { (post1, post2) -> Bool in
                                     post1.postTime! > post2.postTime!
                                 })
-                                /*
                                 for j in 0 ..< note.imageName.count {
-                                    // PhotoView
+                                    // loadImageToFile
                                     let fileName = "\(note.imageName[j]).jpg"
-                                    if checkFile(fileName: fileName) {
-                                    }else{
-                                        let databaseImageView = databaseRefPaper.child(keyArray[i]).child("photourl").child("\(i)")
-                                        loadImageToFile(fileName: fileName, database: databaseImageView)
+                                    print(fileName)
+                                    let storageRefPhoto = self.storageRef.child(note.account!).child(fileName)
+                                    storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in
+                                        guard let imageData = data else {return}
+                                        let filePath = fileDocumentsPath(fileName: fileName)
+                                        do {
+                                            try imageData.write(to: filePath)
+                                        }catch{
+                                            print("error: \(error)")
+                                        }
                                     }
-                                    
-                                    self.images.append(loadImage(fileName: "\(note.imageName[j]).jpg")!)
-                                    
-                                    print("\(note.imageName[j]).jpg")
-                                    self.message.append(note.message!)
-                                    let lightbox = LightboxImage(image: self.images[j], text: self.message[j])
-                                    self.lightboxImages[i].append(lightbox)
-                                    
                                 }
-                                self.images = []
-                                self.message = []
- */
+                                self.collectionView.reloadData()
+
                             }
                         }
                     }
-                    
-                    
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                    }
+                    self.collectionView.reloadData()
                 }
             })
             
@@ -291,13 +263,16 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         // upload to firebase
         guard let uid = Auth.auth().currentUser?.uid else {return}
         self.databaseRef = self.databaseRef.child("User").child(uid)
+        
         let now:Date = Date()
         let dateFormat:DateFormatter = DateFormatter()
         dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString:String = dateFormat.string(from: now)
+        
         if let image = photoImage ,
             let imageData = image.jpegData(compressionQuality: 1) ,
-            let account = UserDefaults.standard.string(forKey: "account") {
+            let account = UserDefaults.standard.string(forKey: "account"),
+            let nickName = UserDefaults.standard.string(forKey: "nickName") {
             storageRef = Storage.storage().reference().child(account).child(fileName)
             let metadata = StorageMetadata()
             storageRef.putData(imageData, metadata: metadata) { (data, error) in
@@ -311,16 +286,16 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         return
                     }
                     guard let uploadImageUrl = url?.absoluteString else {return}
-                    guard let uid = Auth.auth().currentUser?.uid else {return}
-                    
+
                     let postMessage: [String : Any] = ["account" : account,
                                                        "date" : dateString,
                                                        "uid" : uid,
+                                                       "nickName" : nickName,
                                                        "photo" : uploadImageUrl,
                                                        "postTime": [".sv":"timestamp"],
                                                       ]
                     
-                    self.databaseRef.updateChildValues(postMessage, withCompletionBlock: { (error, dataRef) in
+                    self.databaseRef.setValue(postMessage, withCompletionBlock: { (error, dataRef) in
                         if error != nil{
                             print("Database Error: \(error!.localizedDescription)")
                         }else{
@@ -336,8 +311,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         picker.dismiss(animated: true)
     }
     
-    
-    
     @objc func messageVC () {
         print("messageVC")
         let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
@@ -346,7 +319,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         messageVC.messageData = note
         lightboxController.present(navigationVC, animated: true)
     }
-    
     
     @objc func heartVC() {
         print("heartVC")
@@ -357,10 +329,11 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         messageVC.messageData = note
         lightboxController.present(navigationVC, animated: true, completion: nil)
     }
-    /*
+    
     @objc func editVC() {
         
-        
+        print("editVC")
+
         let controller = UIAlertController(title: "修改貼文", message: "請選擇操作功能", preferredStyle: .actionSheet)
         let names = ["編輯貼文", "刪除貼文"]
         for name in names {
@@ -372,8 +345,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         self.dismiss(animated: true)
                         let current = self.memberData[self.index]
                         let editPostVC = navigationVC.topViewController as! EditPostViewController
-                        editPostVC.editData = current
-                        editPostVC.editImage = image(fileName: current.imageName!)
+                        editPostVC.currentData = current
+                        editPostVC.images = self.images
                         self.present(navigationVC, animated: true, completion: nil)
                     }
                     
@@ -384,23 +357,25 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                     let controller = UIAlertController(title: "刪除貼文", message: "請問是否確認刪除貼文", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
                         print("Yes")
-                        let current = self.memberData[self.index]
+                        let currentData = self.memberData[self.index]
                         guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-                        let storageRefAccount = self.storageRef.child("\(account).jpg")
-                        storageRefAccount.child(current.imageName!).delete(completion: nil)
-                        
+                        let storageRefAccount = self.storageRef.child(account)
                         let databaseRefPaper = self.databaseRef.child("Paper")
-                        databaseRefPaper.child(current.paperName!).removeValue(completionBlock: { (error, data) in
-                            
-                            if checkFile(fileName: current.imageName!) {
-                                let url = fileDocumentsPath(fileName: current.imageName!)
+                        databaseRefPaper.child(currentData.paperName!).removeValue()
+                        for i in 0 ..< currentData.imageName.count {
+                            let imageName = "\(currentData.imageName[i]).jpg"
+                            storageRefAccount.child(imageName).delete(completion: nil)
+                            if checkFile(fileName: imageName) {
+                                let url = fileDocumentsPath(fileName: imageName)
                                 do{
                                     try FileManager.default.removeItem(at: url)
                                 }catch{
                                     print("error: \(error)")
                                 }
                             }
-                        })
+                        }
+                        self.memberData.remove(at: self.index)
+                        self.collectionView.reloadData()
                         self.dismiss(animated: true)
                     }
                     controller.addAction(okAction)
@@ -417,8 +392,33 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         lightboxController.present(controller, animated: true, completion: nil)
         
     }
-    */
     
+    @IBAction func signOut(_ sender: Any) {
+        
+        let alert = UIAlertController(title: "登出成功", message: "希望您再次使用", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+            
+//            UserDefaults.standard.removeObject(forKey: "nickName")
+//            UserDefaults.standard.removeObject(forKey: "account")
+//            UserDefaults.standard.removeObject(forKey: "password")
+
+            
+            if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
+            {
+                self.present(signVC, animated: true, completion: nil)
+            }
+            self.imageBtn.imageView?.image = UIImage(named: "member.png")
+        }
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: {
+            
+            do {
+                try Auth.auth().signOut()
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        })
+    }
     
 }
 
@@ -440,9 +440,9 @@ extension MemberViewController : UICollectionViewDataSource {
                 cell.photoView.layer.shadowOpacity = 0.5
                 print(fileName)
             if note.imageName.count > 1 {
-                cell.label.text = "\(note.imageName.count)"
+                cell.picturesView.image = UIImage(named: "pictures")
             }else {
-                cell.label.text = nil
+                cell.picturesView.image = nil
             }
         }
         return cell
@@ -456,21 +456,21 @@ extension MemberViewController : UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         print("\(indexPath.section),\(indexPath.item)")
-        
+        self.images = []
         guard self.memberData[indexPath.item].imageName.count > 0 else { return }
         let note = self.memberData[indexPath.item]
         let fileName = note.imageName
         var light: [LightboxImage] = []
         for i in 0 ..< note.imageName.count {
-            light.append(LightboxImage(image: loadImage(fileName: "\(fileName[i]).jpg")!, text: note.message!))
+            self.images.append(loadImage(fileName: "\(fileName[i]).jpg")!)
+            light.append(LightboxImage(image: self.images[i], text: note.message!))
         }
-        print(self.lightboxImages)
-//        let lightbox = self.lightboxImages[indexPath.item]
-//        lightboxController = LightboxController(images: lightbox, startIndex: 0)
+        
         lightboxController = LightboxController(images: light, startIndex: 0)
         lightboxController.dynamicBackground = true
         lightboxController.imageTouchDelegate = self
         lightboxController.pageDelegate = self
+        lightboxController.dismissalDelegate = self
         
         self.present(lightboxController, animated: true, completion: nil)
         lightboxController.view.addSubview(messageButton)
@@ -480,19 +480,20 @@ extension MemberViewController : UICollectionViewDelegate {
         
         messageButton.addTarget(self, action: #selector(messageVC), for: .touchUpInside)
         heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
-//        editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
         
         self.index = indexPath.item
         
     }
 }
 
-extension MemberViewController: LightboxControllerTouchDelegate, LightboxControllerPageDelegate{
-    
-    
+extension MemberViewController: LightboxControllerTouchDelegate, LightboxControllerPageDelegate ,LightboxControllerDismissalDelegate
+
+{
     
     func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
         print("didMoveToPage")
+        
         
         print(page)
     }
@@ -501,6 +502,7 @@ extension MemberViewController: LightboxControllerTouchDelegate, LightboxControl
         print("didTouch")
         
         flag = !flag
+        print(flag)
         if flag {
             messageButton.isHidden = false
             heartButton.isHidden = false
@@ -513,5 +515,9 @@ extension MemberViewController: LightboxControllerTouchDelegate, LightboxControl
     }
     
     
-    
+    func lightboxControllerWillDismiss(_ controller: LightboxController) {
+        
+        print("lightboxControllerWillDismiss")
+        
+    }
 }

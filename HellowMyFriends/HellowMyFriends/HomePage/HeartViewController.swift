@@ -70,6 +70,7 @@ class HeartViewController: UIViewController {
                         note.account = array["account"] as? String
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
+                        note.nickName = array["nickName"] as? String
                         self?.heartData.append(note)
                         self?.heartData.sort(by: { (post1, post2) -> Bool in
                             post1.postTime ?? 0.0 > post2.postTime ?? 0.0
@@ -110,8 +111,9 @@ extension HeartViewController: UITableViewDataSource {
         
         
         let note = self.heartData[indexPath.row]
-        if let accountView = note.account {
-            cell.textLabel?.text = note.account
+        if let accountView = note.account ,
+            let nickName = note.nickName {
+            cell.textLabel?.text = nickName
             cell.imageView?.image = loadImage(fileName: "\(accountView).jpg")
             cell.detailTextLabel?.text = "給了你巧克力"
         }
@@ -135,20 +137,5 @@ extension HeartViewController: UITableViewDelegate {
         self.tableView.setEditing(editing, animated: false)
     }
     
-    
-    
-    
-    
-    /*
-     if editingStyle == .delete {
-     
-     guard let paperName = self.messageData.paperName else { return}
-     let note = self.commentData[indexPath.row]
-     guard let commentName = note.commentName else {return}
-     self.databaseRef.child("Paper").child(paperName).child("comment").child(commentName).removeValue(completionBlock: { (error, data) in
-     print("刪除離留言成功")
-     })
-     }
-     */
     
 }

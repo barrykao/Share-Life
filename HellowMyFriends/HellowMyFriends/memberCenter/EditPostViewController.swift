@@ -13,9 +13,6 @@ import ImagePicker
 import Lightbox
 
 class EditPostViewController: UIViewController {
-
-    var editData : DatabaseData! = DatabaseData()
-    
     
     @IBOutlet var photo: UIImageView!
 
@@ -25,7 +22,9 @@ class EditPostViewController: UIViewController {
     
     @IBOutlet var collectionView: UICollectionView!
     
-    var currentName: DatabaseData! = DatabaseData()
+    @IBOutlet var clearPhotoBtn: UIBarButtonItem!
+    
+    var currentData: DatabaseData!
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
     var isEdit : Bool = false
@@ -41,14 +40,15 @@ class EditPostViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         
-        let account = "\(editData.account!).jpg"
+        let account = "\(currentData.account!).jpg"
         photo.image = loadImage(fileName: account)
-        self.account.text = editData.account
-        self.textView.text = editData.message
+        self.account.text = currentData.account
+        self.textView.text = currentData.message
         self.navigationItem.rightBarButtonItem?.isEnabled = false
+
         // Do any additional setup after loading the view.
 //        textView.text = "在想些什麼?"
-        textView.textColor = UIColor.lightGray
+//        textView.textColor = UIColor.lightGray
         //        textView.font = UIFont(name: "verdana", size: 13.0)
         textView.returnKeyType = .done
         textView.delegate = self
@@ -63,11 +63,33 @@ class EditPostViewController: UIViewController {
                 self.textView.text = ""
             }
             
-            self.currentName.message = self.textView.text
             
+            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+            let storageRefAccount = self.storageRef.child(account)
+            let databaseRefPaper = self.databaseRef.child("Paper")
+            databaseRefPaper.child(self.currentData.paperName!).removeValue()
+            for i in 0 ..< self.currentData.imageName.count {
+                let imageName = "\(self.currentData.imageName[i]).jpg"
+                storageRefAccount.child(imageName).delete(completion: nil)
+                if checkFile(fileName: imageName) {
+                    let url = fileDocumentsPath(fileName: imageName)
+                    do{
+                        try FileManager.default.removeItem(at: url)
+                    }catch{
+                        print("error: \(error)")
+                    }
+                }
+            }
+            
+            self.currentData.imageName = []
+            for _ in 0 ..< self.images.count {
+                let uuidString = UUID().uuidString
+                self.currentData.imageName.append(uuidString)
+            }
+            
+            self.currentData.message = self.textView.text
+            self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
             self.postPhotoBtn()
-            
-            
             
             self.dismiss(animated: true)
         }
@@ -77,16 +99,9 @@ class EditPostViewController: UIViewController {
     }
     func postPhotoBtn() {
         
-        
-        
-        
-        
-        self.databaseRef = self.databaseRef.child("Paper").child(self.currentName.imageName[0])
         print("postPhotoBtn")
         for i in 0 ..< self.images.count {
-            let uuidString = UUID().uuidString
-            self.currentName.imageName.append(uuidString)
-            guard let fileName = self.currentName.imageName.first else {return}
+            let fileName = self.currentData.imageName[i]
             print(fileName)
             // save To file
             guard let image1 = thumbmail(image: self.images[i]) else {return}
@@ -102,44 +117,32 @@ class EditPostViewController: UIViewController {
                     print("Error: \(error!.localizedDescription)")
                     return
                 }
-                self.storageRef.downloadURL(completion: { (url, error) in
+                let now: Date = Date()
+                let dateFormat:DateFormatter = DateFormatter()
+                dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let dateString:String = dateFormat.string(from: now)
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                guard let message = self.textView.text else { return}
+                guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                let postMessage: [String : Any] = ["account" : account,
+                                                   "date" : dateString,
+                                                   "message" : message,
+                                                   "uid" : uid,
+                                                   "photo" : self.currentData.imageName,
+                                                   "postTime": [".sv":"timestamp"],
+                                                   "comment" : "commentData",
+                                                   "heart" : "heartData"]
+                
+                self.databaseRef.setValue(postMessage) { (error, data) in
                     if error != nil {
-                        print("Error: \(error!.localizedDescription)")
-                        return
+                        assertionFailure()
+                    }else {
+                        print("上傳成功")
                     }
-                    print("執行downloadURL")
-                    guard let uploadImageUrl = url?.absoluteString else {return}
-                    self.currentName.imageURL.append(uploadImageUrl)
-                    
-                    let now: Date = Date()
-                    let dateFormat:DateFormatter = DateFormatter()
-                    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                    let dateString:String = dateFormat.string(from: now)
-                    guard let uid = Auth.auth().currentUser?.uid else {return}
-                    guard let message = self.textView.text else { return}
-                    guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-                    let postMessage: [String : Any] = ["account" : account,
-                                                       "date" : dateString,
-                                                       "message" : message,
-                                                       "uid" : uid,
-                                                       "photo" : self.currentName.imageName,
-                                                       "photourl" : self.currentName.imageURL,
-                                                       "postTime": [".sv":"timestamp"],
-                                                       "comment" : "commentData",
-                                                       "heart" : "heartData"]
-                    
-                    self.databaseRef.setValue(postMessage) { (error, data) in
-                        if error != nil {
-                            assertionFailure()
-                        }else {
-                            print("上傳成功")
-                        }
-                    }
-                })
+                }
             }
         }
     }
-    
     @IBAction func camera(_ sender: Any) {
         
         let imagePicker = ImagePickerController()
@@ -148,18 +151,22 @@ class EditPostViewController: UIViewController {
         
     }
     
-        
-    
-    
-    
-    
     @IBAction func back(_ sender: Any) {
         
         self.dismiss(animated: true)
     }
     
-   
+    
+    @IBAction func clearPhotoBtn(_ sender: Any) {
+        
+        self.images = []
+        self.collectionView.reloadData()
+        self.clearPhotoBtn.isEnabled = false
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
 
+        
+    }
+    
 }
 
 extension EditPostViewController: UICollectionViewDataSource {
@@ -174,9 +181,9 @@ extension EditPostViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "postMessageCell", for: indexPath) as! PostMessageCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "editCell", for: indexPath) as! EditCollectionViewCell
         
-        cell.imageView.image = images[indexPath.item]
+        cell.photoView.image = images[indexPath.item]
         
         return cell
     }
@@ -219,13 +226,16 @@ extension EditPostViewController : ImagePickerDelegate {
     func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
         print("doneButtonDidPress")
         self.images = images
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
         self.dismiss(animated: true)
         self.collectionView.reloadData()
     }
+    
     func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
         print("cancelButtonDidPress")
         imagePicker.dismiss(animated: true)
     }
+    
 }
 
 
@@ -248,8 +258,12 @@ extension EditPostViewController : UITextViewDelegate {
     func textViewDidChangeSelection(_ textView: UITextView) {
         if textView.text == "在想些什麼?" || textView.text == ""{
             self.navigationItem.rightBarButtonItem?.isEnabled = false
+            self.clearPhotoBtn.isEnabled = false
+
         }else{
             self.navigationItem.rightBarButtonItem?.isEnabled = true
+            self.clearPhotoBtn.isEnabled = true
+
         }
     }
     func textViewDidEndEditing(_ textView: UITextView) {

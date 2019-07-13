@@ -25,7 +25,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     @IBOutlet var collectionView: UICollectionView!
     
     
-    var currentName : DatabaseData!
+    var currentData : DatabaseData!
     
     var images : [UIImage] = []
     var isEdit : Bool = false
@@ -38,10 +38,8 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-
-        
-        
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
         
@@ -59,14 +57,18 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.currentPageIndicatorTintColor = UIColor.black
         view.addSubview(self.pageControl)
+        guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+        self.account.text = nickName
         
         if let account = UserDefaults.standard.string(forKey: "account") {
             let photoName = "\(account).jpg"
             photo.image = loadImage(fileName: photoName)
-            self.account.text = account
         }
         
-        buttonDesign(button: textView)
+//        buttonDesign(button: textView)
+        
+        textView.layer.borderWidth = 0.5
+        textView.layer.cornerRadius = 5.0
         self.navigationItem.rightBarButtonItem?.isEnabled = false
 
         textView.text = "在想些什麼?"
@@ -86,10 +88,10 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             if self.textView.text == "在想些什麼?"{
                 self.textView.text = ""
             }
-            self.currentName.message = self.textView.text
-            self.databaseRef = self.databaseRef.child("Paper").child(self.currentName.imageName[0])
+            self.currentData.message = self.textView.text
+            self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
             self.postPhotoBtn()
-            
+            self.delegate?.didPostMessage(note: self.currentData)
 
             
             self.dismiss(animated: true)
@@ -103,8 +105,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         
         print("postPhotoBtn")
         for i in 0 ..< self.images.count {
-            
-            let fileName = self.currentName.imageName[i]
+            let fileName = self.currentData.imageName[i]
             print(fileName)
             // save To file
             guard let image1 = thumbmail(image: self.images[i]) else {return}
@@ -120,40 +121,31 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                     print("Error: \(error!.localizedDescription)")
                     return
                 }
-                self.storageRef.downloadURL(completion: { (url, error) in
+                let now: Date = Date()
+                let dateFormat:DateFormatter = DateFormatter()
+                dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let dateString:String = dateFormat.string(from: now)
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                guard let message = self.textView.text else { return}
+                guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+
+                let postMessage: [String : Any] = ["account" : account,
+                                                   "nickName" : nickName,
+                                                   "date" : dateString,
+                                                   "message" : message,
+                                                   "uid" : uid,
+                                                   "photo" : self.currentData.imageName,
+                                                   "postTime": [".sv":"timestamp"],
+                                                   "comment" : "commentData",
+                                                   "heart" : "heartData"]
+                self.databaseRef.setValue(postMessage) { (error, data) in
                     if error != nil {
-                        print("Error: \(error!.localizedDescription)")
-                        return
+                        assertionFailure()
+                    }else {
+                        print("上傳成功")
                     }
-                    print("執行downloadURL")
-                    guard let uploadImageUrl = url?.absoluteString else {return}
-                    self.currentName.imageURL.append(uploadImageUrl)
-                    
-                    let now: Date = Date()
-                    let dateFormat:DateFormatter = DateFormatter()
-                    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                    let dateString:String = dateFormat.string(from: now)
-                    guard let uid = Auth.auth().currentUser?.uid else {return}
-                    guard let message = self.textView.text else { return}
-                    guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-                    let postMessage: [String : Any] = ["account" : account,
-                                                       "date" : dateString,
-                                                       "message" : message,
-                                                       "uid" : uid,
-                                                       "photo" : self.currentName.imageName,
-                                                       "photourl" : self.currentName.imageURL,
-                                                       "postTime": [".sv":"timestamp"],
-                                                       "comment" : "commentData",
-                                                       "heart" : "heartData"]
-                    
-                    self.databaseRef.setValue(postMessage) { (error, data) in
-                        if error != nil {
-                            assertionFailure()
-                        }else {
-                            print("上傳成功")
-                        }
-                    }
-                })
+                }
             }
         }
     }
@@ -216,7 +208,6 @@ extension PostMessageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "postMessageCell", for: indexPath) as! PostMessageCollectionViewCell
-        
         cell.imageView.image = images[indexPath.item]
         
         return cell

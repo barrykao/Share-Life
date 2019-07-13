@@ -24,12 +24,7 @@ class DatabaseData {
     var heartCount: Int = 0
     var heartUid: [String] = []
     var imageName : [String] = []
-    var imageURL: [String] = []
-    var imageNameUUID: String
-    init() {
-        self.imageNameUUID = UUID().uuidString
-    }
- 
+    var nickName: String?
 }
 
 class CommentData {
@@ -40,7 +35,8 @@ class CommentData {
     var comment: String?
     var uid : String?
     var commentUUID : String
-    
+    var nickName: String?
+
     init() {
         self.commentUUID = UUID().uuidString
     }
@@ -53,7 +49,8 @@ class HeartData {
     var postTime : Double?
     var uid : String?
     var heartUUID : String
-    
+    var nickName: String?
+
     init() {
         self.heartUUID = UUID().uuidString
     }
