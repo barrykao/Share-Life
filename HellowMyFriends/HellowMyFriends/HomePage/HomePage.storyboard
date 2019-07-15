@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--首頁-->
+        <!--Share Life-->
         <scene sceneID="KyK-Ui-oEb">
             <objects>
                 <viewController id="B6S-TY-9FS" customClass="HomePageViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
@@ -116,13 +116,13 @@
                                                             </constraints>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g6l-Bv-sHz">
-                                                            <rect key="frame" x="0.0" y="70" width="398" height="20.333333333333329"/>
+                                                            <rect key="frame" x="0.0" y="70" width="398" height="0.0"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="2A7-Ng-6OE">
-                                                            <rect key="frame" x="0.0" y="100.33333333333331" width="398" height="300"/>
+                                                            <rect key="frame" x="0.0" y="80" width="398" height="300"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="300" id="wb1-Ec-a6F"/>
@@ -158,25 +158,31 @@
                                                                 </collectionViewCell>
                                                             </cells>
                                                         </collectionView>
+                                                        <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="bTC-LN-Hxy">
+                                                            <rect key="frame" x="0.0" y="390" width="398" height="20"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="20" id="l5E-N1-beY"/>
+                                                            </constraints>
+                                                        </pageControl>
                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ca0-0L-rVq">
-                                                            <rect key="frame" x="0.0" y="410.33333333333331" width="398" height="40.333333333333314"/>
+                                                            <rect key="frame" x="0.0" y="420" width="398" height="30.666666666666686"/>
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zRC-ya-8xQ">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="40.333333333333336"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="30.666666666666668"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="80" id="Lll-gh-WPv"/>
                                                                     </constraints>
-                                                                    <state key="normal" image="chocolate"/>
+                                                                    <state key="normal" image="emptyHeart"/>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ub-WX-h0l">
-                                                                    <rect key="frame" x="85" y="0.0" width="103" height="40.333333333333336"/>
-                                                                    <state key="normal" title="0塊巧克力"/>
+                                                                    <rect key="frame" x="85" y="0.0" width="103" height="30.666666666666668"/>
+                                                                    <state key="normal" title="0顆愛心"/>
                                                                     <connections>
                                                                         <segue destination="5kx-Yg-WBh" kind="presentation" identifier="heartSegue" id="x3j-19-JQO"/>
                                                                     </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gYv-ML-dSh">
-                                                                    <rect key="frame" x="193" y="0.0" width="80" height="40.333333333333336"/>
+                                                                    <rect key="frame" x="193" y="0.0" width="80" height="30.666666666666668"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="80" id="4Dv-Z9-Kvr"/>
                                                                     </constraints>
@@ -186,7 +192,7 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8xW-WR-k7j">
-                                                                    <rect key="frame" x="278" y="0.0" width="120" height="40.333333333333336"/>
+                                                                    <rect key="frame" x="278" y="0.0" width="120" height="30.666666666666668"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="120" id="qxe-5k-dub"/>
                                                                     </constraints>
@@ -224,6 +230,7 @@
                                             <outlet property="label" destination="g6l-Bv-sHz" id="qXv-mt-KfR"/>
                                             <outlet property="messageBtn" destination="gYv-ML-dSh" id="Acg-rf-687"/>
                                             <outlet property="messageCount" destination="8xW-WR-k7j" id="Je6-FF-vXp"/>
+                                            <outlet property="pageControl" destination="bTC-LN-Hxy" id="UL0-be-CTl"/>
                                             <outlet property="photo" destination="RkL-rb-EVn" id="R5w-sU-VGT"/>
                                             <outlet property="photoCount" destination="Z93-m0-k68" id="xj9-vr-vkK"/>
                                         </connections>
@@ -240,7 +247,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wpf-ZU-WvA"/>
                     </view>
-                    <navigationItem key="navigationItem" title="首頁" id="vlx-dC-XgT">
+                    <navigationItem key="navigationItem" title="Share Life" id="vlx-dC-XgT">
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="eAv-ZV-jpN">
                             <connections>
                                 <action selector="refreshLoadData:" destination="B6S-TY-9FS" id="imU-dm-n4o"/>
@@ -343,6 +350,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="cameraBtn" destination="h1w-qs-fiz" id="ZrU-Zq-0St"/>
                         <outlet property="clearPhotoBtn" destination="UQw-ps-3Ye" id="03u-w9-Efl"/>
                         <outlet property="collectionView" destination="pOs-Aw-EME" id="22u-4J-Lb5"/>
                     </connections>
@@ -478,7 +486,7 @@
             </objects>
             <point key="canvasLocation" x="1399" y="-1312"/>
         </scene>
-        <!--巧克力集合-->
+        <!--愛心集合-->
         <scene sceneID="m37-QV-V4c">
             <objects>
                 <viewController id="vDb-Fj-imm" customClass="HeartViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
@@ -530,7 +538,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BAr-X2-F2J"/>
                     </view>
-                    <navigationItem key="navigationItem" title="巧克力集合" id="fIL-BM-Kwv">
+                    <navigationItem key="navigationItem" title="愛心集合" id="fIL-BM-Kwv">
                         <barButtonItem key="leftBarButtonItem" title="返回" id="9Mt-lY-dlj">
                             <connections>
                                 <action selector="backBtn:" destination="vDb-Fj-imm" id="VoS-Z2-qpm"/>
@@ -548,7 +556,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cZP-Sc-mpb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1752" y="129"/>
+            <point key="canvasLocation" x="1407" y="-526"/>
         </scene>
         <!--留言-->
         <scene sceneID="QJi-Of-q0V">
@@ -728,13 +736,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IU4-Xi-KIe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3218.840579710145" y="128.80434782608697"/>
+            <point key="canvasLocation" x="2875" y="-526"/>
         </scene>
-        <!--首頁-->
+        <!--Share Life-->
         <scene sceneID="ujZ-vt-JO8">
             <objects>
                 <navigationController storyboardIdentifier="homePageVC" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ODz-ix-vT9" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="首頁" image="003-house" id="3kh-8T-TGd"/>
+                    <tabBarItem key="tabBarItem" title="Share Life" image="003-house" id="3kh-8T-TGd"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ler-7U-LEo">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
@@ -765,7 +773,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ygY-90-JOg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2538" y="129"/>
+            <point key="canvasLocation" x="2194" y="-526"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="QaX-45-b9a">
@@ -784,13 +792,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UyG-UZ-vtm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1015.9420289855074" y="128.80434782608697"/>
+            <point key="canvasLocation" x="672" y="-526"/>
         </scene>
     </scenes>
     <resources>
         <image name="002-chat" width="32" height="32"/>
         <image name="003-house" width="16" height="16"/>
-        <image name="chocolate" width="32" height="32"/>
+        <image name="emptyHeart" width="32" height="32"/>
         <image name="member.png" width="215" height="215"/>
         <image name="send" width="32" height="32"/>
     </resources>

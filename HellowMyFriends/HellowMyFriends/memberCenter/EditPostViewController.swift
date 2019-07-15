@@ -24,12 +24,15 @@ class EditPostViewController: UIViewController {
     
     @IBOutlet var clearPhotoBtn: UIBarButtonItem!
     
+    @IBOutlet var cameraBtn: UIBarButtonItem!
+    
     var currentData: DatabaseData!
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
     var isEdit : Bool = false
     var images: [UIImage] = []
     let fullScreenSize = UIScreen.main.bounds.size
+    var pageControl : UIPageControl! = UIPageControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,19 +42,32 @@ class EditPostViewController: UIViewController {
         
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-        
+        self.cameraBtn.isEnabled = false
         let account = "\(currentData.account!).jpg"
         photo.image = loadImage(fileName: account)
         self.account.text = currentData.account
         self.textView.text = currentData.message
         self.navigationItem.rightBarButtonItem?.isEnabled = false
 
-        // Do any additional setup after loading the view.
-//        textView.text = "在想些什麼?"
-//        textView.textColor = UIColor.lightGray
-        //        textView.font = UIFont(name: "verdana", size: 13.0)
         textView.returnKeyType = .done
         textView.delegate = self
+        
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        //设置页控制器
+        pageControl.center = CGPoint(x: UIScreen.main.bounds.width/2,
+                                     y: UIScreen.main.bounds.height - 20)
+        pageControl.numberOfPages = images.count
+        pageControl.isUserInteractionEnabled = true
+        pageControl.tintColor = UIColor.gray
+        pageControl.pageIndicatorTintColor = UIColor.gray
+        pageControl.currentPageIndicatorTintColor = UIColor.blue
+        view.addSubview(self.pageControl)
+        
     }
     
 
@@ -62,7 +78,6 @@ class EditPostViewController: UIViewController {
             if self.textView.text == "在想些什麼?"{
                 self.textView.text = ""
             }
-            
             
             guard let account = UserDefaults.standard.string(forKey: "account") else {return}
             let storageRefAccount = self.storageRef.child(account)
@@ -109,6 +124,7 @@ class EditPostViewController: UIViewController {
             // save To Server
             guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
             guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+            guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
             self.storageRef = Storage.storage().reference().child(account).child("\(fileName).jpg")
             let metadata = StorageMetadata()
             self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
@@ -127,6 +143,7 @@ class EditPostViewController: UIViewController {
                 let postMessage: [String : Any] = ["account" : account,
                                                    "date" : dateString,
                                                    "message" : message,
+                                                   "nickName" : nickName,
                                                    "uid" : uid,
                                                    "photo" : self.currentData.imageName,
                                                    "postTime": [".sv":"timestamp"],
@@ -162,14 +179,14 @@ class EditPostViewController: UIViewController {
         self.images = []
         self.collectionView.reloadData()
         self.clearPhotoBtn.isEnabled = false
+        self.cameraBtn.isEnabled = true
         self.navigationItem.rightBarButtonItem?.isEnabled = false
-
-        
+        self.pageControl.numberOfPages = 0
     }
     
 }
 
-extension EditPostViewController: UICollectionViewDataSource {
+extension EditPostViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -188,6 +205,13 @@ extension EditPostViewController: UICollectionViewDataSource {
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        //当前显示的单元格
+        //        let visibleCell = collectionView.visibleCells[0]
+        guard let visibleCell = collectionView.visibleCells.first else {return}
+        //设置页控制器当前页
+        self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
+    }
 }
 
 

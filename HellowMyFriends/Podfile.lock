@@ -83,6 +83,7 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - PageMenu (2.0.0)
+  - RSKImageCropper (2.2.2)
 
 DEPENDENCIES:
   - Firebase/Auth
@@ -93,6 +94,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - Lightbox
   - PageMenu
+  - RSKImageCropper
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -115,6 +117,7 @@ SPEC REPOS:
     - Lightbox
     - nanopb
     - PageMenu
+    - RSKImageCropper
 
 SPEC CHECKSUMS:
   Cache: 807c5d86d01a177f06ede9865add3aea269bbfd4
@@ -136,7 +139,8 @@ SPEC CHECKSUMS:
   Lightbox: d317750e4132bfb871a5307cfe0a2c7d6a583c65
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PageMenu: 9c38fd7e0d9ef4b1408320f55bb907bbc0e538dc
+  RSKImageCropper: 05e3b82a18da83ea3c2b7bffa7f2199a621d6802
 
-PODFILE CHECKSUM: 4d057e1c6704ab0153f7165171082bfe574a2829
+PODFILE CHECKSUM: d281554f7db80f73ada998089ce75c6a4e8b89f9
 
 COCOAPODS: 1.6.1

@@ -71,7 +71,7 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
             
             if error == nil {
                     print("log in!")
-                    let alert = UIAlertController(title: "登入成功", message: "你好", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "登入成功", message: "觀迎來到Share Life!", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
                     self.dismiss(animated: true)
                 })

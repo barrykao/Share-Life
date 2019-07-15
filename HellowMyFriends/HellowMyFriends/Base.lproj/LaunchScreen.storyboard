@@ -18,13 +18,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="tFq-r6-CSn">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background3.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="tFq-r6-CSn">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="歡迎我的朋友" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XYW-oE-NkV">
-                                <rect key="frame" x="131" y="353" width="152" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Share Life" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XYW-oE-NkV">
+                                <rect key="frame" x="86.666666666666671" y="353" width="240.66666666666663" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" red="0.16483829929999999" green="0.097113616489999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -32,12 +32,10 @@
                         <constraints>
                             <constraint firstItem="tFq-r6-CSn" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="17n-4h-JDe"/>
                             <constraint firstItem="tFq-r6-CSn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="CUJ-e2-8jX"/>
+                            <constraint firstItem="XYW-oE-NkV" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Ehc-X8-mRT"/>
+                            <constraint firstItem="XYW-oE-NkV" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Enh-dU-XmV"/>
                             <constraint firstItem="tFq-r6-CSn" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="G2F-Da-NKz"/>
-                            <constraint firstItem="XYW-oE-NkV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="131" id="HEZ-CU-d67"/>
                             <constraint firstItem="tFq-r6-CSn" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="IUo-At-ID6"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XYW-oE-NkV" secondAttribute="trailing" constant="131" id="J4q-N5-AyH"/>
-                            <constraint firstItem="XYW-oE-NkV" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="333" id="LbC-QN-ipW"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="XYW-oE-NkV" secondAttribute="bottom" constant="353" id="qGQ-6O-H5u"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -48,6 +46,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="background.jpg" width="700" height="1050"/>
+        <image name="background3.jpg" width="1524.719970703125" height="2537.280029296875"/>
     </resources>
 </document>

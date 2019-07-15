@@ -11,7 +11,11 @@ import CoreData
 import UIKit
 
 
-class DatabaseData {
+class DatabaseData: Equatable{
+    static func == (lhs: DatabaseData, rhs: DatabaseData) -> Bool {
+        return lhs === rhs
+    }
+    
     
     var paperName : String?
     var account : String?
@@ -25,6 +29,7 @@ class DatabaseData {
     var heartUid: [String] = []
     var imageName : [String] = []
     var nickName: String?
+    var profile: String?
 }
 
 class CommentData {

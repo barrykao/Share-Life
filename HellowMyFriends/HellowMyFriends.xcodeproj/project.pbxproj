@@ -29,6 +29,7 @@
 		C676073322D05AEC00848AFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C676073222D05AEB00848AFF /* ViewController.swift */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67D3A5622D9EAF600EFF778 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C67D3A5522D9EAF600EFF778 /* GoogleService-Info.plist */; };
+		C67D83D922DC6D3B00EE1109 /* background3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C67D83D822DC6D3B00EE1109 /* background3.jpg */; };
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
@@ -66,6 +67,7 @@
 		C676073222D05AEB00848AFF /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67D3A5522D9EAF600EFF778 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C67D83D822DC6D3B00EE1109 /* background3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background3.jpg; sourceTree = "<group>"; };
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
@@ -139,6 +141,7 @@
 				C65F50C822C22E2D00CAB067 /* register.png */,
 				C6CF777A22CD1B03004FFE6C /* photoImage.png */,
 				C65F50C622C22DEE00CAB067 /* first.png */,
+				C67D83D822DC6D3B00EE1109 /* background3.jpg */,
 				C65F50CC22C22E8300CAB067 /* reset.png */,
 				C6A897FC22AF896F008C7BF5 /* background.jpg */,
 				C65A132122B8AB9D002C2881 /* background 2.jpg */,
@@ -267,6 +270,7 @@
 				C6CF777B22CD1B04004FFE6C /* photoImage.png in Resources */,
 				C65F50C722C22DEE00CAB067 /* first.png in Resources */,
 				C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */,
+				C67D83D922DC6D3B00EE1109 /* background3.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +294,7 @@
 				"${BUILT_PRODUCTS_DIR}/Imaginary/Imaginary.framework",
 				"${BUILT_PRODUCTS_DIR}/Lightbox/Lightbox.framework",
 				"${BUILT_PRODUCTS_DIR}/PageMenu/PageMenu.framework",
+				"${BUILT_PRODUCTS_DIR}/RSKImageCropper/RSKImageCropper.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -305,6 +310,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Imaginary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lightbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PageMenu.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RSKImageCropper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);

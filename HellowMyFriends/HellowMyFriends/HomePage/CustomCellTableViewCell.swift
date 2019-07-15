@@ -53,6 +53,8 @@ class CustomCellTableViewCell: UITableViewCell {
     var collectionViewData: [DatabaseData] = []
     let fullScreenSize = UIScreen.main.bounds.size
     
+    @IBOutlet var pageControl: UIPageControl!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -62,6 +64,7 @@ class CustomCellTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
+        
         // Configure the view for the selected state
     }
 
@@ -88,6 +91,13 @@ extension CustomCellTableViewCell: UICollectionViewDataSource, UICollectionViewD
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        //当前显示的单元格
+        //        let visibleCell = collectionView.visibleCells[0]
+        guard let visibleCell = collectionView.visibleCells.first else {return}
+        //设置页控制器当前页
+        self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
+    }
     
 }
 

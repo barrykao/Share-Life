@@ -115,7 +115,7 @@ extension HeartViewController: UITableViewDataSource {
             let nickName = note.nickName {
             cell.textLabel?.text = nickName
             cell.imageView?.image = loadImage(fileName: "\(accountView).jpg")
-            cell.detailTextLabel?.text = "給了你巧克力"
+            cell.detailTextLabel?.text = "給了你愛心"
         }
         return cell
         

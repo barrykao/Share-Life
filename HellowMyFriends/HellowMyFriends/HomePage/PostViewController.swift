@@ -19,6 +19,7 @@ class PostViewController: UIViewController {
     
     @IBOutlet var clearPhotoBtn: UIBarButtonItem!
     
+    @IBOutlet var cameraBtn: UIBarButtonItem!
     
     var databaseRef: DatabaseReference! = Database.database().reference()
     var storageRef: StorageReference! = Storage.storage().reference()
@@ -26,7 +27,7 @@ class PostViewController: UIViewController {
     var images: [UIImage] = []
     var index: Int = 0
     let fullScreenSize = UIScreen.main.bounds.size
-    var pageControl : UIPageControl!
+    var pageControl : UIPageControl! = UIPageControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,26 +49,24 @@ class PostViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
-        if images.count != 0 {
+        if images.count > 0  {
             self.navigationItem.rightBarButtonItem?.isEnabled = true
             self.clearPhotoBtn.isEnabled = true
+            self.cameraBtn.isEnabled = false
             //设置页控制器
-            pageControl = UIPageControl()
             pageControl.center = CGPoint(x: UIScreen.main.bounds.width/2,
-                                         y: UIScreen.main.bounds.height - 80)
+                                         y: UIScreen.main.bounds.height - 20)
             pageControl.numberOfPages = images.count
             pageControl.isUserInteractionEnabled = true
             pageControl.tintColor = UIColor.gray
             pageControl.pageIndicatorTintColor = UIColor.gray
-            pageControl.currentPageIndicatorTintColor = UIColor.black
+            pageControl.currentPageIndicatorTintColor = UIColor.blue
             view.addSubview(self.pageControl)
         }else{
             self.navigationItem.rightBarButtonItem?.isEnabled = false
             self.clearPhotoBtn.isEnabled = false
+            self.cameraBtn.isEnabled = true
         }
-        
-        
     }
     
     @IBAction func camera(_ sender: Any) {
@@ -86,6 +85,10 @@ class PostViewController: UIViewController {
         self.images = []
         self.collectionView.reloadData()
         self.clearPhotoBtn.isEnabled = false
+        self.cameraBtn.isEnabled = true
+        
+        pageControl.numberOfPages = images.count
+
         self.navigationItem.rightBarButtonItem?.isEnabled = false
 
     }
@@ -105,7 +108,7 @@ class PostViewController: UIViewController {
     }
 }
 
-extension PostViewController: UICollectionViewDataSource {
+extension PostViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -123,14 +126,6 @@ extension PostViewController: UICollectionViewDataSource {
         
         return cell
     }
-    
-}
-
-extension PostViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        
-    }
     //collectionView里某个cell显示完毕
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         //当前显示的单元格
@@ -140,7 +135,6 @@ extension PostViewController: UICollectionViewDelegate {
         self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
     }
 }
-
 
 extension PostViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -55,7 +55,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         pageControl.isUserInteractionEnabled = true
         pageControl.tintColor = UIColor.gray
         pageControl.pageIndicatorTintColor = UIColor.gray
-        pageControl.currentPageIndicatorTintColor = UIColor.black
+        pageControl.currentPageIndicatorTintColor = UIColor.blue
         view.addSubview(self.pageControl)
         guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
         self.account.text = nickName
@@ -91,9 +91,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             self.currentData.message = self.textView.text
             self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
             self.postPhotoBtn()
-            self.delegate?.didPostMessage(note: self.currentData)
-
-            
+//            NotificationCenter.default.post(name: Notification.Name("updated"), object: nil, userInfo: ["note": self.currentData!])
             self.dismiss(animated: true)
         }
         alert.addAction(okAction)
@@ -113,9 +111,9 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             // save To Server
             guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
             guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-            self.storageRef = Storage.storage().reference().child(account).child("\(fileName).jpg")
+            let storageFileName = self.storageRef.child(account).child("\(fileName).jpg")
             let metadata = StorageMetadata()
-            self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
+            storageFileName.putData(imageData, metadata: metadata) { (data, error) in
                 print("執行putData")
                 if error != nil {
                     print("Error: \(error!.localizedDescription)")
@@ -150,6 +148,11 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        isEditing()
+    }
+
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "在想些什麼?" {
             textView.text = ""
@@ -157,7 +160,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             textView.font = UIFont(name: "verdana", size: 18.0)
         }
     }
-    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
@@ -179,12 +181,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             textView.font = UIFont(name: "verdana", size: 13.0)
         }
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        isEditing()
-    }
-    
     func isEditing() {
         if textView.text != "在想些什麼?"{
             self.navigationItem.rightBarButtonItem?.isEnabled = true
@@ -195,7 +191,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
    
 }
 
-extension PostMessageViewController: UICollectionViewDataSource {
+extension PostMessageViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -213,19 +209,13 @@ extension PostMessageViewController: UICollectionViewDataSource {
         return cell
     }
     
-}
-extension PostMessageViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        self.index = indexPath.item
-        
-    }
     //collectionView里某个cell显示完毕
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let visibleCell = collectionView.visibleCells.first else {return}
         self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
         
     }
+    
 }
 
 
