@@ -272,13 +272,14 @@ extension EditPostViewController : UITextViewDelegate {
             textView.font = UIFont(name: "verdana", size: 18.0)
         }
     }
-    
+    /*
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
         }
         return true
     }
+    */
     func textViewDidChangeSelection(_ textView: UITextView) {
         if textView.text == "在想些什麼?" || textView.text == ""{
             self.navigationItem.rightBarButtonItem?.isEnabled = false
@@ -295,7 +296,7 @@ extension EditPostViewController : UITextViewDelegate {
         if textView.text == "" {
             textView.text = "在想些什麼?"
             textView.textColor = UIColor.lightGray
-            textView.font = UIFont(name: "verdana", size: 13.0)
+            textView.font = UIFont(name: "verdana", size: 18.0)
         }
     }
     

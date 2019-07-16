@@ -54,8 +54,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        stackView.layer.borderWidth = 0.5
-        stackView.layer.cornerRadius = 5.0
+//        stackView.layer.borderWidth = 0.5
+//        stackView.layer.cornerRadius = 5.0
         account.layer.borderWidth = 0.5
         account.layer.cornerRadius = 5.0
        
@@ -117,14 +117,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear")
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        self.databaseRef.child("User").child(uid).child("nickName").observe(.value, with: { (snapshot) in
-            guard let nickName = snapshot.value as? String else {return}
-            self.nickName.text = nickName
-            print(nickName)
-            UserDefaults.standard.set(nickName, forKey: "nickName")
-        })
-        
+      
+    
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -137,14 +131,44 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             print("顯示圖片")
             let fileName = "\(account).jpg"
             let photoImage = loadImage(fileName: fileName)
-//            self.imageBtn.backgroundImage(for: .normal)
             self.imageBtn.setImage(photoImage, for: .normal)
             imageBtn.layer.cornerRadius = imageBtn.frame.height/2
             imageBtn.backgroundColor = UIColor.clear
             imageBtn.clipsToBounds = false
             
-            guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
-            self.nickName.text = nickName
+//            guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+//            self.nickName.text = nickName
+//            print(nickName)
+            
+            guard let uid = Auth.auth().currentUser?.uid else {return}
+            let databaseUid = self.databaseRef.child("User").child(uid)
+            databaseUid.observe(.value, with: { (snapshot) in
+                guard let uidDict = snapshot.value as? [String:Any] else {return}
+                guard let nickName = uidDict["nickName"] as? String else {return}
+                UserDefaults.standard.set(nickName, forKey: "nickName")
+                print(nickName)
+                self.nickName.text = nickName
+                guard let profile = uidDict["profile"] as? String else {return}
+                if profile == "" {
+                    self.textView.text = "在想些什麼?"
+                }else {
+                    self.textView.text = profile
+                    self.textView.textColor = UIColor.black
+                    self.textView.font = UIFont(name: "verdana", size: 13.0)
+                }
+                
+                /*
+                if self.textView.text == "在想些什麼?" {
+                    print("No profile")
+                }else {
+                    guard let profile = uidDict["profile"] as? String else {return}
+                    self.textView.text = profile
+                    self.textView.textColor = UIColor.black
+                    self.textView.font = UIFont(name: "verdana", size: 13.0)
+                }
+                */
+            })
+            
             collectionViewReloadData()
         }else{
             print("尚未登入")
@@ -202,21 +226,22 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                 note.postTime = array["postTime"] as? Double
                                 note.nickName = array["nickName"] as? String
                                 
-                                if array["comment"] as? String == "commentData" {
-                                    note.commentCount = 0
-                                }else {
-                                    guard let comment = array["comment"] as? [String:Any] else {return}
+                                if let comment = array["comment"] as? [String:Any] {
                                     note.commentCount = comment.count
-                                }
-                                if array["heart"] as? String == "heartData" {
-                                    note.heartCount = 0
                                 }else {
-                                    guard let heart = array["heart"] as? [String:Any] else {return}
+                                    note.commentCount = 0
+                                }
+                                
+                                if let heart = array["heart"] as? [String:Any] {
                                     note.heartUid = Array(heart.keys)
                                     note.heartCount = heart.count
                                     self.count += note.heartCount
+                                }else {
+                                    note.heartCount = 0
                                 }
+
                                 self.heartCount.text = "\(self.count)顆"
+
                                 self.memberData.append(note)
                                 // sort Post
                                 self.memberData.sort(by: { (post1, post2) -> Bool in
@@ -620,15 +645,17 @@ extension MemberViewController: UITextViewDelegate {
         if textView.text == "在想些什麼?" {
             textView.text = ""
             textView.textColor = UIColor.black
-            textView.font = UIFont(name: "verdana", size: 18.0)
+            textView.font = UIFont(name: "verdana", size: 13.0)
         }
     }
+    /*
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
         }
         return true
     }
+    */
     func textViewDidChangeSelection(_ textView: UITextView) {
         if textView.text == "在想些什麼?" || textView.text == "" {
             self.sendBtn.isEnabled = false

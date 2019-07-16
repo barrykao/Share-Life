@@ -14,37 +14,19 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     var data : [DatabaseData] = []
     var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
-
-
     var refreshControl:UIRefreshControl!
     var touchedIndexPath : Int = 0
-    /*
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(HomePageViewController.finishUpdate(notification:)), name: Notification.Name("updated"), object: nil)
-    }
+    var feedbackGenerator : UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .heavy)
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        feedbackGenerator = nil
     }
-     @objc func finishUpdate(notification : Notification) {
-     
-         let note = notification.userInfo?["note"] as! DatabaseData
-        
-         if let index = self.data.firstIndex(of: note){
-         //轉成indexPath
-         let indexPath = IndexPath(row: index, section: 0)
-         //tableciew reload indexPath位置的cell
-         self.tableView.reloadRows(at: [indexPath], with: .automatic)
-         }
-     
-     }
-    */
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let app:AppDelegate = UIApplication.shared.delegate as! AppDelegate
         self.data = app.data
+        
+        feedbackGenerator?.prepare()
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -77,9 +59,8 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     
     override func viewDidAppear(_ animated: Bool) {
 //        self.loadData()
+        self.tableView.reloadData()
     }
-    
-    
     
     @IBAction func refreshLoadData(_ sender: Any) {
         
@@ -118,21 +99,28 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
                         note.nickName = array["nickName"] as? String
-
+                        /*
                         if array["comment"] as? String == "commentData" {
                             note.commentCount = 0
                         }else {
                             guard let comment = array["comment"] as? [String:Any] else {return}
                             note.commentCount = comment.count
                         }
-                        if array["heart"] as? String == "heartData" {
-                            note.heartCount = 0
+                        */
+                        if let comment = array["comment"] as? [String:Any] {
+                            note.commentCount = comment.count
                         }else {
-                            guard let heart = array["heart"] as? [String:Any] else {return}
+                            note.commentCount = 0
+                        }
+                        
+                        if let heart = array["heart"] as? [String:Any] {
                             note.heartUid = Array(heart.keys)
                             note.heartCount = heart.count
+                        }else {
+                            note.heartCount = 0
                         }
-
+                        
+                      
                         self!.data.append(note)
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
@@ -151,7 +139,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                                     do {
                                         try imageData.write(to: filePath)
                                         print("下載成功")
-                                        if j == note.imageName.count {
+                                        if j == note.imageName.count - 1 {
                                             DispatchQueue.main.async {
                                                 self?.tableView.reloadData()
                                             }
@@ -214,6 +202,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.collectionView.delegate = cell
         cell?.collectionView.dataSource = cell
         cell?.collectionView.reloadData()
+        
         if note.imageName.count > 1 {
             cell?.pageControl.numberOfPages = note.imageName.count
             cell?.pageControl.isUserInteractionEnabled = true
@@ -237,13 +226,23 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell?.photoCount.image = nil
         }
         
-        let uid = Auth.auth().currentUser?.uid
+        
         
         cell?.heartImageBtn.setImage(UIImage(named: "fullHeart"), for: .normal)
        
         
         cell?.heartImageBtn.tag = indexPath.section * 10
-        cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchDown)
+        cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchUpInside)
+        if let uid = UserDefaults.standard.string(forKey: "uid") {
+            if note.heartUid.contains(uid) {
+                cell?.heartImageBtn.setImage(UIImage(named: "fullHeart"), for: .normal)
+            }else {
+                cell?.heartImageBtn.setImage(UIImage(named: "emptyHeart"), for: .normal)
+            }
+        }
+        
+        
+        
         
 
         cell?.heartCount.setTitle("\(note.heartCount)顆愛心", for: .normal)
@@ -290,8 +289,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
     @objc func heartBtnPressed(sender:UIButton) {
         
-
-        
         guard let account = UserDefaults.standard.string(forKey: "account") else { return}
         guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
         guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
@@ -299,139 +296,53 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         let indexPath = (sender.tag) / 10
         let note = self.data[indexPath - 1]
         guard let paperName = note.paperName else { return}
-
-//        guard let paperName = note.paperName else { return}
-//        let databasePaperName = self.databaseRef.child("Paper").child(paperName)
         let databasePaperName = self.databaseRef.child("Paper").child(paperName)
-        
-        let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
-                                     "account" : account,
-                                     "uid" : uid,
-                                     "nickName" : nickName]
-        databasePaperName.child("heart").child(uid).setValue(heart){ (error, database) in
-            if let error = error {
-                assertionFailure("Fail To postMessage \(error)")
-            }
-            print("上傳巧克力成功")
-        }
-    
-        /*
-        databasePaperName.child("heart").observe(.value) { (snapshot) in
+       
+        if note.heartUid.contains(uid) {
             
-            if (snapshot.hasChild(uid)) {
-                // delete heart
-                sender.setImage(UIImage(named: "emptyHeart"), for: .normal)
-                databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
+            // delete
+            databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
+                if let error = error {
+                    assertionFailure("Fail To postMessage \(error)")
+                }else {
                     print("刪除離留言成功")
-                    // give fake heart
-                    databasePaperName.observe(.value, with: { (snapshot) in
-                        if (snapshot.hasChild("heart")){
-                            print("heart alive")
-                        }else{
-                            print("heart died")
-                            databasePaperName.child("heart").setValue("heartData", withCompletionBlock: { (error, data) in
-                                print("上傳假資料成功")
-                                self.refreshLoadData(1)
-                            })
-                        }
-                    })
-                })
-            
-            }else {
-                //
-                sender.setImage(UIImage(named: "fullHeart"), for: .normal)
-
-                 let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
-                                             "account" : account,
-                                             "uid" : uid,
-                                             "nickName" : nickName]
-                databasePaperName.child("heart").child(uid).setValue(heart)
-                { (error, database) in
-                    if let error = error {
-                        assertionFailure("Fail To postMessage \(error)")
-                    }
-                    print("上傳巧克力成功")
                 }
-                
+            })
+            
+        }else {
+            // add
+            let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
+                                         "account" : account,
+                                         "uid" : uid,
+                                         "nickName" : nickName]
+            databasePaperName.child("heart").child(uid).setValue(heart){ (error, database) in
+                if let error = error {
+                    assertionFailure("Fail To postMessage \(error)")
+                }
+                print("上傳愛心成功")
             }
- 
- 
+            
         }
-         */
-        
-        /*
-            for i in 0 ..< note.heartUid.count {
-                    // delete heart
-                databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
-                    print("刪除離留言成功")
-                    // give fake heart
-                    databasePaperName.observe(.value, with: { (snapshot) in
-                        if (snapshot.hasChild("heart")){
-                            print("comment alive")
-                        }else{
-                            print("comment died")
-                            databasePaperName.child("heart").setValue("heartData", withCompletionBlock: { (error, data) in
-                                print("上傳假資料成功")
-                                self.refreshLoadData(1)
-                            })
-                        }
-                    })
-                })
-            }
-            */
-            
-            
-            
-            
-        
- 
-        /*
-        // give heart
-        guard let paperName = note.paperName else { return}
-        let databasePaperName = self.databaseRef.child("Paper").child(paperName)
-        let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
-                                     "account" : account,
-                                     "uid" : uid,
-                                     "nickName" : nickName]
-        databasePaperName.child("heart").child(uid).setValue(heart)
-        { (error, database) in
-            if let error = error {
-                assertionFailure("Fail To postMessage \(error)")
-            }
-            print("上傳巧克力成功")
-        }
-        
-        
-        
-        
-        databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
-            print("刪除離留言成功")
-         
-            //                    self.refreshLoadData(1)
-        })
-        databasePaperName.observe(.value, with: { (snapshot) in
-            //                        print(snapshot.value)
-            if (snapshot.hasChild("comment")){
-                print("comment alive")
-            }else{
-                print("comment died")
-                databasePaperName.child("comment").setValue("commentData", withCompletionBlock: { (error, data) in
-                    print("上傳假資料成功")
-                    self.commentData = []
-                    self.refreshLoadData(1)
-         
-                })
-         
-            }
-        })
-        */
-        
-    
+        scaleLikeButton(sender: sender)
 
         
+        
+
     }
     
-    
+    func scaleLikeButton(sender: UIButton) {
+        UIView.animate(withDuration: 0.2, animations: {
+            let scaleTransform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            sender.transform = scaleTransform
+        }) { ( _ ) in
+            UIView.animate(withDuration: 0.2, animations: {
+                sender.transform = CGAffineTransform.identity
+            })
+        }
+        
+        feedbackGenerator?.impactOccurred()
+    }
+
     
 }
 
@@ -440,17 +351,5 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
 
 //        self.tableView.reloadData()
-//        func scaleLikeButton() {
-//            UIView.animate(withDuration: 0.2, animations: {
-//                let scaleTransform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-//                sender.transform = scaleTransform
-//            }) { ( _ ) in
-//                UIView.animate(withDuration: 0.2, animations: {
-//                    sender.transform = CGAffineTransform.identity
-//                })
-//            }
-//        }
 //
-//        scaleLikeButton()
-//
-//        feedbackGenerator?.impactOccurred()
+

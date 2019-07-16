@@ -33,8 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         print("home= \(NSHomeDirectory())")
         
+        
         let databaseRefPaper = self.databaseRef.child("Paper")
-        databaseRefPaper.observe(.value, with: { [weak self] (snapshot) in
+        
+        databaseRefPaper.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
             
             if let uploadDataDic = snapshot.value as? [String:Any] {
                 let dataDic = uploadDataDic
@@ -52,22 +54,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     note.postTime = array["postTime"] as? Double
                     note.nickName = array["nickName"] as? String
                     
-                    if array["comment"] as? String == "commentData" {
-                        //                            print("0則留言")
-                        note.commentCount = 0
-                    }else {
-                        guard let comment = array["comment"] as? [String:Any] else {return}
+                    if let comment = array["comment"] as? [String:Any] {
                         note.commentCount = comment.count
-                    }
-                    if array["heart"] as? String == "heartData" {
-                        //                            print("0顆愛心")
-                        note.heartCount = 0
                     }else {
-                        guard let heart = array["heart"] as? [String:Any] else {return}
-                        note.heartUid = Array(heart.keys)
-                        note.heartCount = heart.count
+                        note.commentCount = 0
                     }
                     
+                    if let heart = array["heart"] as? [String:Any] {
+                        note.heartUid = Array(heart.keys)
+                        note.heartCount = heart.count
+                    }else {
+                        note.heartCount = 0
+                    }
                     self!.data.append(note)
                     self?.data.sort(by: { (post1, post2) -> Bool in
                         post1.postTime! > post2.postTime!
@@ -91,7 +89,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         })
-        
         
         return true
     }

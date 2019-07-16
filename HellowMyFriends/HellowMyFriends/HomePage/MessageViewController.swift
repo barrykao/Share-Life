@@ -70,23 +70,9 @@ class MessageViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
         
-        let swipeLeft = UISwipeGestureRecognizer(
-            target:self,
-            action:#selector(backBtn(_:)))
-        swipeLeft.direction = .right
-        
-        // 為視圖加入監聽手勢
-        self.view.addGestureRecognizer(swipeLeft)
-        
         // Do any additional setup after loading the view.
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        
-        
-        
-    }
+  
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -151,9 +137,7 @@ class MessageViewController: UIViewController {
                         self?.tableView.reloadData()
                     }
             })
-//                            self.tableView.reloadData()
         }
-        
     }
     
     
@@ -176,9 +160,7 @@ class MessageViewController: UIViewController {
                                             "uid" : uid,
                                             "nickName" :nickName
                                           ]
-        
-        print(self.commentName)
-        self.databaseRef.child("Paper").child(paperName).child("comment").child(note.commentUUID).setValue(postMessage) { (error, database) in
+    self.databaseRef.child("Paper").child(paperName).child("comment").child(note.commentUUID).setValue(postMessage) { (error, database) in
             if let error = error {
                 assertionFailure("Fail To postMessage \(error)")
             }
@@ -254,16 +236,17 @@ extension MessageViewController: UITableViewDelegate {
             
             if note.uid == uid {
              if editingStyle == .delete {
+                
                  guard let paperName = self.messageData.paperName else { return}
                  guard let commentName = note.commentName else {return}
                 
                     let databasePaperName = self.databaseRef.child("Paper").child(paperName)
                     databasePaperName.child("comment").child(commentName).removeValue(completionBlock: { (error, data) in
-                    print("刪除離留言成功")
-               
-//                    self.refreshLoadData(1)
+                        print("刪除離留言成功")
+                        self.commentData.remove(at: indexPath.row)
+                        self.tableView.deleteRows(at: [indexPath], with: .automatic)
                     })
-                
+                /*
                     databasePaperName.observe(.value, with: { (snapshot) in
 //                        print(snapshot.value)
                         if (snapshot.hasChild("comment")){
@@ -280,6 +263,7 @@ extension MessageViewController: UITableViewDelegate {
                             
                         }
                     })
+ */
                  }
             }
         }
