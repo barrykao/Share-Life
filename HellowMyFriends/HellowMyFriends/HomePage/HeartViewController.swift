@@ -55,7 +55,7 @@ class HeartViewController: UIViewController {
             guard let paperName = self.messageData.paperName else { return}
             
             let databaseRefPaper = self.databaseRef.child("Paper").child(paperName).child("heart")
-            databaseRefPaper.observe(.value, with: { [weak self] (snapshot) in
+            databaseRefPaper.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
                 if let uploadDataDic = snapshot.value as? [String:Any] {
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)

@@ -16,7 +16,10 @@ public protocol LightboxControllerTouchDelegate: class {
 }
 
 open class LightboxController: UIViewController {
-
+    
+    
+    
+    
   // MARK: - Internal views
 
   lazy var scrollView: UIScrollView = { [unowned self] in
@@ -179,8 +182,10 @@ open class LightboxController: UIViewController {
     configurePages(initialImages)
 
     goTo(initialPage, animated: false)
+   
   }
 
+    
   open override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     if !presented {
@@ -323,7 +328,7 @@ open class LightboxController: UIViewController {
     backgroundView.image = image
     backgroundView.layer.add(CATransition(), forKey: "fade")
   }
-
+    
   func toggleControls(pageView: PageView?, visible: Bool, duration: TimeInterval = 0.1, delay: TimeInterval = 0) {
     let alpha: CGFloat = visible ? 1.0 : 0.0
 

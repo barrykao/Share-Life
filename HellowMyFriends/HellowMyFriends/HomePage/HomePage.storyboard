@@ -92,16 +92,16 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </imageView>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="BJv-Tc-P5D">
-                                                                    <rect key="frame" x="85" y="0.0" width="250" height="60"/>
+                                                                    <rect key="frame" x="85" y="0.0" width="190" height="60"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6H-DQ-GnA">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="250" height="43"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="190" height="43"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                             <nil key="textColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2019-01-01 01:01:01" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSU-8K-lvc">
-                                                                            <rect key="frame" x="0.0" y="43" width="250" height="17"/>
+                                                                            <rect key="frame" x="0.0" y="43" width="190" height="17"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="17" id="k1e-X2-Lmy"/>
                                                                             </constraints>
@@ -111,16 +111,17 @@
                                                                         </label>
                                                                     </subviews>
                                                                 </stackView>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z93-m0-k68">
-                                                                    <rect key="frame" x="360" y="0.0" width="38" height="60"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fullScreen" translatesAutoresizingMaskIntoConstraints="NO" id="Z93-m0-k68">
+                                                                    <rect key="frame" x="300" y="0.0" width="98" height="60"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="60" id="Tev-H6-tSE"/>
+                                                                    </constraints>
                                                                 </imageView>
                                                             </subviews>
                                                             <color key="backgroundColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstItem="Z93-m0-k68" firstAttribute="top" secondItem="bK1-aC-w4J" secondAttribute="top" id="43v-1H-wvA"/>
-                                                                <constraint firstAttribute="bottom" secondItem="Z93-m0-k68" secondAttribute="bottom" id="90h-zZ-XJK"/>
                                                                 <constraint firstAttribute="trailing" secondItem="Z93-m0-k68" secondAttribute="trailing" id="hht-SC-mkx"/>
-                                                                <constraint firstItem="Z93-m0-k68" firstAttribute="leading" secondItem="bK1-aC-w4J" secondAttribute="leading" constant="360" id="k5k-3n-uWu"/>
+                                                                <constraint firstItem="Z93-m0-k68" firstAttribute="leading" secondItem="bK1-aC-w4J" secondAttribute="leading" constant="300" id="k5k-3n-uWu"/>
                                                             </constraints>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g6l-Bv-sHz">
@@ -256,7 +257,12 @@
                         <viewLayoutGuide key="safeArea" id="wpf-ZU-WvA"/>
                     </view>
                     <navigationItem key="navigationItem" title="Share Life" id="vlx-dC-XgT">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="eAv-ZV-jpN">
+                        <barButtonItem key="leftBarButtonItem" image="top" id="eKV-bH-kaE">
+                            <connections>
+                                <action selector="scrollToTop:" destination="B6S-TY-9FS" id="PEw-6C-Ry3"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="refresh" id="eAv-ZV-jpN">
                             <connections>
                                 <action selector="refreshLoadData:" destination="B6S-TY-9FS" id="imU-dm-n4o"/>
                             </connections>
@@ -285,7 +291,7 @@
                                     <constraint firstAttribute="height" constant="44" id="Q6b-Pn-ZaK"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="清除照片" id="UQw-ps-3Ye">
+                                    <barButtonItem image="trash" id="UQw-ps-3Ye">
                                         <connections>
                                             <action selector="clearPhotoBtn:" destination="7Ua-Bf-KAH" id="aAk-6C-KPH"/>
                                         </connections>
@@ -346,12 +352,12 @@
                         <viewLayoutGuide key="safeArea" id="6Ne-O1-5HC"/>
                     </view>
                     <navigationItem key="navigationItem" title="請選擇相片" id="hcC-cl-UTe">
-                        <barButtonItem key="leftBarButtonItem" title="取消" id="EQc-Nv-xXn">
+                        <barButtonItem key="leftBarButtonItem" image="return" id="EQc-Nv-xXn">
                             <connections>
                                 <action selector="back:" destination="7Ua-Bf-KAH" id="BEE-TS-lV8"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="下一步" id="QUp-gC-PGQ">
+                        <barButtonItem key="rightBarButtonItem" image="next" id="QUp-gC-PGQ">
                             <connections>
                                 <segue destination="2tS-Mr-Rzi" kind="show" identifier="postMessageSegue" id="bYu-jx-nQE"/>
                             </connections>
@@ -459,7 +465,7 @@
                         <viewLayoutGuide key="safeArea" id="Pnn-dh-tpa"/>
                     </view>
                     <navigationItem key="navigationItem" title="新貼文" leftItemsSupplementBackButton="YES" id="OX7-5u-cSE">
-                        <barButtonItem key="rightBarButtonItem" title="發文" id="PaX-R5-GUK">
+                        <barButtonItem key="rightBarButtonItem" image="post" id="PaX-R5-GUK">
                             <connections>
                                 <action selector="postToServer:" destination="2tS-Mr-Rzi" id="8Oe-TJ-PGw"/>
                             </connections>
@@ -547,12 +553,12 @@
                         <viewLayoutGuide key="safeArea" id="BAr-X2-F2J"/>
                     </view>
                     <navigationItem key="navigationItem" title="愛心集合" id="fIL-BM-Kwv">
-                        <barButtonItem key="leftBarButtonItem" title="返回" id="9Mt-lY-dlj">
+                        <barButtonItem key="leftBarButtonItem" image="return" id="9Mt-lY-dlj">
                             <connections>
                                 <action selector="backBtn:" destination="vDb-Fj-imm" id="VoS-Z2-qpm"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="mcp-7w-NCc">
+                        <barButtonItem key="rightBarButtonItem" image="refresh" id="mcp-7w-NCc">
                             <connections>
                                 <action selector="refreshLoadData:" destination="vDb-Fj-imm" id="Ecf-Pr-0dy"/>
                             </connections>
@@ -722,12 +728,12 @@
                         <viewLayoutGuide key="safeArea" id="dBY-O1-Vsu"/>
                     </view>
                     <navigationItem key="navigationItem" title="留言" id="qjs-Hu-lPH">
-                        <barButtonItem key="leftBarButtonItem" title="返回" id="NfS-ft-Dhc">
+                        <barButtonItem key="leftBarButtonItem" image="return" id="NfS-ft-Dhc">
                             <connections>
                                 <action selector="backBtn:" destination="GeD-UK-2f9" id="094-br-i4q"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="eyH-D9-vAA">
+                        <barButtonItem key="rightBarButtonItem" image="refresh" id="eyH-D9-vAA">
                             <connections>
                                 <action selector="refreshLoadData:" destination="GeD-UK-2f9" id="SPY-vX-BiU"/>
                             </connections>
@@ -807,8 +813,15 @@
         <image name="002-chat" width="32" height="32"/>
         <image name="003-house" width="16" height="16"/>
         <image name="emptyHeart" width="32" height="32"/>
+        <image name="fullScreen" width="32" height="32"/>
         <image name="member.png" width="215" height="215"/>
+        <image name="next" width="32" height="32"/>
+        <image name="post" width="32" height="32"/>
+        <image name="refresh" width="32" height="32"/>
+        <image name="return" width="32" height="32"/>
         <image name="send" width="32" height="32"/>
+        <image name="top" width="32" height="32"/>
+        <image name="trash" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="oUU-OE-HOK"/>

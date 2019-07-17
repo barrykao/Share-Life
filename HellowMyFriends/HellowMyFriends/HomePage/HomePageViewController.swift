@@ -5,11 +5,15 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import AudioToolbox.AudioServices //加入震動反饋
+import Lightbox
 
 class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
 
+    var messageButton: UIButton!
+    var heartButton: UIButton!
+    
     var data : [PaperData] = []
     var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
@@ -17,7 +21,11 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     let fullScreenSize = UIScreen.main.bounds.size
     var userCardView = UIView()
     var backView = UIView()
-    
+    var images: [UIImage] = []
+    var flag: Bool = true
+    var index: Int!
+    var lightboxController: LightboxController = LightboxController()
+
     var touchedIndexPath : Int = 0
     var feedbackGenerator : UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .heavy)
   
@@ -39,6 +47,8 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        
         let home: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         self.data = home.paperData
         feedbackGenerator?.prepare()
@@ -54,8 +64,20 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
         
+        messageButton = UIButton(frame:  CGRect(x: fullScreenSize.width - 60, y: fullScreenSize.height - 153, width: 50, height: 50))
+        messageButton.setImage(UIImage(named: "message"), for: .normal)
+        messageButton.setTitleColor(UIColor.white, for: .normal)
+        
+        heartButton = UIButton(frame:  CGRect(x: 10, y: fullScreenSize.height - 153, width: 50, height: 50))
+        heartButton.setImage(UIImage(named: "fullHeart"), for: .normal)
+        heartButton.setTitleColor(UIColor.white, for: .normal)
+        
 //        NotificationCenter.default.addObserver(self, selector: #selector(HomePageViewController.finishUpdate(notification:)), name: Notification.Name("NoteUpdated"), object: nil)
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.loadData()
     }
     
     @IBAction func refreshLoadData(_ sender: Any) {
@@ -152,6 +174,13 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
     }
     
+    
+    @IBAction func scrollToTop(_ sender: Any) {
+        
+        let topIndex = IndexPath(row: 0, section: 0)
+        self.tableView.scrollToRow(at: topIndex, at: .top, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 10
     }
@@ -193,7 +222,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         
         if note.imageName.count > 1 {
             cell?.pageControl.numberOfPages = note.imageName.count
-            cell?.pageControl.isUserInteractionEnabled = true
+            cell?.pageControl.isUserInteractionEnabled = false
             cell?.pageControl.tintColor = UIColor.gray
             cell?.pageControl.pageIndicatorTintColor = UIColor.gray
             cell?.pageControl.currentPageIndicatorTintColor = UIColor.blue
@@ -209,20 +238,18 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell?.photo.image = loadImage(fileName: "\(account).jpg")
             cell?.photo.tag = indexPath.section * 100
         }
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         cell?.photo.isUserInteractionEnabled = true
         cell?.photo.addGestureRecognizer(tapGestureRecognizer)
         
-        
-        if note.imageName.count > 1 {
-            cell?.photoCount.image = UIImage(named: "pictures")
-        }else{
-            cell?.photoCount.image = nil
-        }
+        cell?.photoCount.image = UIImage(named: "fullScreen")
+        cell?.photoCount.tag = indexPath.section * 1000
+        let tapGesturefullScreen = UITapGestureRecognizer(target: self, action: #selector(fullScreen(tapGestureRecognizer:)))
+        cell?.photoCount.isUserInteractionEnabled = true
+        cell?.photoCount.addGestureRecognizer(tapGesturefullScreen)
         
         cell?.heartImageBtn.setImage(UIImage(named: "fullHeart"), for: .normal)
-       
-        
         cell?.heartImageBtn.tag = indexPath.section * 10
         cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchUpInside)
         
@@ -246,9 +273,30 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        self.tableView.deselectRow(at: indexPath, animated: false)
+        self.tableView.deselectRow(at: indexPath, animated: true)
         print("\(indexPath.section), \(indexPath.row)")
        
+       
+       
+    }
+    
+    @objc func messageVC() {
+        print("messageVC")
+        let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
+        let messageVC = navigationVC.topViewController as! MessageViewController
+        let note = self.data[self.index]
+        messageVC.messageData = note
+        lightboxController.present(navigationVC, animated: true)
+    }
+    
+    @objc func heartVC() {
+        print("heartVC")
+        
+        let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "heartVC") as! UINavigationController
+        let messageVC = navigationVC.topViewController as! HeartViewController
+        let note = self.data[self.index]
+        messageVC.messageData = note
+        lightboxController.present(navigationVC, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -319,7 +367,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         scaleLikeButton(sender: sender)
     }
     
-    
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         let tappedImage = tapGestureRecognizer.view as! UIImageView
         let indexPath = tappedImage.tag / 100
@@ -361,7 +408,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             let cancelBT = UIButton()
             cancelBT.tag = 999
             cancelBT.frame = CGRect(x: self.view.center.x - 25, y: (self.view.frame.height - (self.tabBarController?.tabBar.frame.size.height)!) - 100, width: 50, height: 50)
-            cancelBT.setImage(UIImage(named: "cancel"), for: .normal)
+            cancelBT.setImage(UIImage(named: "cancel1"), for: .normal)
             cancelBT.addTarget(self, action: #selector(self.dissMissUserCardView), for: .touchUpInside)
             UIView.transition(with: self.view, duration: 0.3, options: [.transitionCrossDissolve], animations: {self.view.addSubview(cancelBT)}, completion: nil)//加入此視窗
         }
@@ -374,6 +421,37 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {card?.removeFromSuperview()}, completion: nil)
         let cancel = self.view.viewWithTag(999)
         UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {cancel?.removeFromSuperview()}, completion: nil)
+    }
+    
+    @objc func fullScreen(tapGestureRecognizer: UITapGestureRecognizer) {
+        
+        let tappedImage = tapGestureRecognizer.view as! UIImageView
+        let index = (tappedImage.tag / 1000) - 1
+        self.images = []
+        guard self.data[index].imageName.count > 0 else { return }
+        let note = self.data[index]
+        let fileName = note.imageName
+        var light: [LightboxImage] = []
+        for i in 0 ..< note.imageName.count {
+            self.images.append(loadImage(fileName: "\(fileName[i]).jpg")!)
+            light.append(LightboxImage(image: self.images[i], text: note.message!))
+        }
+        
+        lightboxController = LightboxController(images: light, startIndex: 0)
+        lightboxController.dynamicBackground = true
+        lightboxController.imageTouchDelegate = self
+        lightboxController.pageDelegate = self
+        lightboxController.dismissalDelegate = self
+        
+        self.present(lightboxController, animated: true, completion: nil)
+        lightboxController.view.addSubview(messageButton)
+        lightboxController.view.addSubview(heartButton)
+        
+        messageButton.addTarget(self, action: #selector(messageVC), for: .touchUpInside)
+        heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
+        
+        self.index = index
+        
     }
     
     func scaleLikeButton(sender: UIButton) {
@@ -391,4 +469,35 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
 }
 
-
+extension HomePageViewController: LightboxControllerTouchDelegate, LightboxControllerPageDelegate ,LightboxControllerDismissalDelegate
+    
+{
+    
+    func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
+        print("didMoveToPage")
+        
+        print(page)
+    }
+    
+    func lightboxController(_ controller: LightboxController, didTouch image: LightboxImage, at index: Int) {
+        print("didTouch")
+        
+        flag = !flag
+        print(flag)
+        if flag {
+            messageButton.isHidden = false
+            heartButton.isHidden = false
+            
+        }else {
+            messageButton.isHidden = true
+            heartButton.isHidden = true
+            
+        }
+    }
+    
+    func lightboxControllerWillDismiss(_ controller: LightboxController) {
+        
+        print("lightboxControllerWillDismiss")
+        
+    }
+}

@@ -98,9 +98,13 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         textView.isUserInteractionEnabled = false
         textView.text = "在想些什麼?"
         textView.textColor = UIColor.lightGray
-        textView.font = UIFont(name: "verdana", size: 17.0)
+        textView.font = UIFont(name: "verdana", size: 14.0)
         textView.returnKeyType = .done
         textView.delegate = self
+        
+        
+        
+        
         
     }
     
@@ -134,15 +138,16 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                 }else {
                     self.textView.text = profile
                     self.textView.textColor = UIColor.black
-                    self.textView.font = UIFont(name: "verdana", size: 17.0)
+                    self.textView.font = UIFont(name: "verdana", size: 14.0)
                 }
             })
-            
+            collectionViewReloadData()
         }else{
             print("尚未登入")
             if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
             {
                 present(signVC, animated: true, completion: nil)
+                self.databaseRef.removeAllObservers()
             }
         }
     }
@@ -165,7 +170,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @objc func collectionViewReloadData() {
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3){
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()){
             
             self.refreshControl.endRefreshing()
             
@@ -222,7 +227,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                             let filePath = fileDocumentsPath(fileName: fileName)
                                             do {
                                                 try imageData.write(to: filePath)
-                                                if j == note.imageName.count {
+                                                if j == note.imageName.count - 1 {
                                                     DispatchQueue.main.async {
                                                         self.collectionView.reloadData()
                                                     }
@@ -283,61 +288,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         
         picker.pushViewController(imagePicker1, animated: true)
         
-        /*
-        guard let account = UserDefaults.standard.string(forKey: "account")else {return}
-        let fileName = "\(account).jpg"
-        guard let thumbImage = thumbmail(image: image) else {return}
-        let photoImage = circleImage(image: thumbImage , fileName: fileName)
-        self.imageBtn.setImage(photoImage, for: .normal)
-        
-        // upload to firebase
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        
-        let now:Date = Date()
-        let dateFormat:DateFormatter = DateFormatter()
-        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let dateString:String = dateFormat.string(from: now)
-        
-        if let image = photoImage ,
-            let imageData = image.jpegData(compressionQuality: 1) ,
-            let account = UserDefaults.standard.string(forKey: "account"),
-            let nickName = UserDefaults.standard.string(forKey: "nickName") {
-            storageRef = Storage.storage().reference().child(account).child(fileName)
-            let metadata = StorageMetadata()
-            storageRef.putData(imageData, metadata: metadata) { (data, error) in
-                if error != nil {
-                    print("Error: \(error!.localizedDescription)")
-                    return
-                }
-                self.storageRef.downloadURL(completion: { (url, error) in
-                    if error != nil {
-                        print("Error: \(error!.localizedDescription)")
-                        return
-                    }
-                    
-                    guard let uploadImageUrl = url?.absoluteString else {return}
-                    let databasePhoto = self.databaseRef.child("User").child(uid)
-                    let postMessage: [String : Any] = ["account" : account,
-                                                       "date" : dateString,
-                                                       "uid" : uid,
-                                                       "nickName" : nickName,
-                                                       "photo" : uploadImageUrl,
-                                                       "postTime": [".sv":"timestamp"],
-                                                      ]
-                    
-                    databasePhoto.setValue(postMessage, withCompletionBlock: { (error, dataRef) in
-                        if error != nil{
-                            print("Database Error: \(error!.localizedDescription)")
-                        }else{
-                            print("圖片已儲存")
-                        }
-                    })
-                    
-                })
-            }
-        }
-        picker.dismiss(animated: true)
-        */
     }
     
     @objc func messageVC() {
@@ -444,8 +394,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         })
     }
     
-    
-    
     func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
         controller.dismiss(animated: true)
     }
@@ -514,7 +462,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         
         isEdit = !isEdit
         if isEdit {
-            sendBtn.setTitle("儲存", for: .normal)
+//            sendBtn.setTitle("儲存", for: .normal)
+            sendBtn.setImage(UIImage(named: "save"), for: .normal)
             textView.isUserInteractionEnabled = true
         }else {
             let alert = UIAlertController(title: "送出成功", message: "已成功修改個人簡介", preferredStyle: .alert)
@@ -528,7 +477,9 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         print("error: \(error)")
                     }else {
                         print("個人簡介上傳成功")
-                        self.sendBtn.setTitle("編輯", for: .normal)
+//                        self.sendBtn.setTitle("編輯", for: .normal)
+                        self.sendBtn.setImage(UIImage(named: "file"), for: .normal)
+
                         self.textView.isUserInteractionEnabled = false
                     }
                 }
@@ -590,7 +541,20 @@ extension MemberViewController : UICollectionViewDataSource, UICollectionViewDel
             self.images.append(loadImage(fileName: "\(fileName[i]).jpg")!)
             light.append(LightboxImage(image: self.images[i], text: note.message!))
         }
+        /*
+        // 雙指輕點 (雙指以上手勢只能用實機測試)
+        let doubleFingers =
+            UITapGestureRecognizer(
+                target:self,
+                action:#selector(lightboxController.doubleTap(_:)))
         
+        // 點幾下才觸發 設置 1 時 則是點一下會觸發 依此類推
+        doubleFingers.numberOfTapsRequired = 2
+        // 幾根指頭觸發
+        doubleFingers.numberOfTouchesRequired = 1
+        // 為視圖加入監聽手勢
+        self.view.addGestureRecognizer(doubleFingers)
+        */
         lightboxController = LightboxController(images: light, startIndex: 0)
         lightboxController.dynamicBackground = true
         lightboxController.imageTouchDelegate = self
@@ -598,6 +562,7 @@ extension MemberViewController : UICollectionViewDataSource, UICollectionViewDel
         lightboxController.dismissalDelegate = self
         
         self.present(lightboxController, animated: true, completion: nil)
+        
         lightboxController.view.addSubview(messageButton)
         lightboxController.view.addSubview(heartButton)
         lightboxController.view.addSubview(editButton)
@@ -614,12 +579,11 @@ extension MemberViewController : UICollectionViewDataSource, UICollectionViewDel
 }
 extension MemberViewController: UITextViewDelegate {
     
-   
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "在想些什麼?" {
             textView.text = ""
             textView.textColor = UIColor.black
-            textView.font = UIFont(name: "verdana", size: 17.0)
+            textView.font = UIFont(name: "verdana", size: 14.0)
         }
     }
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -627,11 +591,9 @@ extension MemberViewController: UITextViewDelegate {
         if textView.text == "" {
             textView.text = "在想些什麼?"
             textView.textColor = UIColor.lightGray
-            textView.font = UIFont(name: "verdana", size: 17.0)
+            textView.font = UIFont(name: "verdana", size: 14.0)
         }
     }
-    
-    
     
 }
 
@@ -641,7 +603,6 @@ extension MemberViewController: LightboxControllerTouchDelegate, LightboxControl
     
     func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
         print("didMoveToPage")
-        
         
         print(page)
     }
@@ -661,7 +622,6 @@ extension MemberViewController: LightboxControllerTouchDelegate, LightboxControl
             editButton.isHidden = true
         }
     }
-    
     
     func lightboxControllerWillDismiss(_ controller: LightboxController) {
         
