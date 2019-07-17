@@ -6,26 +6,41 @@ import Firebase
 import FirebaseAuth
 import AudioToolbox.AudioServices //加入震動反饋
 
-
 class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
 
-    var data : [DatabaseData] = []
+    var data : [PaperData] = []
     var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
     var refreshControl:UIRefreshControl!
+    let fullScreenSize = UIScreen.main.bounds.size
+    var userCardView = UIView()
+    var backView = UIView()
+    
     var touchedIndexPath : Int = 0
     var feedbackGenerator : UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .heavy)
+  
     deinit {
         feedbackGenerator = nil
+//        NotificationCenter.default.removeObserver(self)
     }
+    
+   /*
+    @objc func finishUpdate(notification : Notification) {
+     
+        let note = notification.userInfo?["note"] as! PaperData
+        self.data.insert(note, at: 0)
+        self.tableView.reloadData()
+        
+     }
+    */
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let app:AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.data = app.data
-        
+        let home: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.data = home.paperData
         feedbackGenerator?.prepare()
         
         self.tableView.dataSource = self
@@ -38,28 +53,9 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
         refreshLoadData(1)
-       
-        // load photoImageViewToFile
-        databaseRef = Database.database().reference()
-        databaseRef.child("User").observe(.value) { (snapshot) in
-            
-            guard let uploadDataDic = snapshot.value as? [String:Any] else {return}
-            let dataDic = uploadDataDic
-            let keyArray = Array(dataDic.keys)
-            for i in 0 ..< keyArray.count {
-                let array = dataDic[keyArray[i]] as! [String:Any]
-                let databasePhoto = self.databaseRef.child("User").child(keyArray[i]).child("photo")
-                guard let photoName = array["account"] as? String else {return}
-                loadImageToFile(fileName: "\(photoName).jpg", database: databasePhoto)
-            }
-        }
         
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-//        self.loadData()
-        self.tableView.reloadData()
+//        NotificationCenter.default.addObserver(self, selector: #selector(HomePageViewController.finishUpdate(notification:)), name: Notification.Name("NoteUpdated"), object: nil)
+
     }
     
     @IBAction func refreshLoadData(_ sender: Any) {
@@ -90,7 +86,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     self?.data = []
                     for i in 0 ..< keyArray.count {
                         let array = dataDic[keyArray[i]] as! [String:Any]
-                        let note = DatabaseData()
+                        let note = PaperData()
                         note.paperName = keyArray[i]
                         note.account = array["account"] as? String
                         note.message = array["message"] as? String
@@ -99,14 +95,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
                         note.nickName = array["nickName"] as? String
-                        /*
-                        if array["comment"] as? String == "commentData" {
-                            note.commentCount = 0
-                        }else {
-                            guard let comment = array["comment"] as? [String:Any] else {return}
-                            note.commentCount = comment.count
-                        }
-                        */
+                       
                         if let comment = array["comment"] as? [String:Any] {
                             note.commentCount = comment.count
                         }else {
@@ -120,7 +109,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                             note.heartCount = 0
                         }
                         
-                      
                         self!.data.append(note)
                         self?.data.sort(by: { (post1, post2) -> Bool in
                             post1.postTime! > post2.postTime!
@@ -209,6 +197,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell?.pageControl.tintColor = UIColor.gray
             cell?.pageControl.pageIndicatorTintColor = UIColor.gray
             cell?.pageControl.currentPageIndicatorTintColor = UIColor.blue
+            cell?.pageControl.currentPage = 0
         }else {
             cell?.pageControl.numberOfPages = 0
         }
@@ -218,7 +207,12 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.date.text = note.date
         if let account = note.account {
             cell?.photo.image = loadImage(fileName: "\(account).jpg")
+            cell?.photo.tag = indexPath.section * 100
         }
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        cell?.photo.isUserInteractionEnabled = true
+        cell?.photo.addGestureRecognizer(tapGestureRecognizer)
+        
         
         if note.imageName.count > 1 {
             cell?.photoCount.image = UIImage(named: "pictures")
@@ -226,13 +220,12 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             cell?.photoCount.image = nil
         }
         
-        
-        
         cell?.heartImageBtn.setImage(UIImage(named: "fullHeart"), for: .normal)
        
         
         cell?.heartImageBtn.tag = indexPath.section * 10
         cell?.heartImageBtn.addTarget(self, action: #selector(heartBtnPressed), for: .touchUpInside)
+        
         if let uid = UserDefaults.standard.string(forKey: "uid") {
             if note.heartUid.contains(uid) {
                 cell?.heartImageBtn.setImage(UIImage(named: "fullHeart"), for: .normal)
@@ -240,10 +233,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 cell?.heartImageBtn.setImage(UIImage(named: "emptyHeart"), for: .normal)
             }
         }
-        
-        
-        
-        
 
         cell?.heartCount.setTitle("\(note.heartCount)顆愛心", for: .normal)
         cell?.heartCount.tag = indexPath.section
@@ -251,8 +240,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
         cell?.messageCount.tag = indexPath.section
         cell?.messageBtn.tag = indexPath.section
-        
-        
+    
         return cell!
     }
     
@@ -276,7 +264,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         }
  
         if segue.identifier == "heartSegue" {
-         print("heartSegue")
+            print("heartSegue")
             guard let index = sender as? UIButton else {return}
             let indexPath = index.tag
             print(indexPath)
@@ -285,6 +273,8 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             let heartVC = navigationVC.topViewController as! HeartViewController
             heartVC.messageData = home
         }
+        
+        
     }
 
     @objc func heartBtnPressed(sender:UIButton) {
@@ -299,16 +289,17 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         let databasePaperName = self.databaseRef.child("Paper").child(paperName)
        
         if note.heartUid.contains(uid) {
-            
             // delete
             databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
                 if let error = error {
                     assertionFailure("Fail To postMessage \(error)")
                 }else {
                     print("刪除離留言成功")
+                    DispatchQueue.main.async {
+//                     self.loadData()
+                    }
                 }
             })
-            
         }else {
             // add
             let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
@@ -320,14 +311,69 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     assertionFailure("Fail To postMessage \(error)")
                 }
                 print("上傳愛心成功")
+                DispatchQueue.main.async {
+//                    self.loadData()
+                }
             }
-            
         }
         scaleLikeButton(sender: sender)
-
+    }
+    
+    
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        let tappedImage = tapGestureRecognizer.view as! UIImageView
+        let indexPath = tappedImage.tag / 100
+        // Your action
+        let note = self.data[indexPath - 1]
         
+        self.backView.frame = self.view.frame
+        self.backView.tag = 997
+        self.backView.backgroundColor = UIColor.black
+        backView.alpha = 0.3
+        self.view.addSubview(self.backView)
         
+        let userCardView = UserCardView()
+        userCardView.tag = 998
+        userCardView.frame = CGRect(x: 12.5, y: 100, width: fullScreenSize.width - 20, height: self.userCardView.frame.size.height)
+        userCardView.mainView.layer.cornerRadius = 5.0
+        userCardView.mainView.backgroundColor = UIColor.darkGray
+        
+        userCardView.topView.backgroundColor = UIColor.darkGray
+        userCardView.topView.layer.cornerRadius = 5.0
+        userCardView.bottomView.backgroundColor = UIColor.darkGray
+        userCardView.bottomView.layer.cornerRadius = 5.0
 
+        guard let account = note.account else {return}
+        guard let nickName = note.nickName else {return}
+        guard let uid = note.uid else {return}
+     
+        let databaseUser = self.databaseRef.child("User")
+        databaseUser.child(uid).observeSingleEvent(of: .value) { (snapshot) in
+            guard let uidDict = snapshot.value as? [String:Any] else {return}
+            guard let profile = uidDict["profile"] as? String else {return}
+            userCardView.photo.image = loadImage(fileName: "\(account).jpg")
+            userCardView.photo.layer.cornerRadius = userCardView.photo.bounds.height / 2
+            userCardView.nickName.text = nickName
+            userCardView.profile.text = profile
+            userCardView.nickName.textColor = UIColor.white
+            userCardView.profile.textColor = UIColor.white
+            UIView.transition(with: self.view, duration: 0.3, options: [.transitionCrossDissolve], animations: {self.view.addSubview(userCardView)}, completion: nil)//加入此視窗
+            let cancelBT = UIButton()
+            cancelBT.tag = 999
+            cancelBT.frame = CGRect(x: self.view.center.x - 25, y: (self.view.frame.height - (self.tabBarController?.tabBar.frame.size.height)!) - 100, width: 50, height: 50)
+            cancelBT.setImage(UIImage(named: "cancel"), for: .normal)
+            cancelBT.addTarget(self, action: #selector(self.dissMissUserCardView), for: .touchUpInside)
+            UIView.transition(with: self.view, duration: 0.3, options: [.transitionCrossDissolve], animations: {self.view.addSubview(cancelBT)}, completion: nil)//加入此視窗
+        }
+    }
+    
+    @objc func dissMissUserCardView() {
+        let back = self.view.viewWithTag(997)
+        UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {back?.removeFromSuperview()}, completion: nil)
+        let card = self.view.viewWithTag(998)
+        UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {card?.removeFromSuperview()}, completion: nil)
+        let cancel = self.view.viewWithTag(999)
+        UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {cancel?.removeFromSuperview()}, completion: nil)
     }
     
     func scaleLikeButton(sender: UIButton) {
@@ -343,13 +389,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         feedbackGenerator?.impactOccurred()
     }
 
-    
 }
 
-
-
-
-
-//        self.tableView.reloadData()
-//
 

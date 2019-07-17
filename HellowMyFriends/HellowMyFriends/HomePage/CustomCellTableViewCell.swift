@@ -49,8 +49,8 @@ class CustomCellTableViewCell: UITableViewCell {
     
     @IBOutlet var collectionView: UICollectionView!
 
-    var currentData: DatabaseData!
-    var collectionViewData: [DatabaseData] = []
+    var currentData: PaperData!
+    var collectionViewData: [PaperData] = []
     let fullScreenSize = UIScreen.main.bounds.size
     
     @IBOutlet var pageControl: UIPageControl!
@@ -83,9 +83,7 @@ extension CustomCellTableViewCell: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as! HomeCollectionViewCell
-        
         let note = self.currentData.imageName[indexPath.row]
-        
         cell.photoView.image = loadImage(fileName: "\(note).jpg")
         
         return cell
@@ -98,6 +96,9 @@ extension CustomCellTableViewCell: UICollectionViewDataSource, UICollectionViewD
         //设置页控制器当前页
         self.pageControl.currentPage = collectionView.indexPath(for: visibleCell)!.item
     }
+    
+    
+    
     
 }
 

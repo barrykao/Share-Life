@@ -23,7 +23,7 @@ class PostViewController: UIViewController {
     
     var databaseRef: DatabaseReference! = Database.database().reference()
     var storageRef: StorageReference! = Storage.storage().reference()
-    var currentData : DatabaseData! = DatabaseData()
+    var currentData : PaperData! = PaperData()
     var images: [UIImage] = []
     var index: Int = 0
     let fullScreenSize = UIScreen.main.bounds.size
@@ -93,7 +93,6 @@ class PostViewController: UIViewController {
 
     }
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "postMessageSegue" {
@@ -137,13 +136,12 @@ extension PostViewController: UICollectionViewDataSource, UICollectionViewDelega
 }
 
 extension PostViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return fullScreenSize
         
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
@@ -182,6 +180,7 @@ extension PostViewController : ImagePickerDelegate {
     func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
         print("cancelButtonDidPress")
         imagePicker.dismiss(animated: true)
+        self.dismiss(animated: true)
         
     }
     

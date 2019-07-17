@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--會員中心-->
+        <!--Member-->
         <scene sceneID="N2h-xO-pmf">
             <objects>
                 <viewController id="A6p-q6-AKt" customClass="MemberViewController" customModule="HellowMyFriends" customModuleProvider="target" sceneMemberID="viewController">
@@ -94,7 +94,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="188" height="40"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="石碇阿蛋王" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xo4-kd-Mwo">
-                                                                <rect key="frame" x="55" y="0.0" width="133" height="40"/>
+                                                                <rect key="frame" x="60" y="0.0" width="128" height="40"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -113,7 +113,7 @@
                                                             <constraint firstAttribute="bottom" secondItem="Xo4-kd-Mwo" secondAttribute="bottom" id="BnA-90-r4q"/>
                                                             <constraint firstAttribute="trailing" secondItem="Xo4-kd-Mwo" secondAttribute="trailing" id="SP5-88-p8v"/>
                                                             <constraint firstAttribute="height" constant="40" id="W31-W6-QXq"/>
-                                                            <constraint firstItem="Xo4-kd-Mwo" firstAttribute="leading" secondItem="K1k-fm-Ezo" secondAttribute="leading" constant="55" id="cmb-5e-tfm"/>
+                                                            <constraint firstItem="Xo4-kd-Mwo" firstAttribute="leading" secondItem="K1k-fm-Ezo" secondAttribute="leading" constant="60" id="cmb-5e-tfm"/>
                                                             <constraint firstItem="49c-My-duF" firstAttribute="leading" secondItem="K1k-fm-Ezo" secondAttribute="leading" id="idL-yG-6AK"/>
                                                         </constraints>
                                                     </view>
@@ -127,7 +127,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0顆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SmV-Hl-hxY">
-                                                                <rect key="frame" x="130" y="0.0" width="58" height="30"/>
+                                                                <rect key="frame" x="100" y="0.0" width="88" height="30"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -135,7 +135,7 @@
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
-                                                            <constraint firstItem="SmV-Hl-hxY" firstAttribute="leading" secondItem="4Bw-ow-xhT" secondAttribute="leading" constant="130" id="5fq-Qh-EgF"/>
+                                                            <constraint firstItem="SmV-Hl-hxY" firstAttribute="leading" secondItem="4Bw-ow-xhT" secondAttribute="leading" constant="100" id="5fq-Qh-EgF"/>
                                                             <constraint firstAttribute="height" constant="30" id="6Qy-nG-0Hg"/>
                                                             <constraint firstAttribute="trailing" secondItem="SmV-Hl-hxY" secondAttribute="trailing" id="C3I-oW-3bh"/>
                                                             <constraint firstItem="EaF-Zl-t2t" firstAttribute="leading" secondItem="4Bw-ow-xhT" secondAttribute="leading" id="GA7-0y-Nmc"/>
@@ -156,12 +156,12 @@
                                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="39w-9V-bhV">
                                                                 <rect key="frame" x="0.0" y="30.33333333333335" width="188" height="81.666666666666686"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                             </textView>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Us0-IP-7a3">
-                                                                <rect key="frame" x="157" y="0.0" width="31" height="30"/>
-                                                                <state key="normal" title="送出"/>
+                                                                <rect key="frame" x="147" y="0.0" width="31" height="30"/>
+                                                                <state key="normal" title="編輯"/>
                                                                 <connections>
                                                                     <action selector="sendBtn:" destination="A6p-q6-AKt" eventType="touchUpInside" id="k8m-MY-h1z"/>
                                                                 </connections>
@@ -169,7 +169,7 @@
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="trailing" secondItem="Us0-IP-7a3" secondAttribute="trailing" id="5Dq-Og-tyk"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Us0-IP-7a3" secondAttribute="trailing" constant="10" id="5Dq-Og-tyk"/>
                                                             <constraint firstItem="39w-9V-bhV" firstAttribute="top" secondItem="HtK-t6-2iQ" secondAttribute="bottom" constant="5" id="GmQ-va-OHp"/>
                                                             <constraint firstAttribute="trailing" secondItem="39w-9V-bhV" secondAttribute="trailing" id="Q9f-Tz-cdy"/>
                                                             <constraint firstItem="39w-9V-bhV" firstAttribute="leading" secondItem="h31-8U-VQn" secondAttribute="leading" id="UQ8-oM-Fei"/>
@@ -210,7 +210,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5eI-RT-q9A"/>
                     </view>
-                    <navigationItem key="navigationItem" title="會員中心" id="pHs-2r-FiV">
+                    <navigationItem key="navigationItem" title="Member" id="pHs-2r-FiV">
                         <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="hTz-S8-nbb">
                             <connections>
                                 <action selector="refreshBtn:" destination="A6p-q6-AKt" id="tac-Sr-lBJ"/>
@@ -226,10 +226,12 @@
                         <outlet property="account" destination="cC5-0w-FIZ" id="B01-pn-4IW"/>
                         <outlet property="collectionView" destination="FMC-RI-WTy" id="wbo-kL-CaV"/>
                         <outlet property="heartCount" destination="SmV-Hl-hxY" id="a48-X8-cYc"/>
+                        <outlet property="heartView" destination="4Bw-ow-xhT" id="WNL-hV-Rof"/>
                         <outlet property="imageBtn" destination="Tkc-K2-PaR" id="cqt-Ky-NCH"/>
                         <outlet property="nickName" destination="Xo4-kd-Mwo" id="eVS-KU-vYG"/>
+                        <outlet property="nicknameView" destination="K1k-fm-Ezo" id="nrZ-dO-8o4"/>
+                        <outlet property="profileView" destination="h31-8U-VQn" id="NSi-Pg-dnd"/>
                         <outlet property="sendBtn" destination="Us0-IP-7a3" id="frm-ec-Lha"/>
-                        <outlet property="stackView" destination="WBg-ps-7Q4" id="zx4-q6-9Ez"/>
                         <outlet property="textView" destination="39w-9V-bhV" id="jfB-O9-qdl"/>
                     </connections>
                 </viewController>

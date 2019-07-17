@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 
 protocol PostMessageViewControllerDelegate {
-    func didPostMessage(note : DatabaseData)
+    func didPostMessage(note : PaperData)
 }
 
 class PostMessageViewController: UIViewController ,UITextViewDelegate{
@@ -25,7 +25,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     @IBOutlet var collectionView: UICollectionView!
     
     
-    var currentData : DatabaseData!
+    var currentData : PaperData!
     
     var images : [UIImage] = []
     var isEdit : Bool = false
@@ -39,7 +39,6 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
         storageRef = Storage.storage().reference()
         databaseRef = Database.database().reference()
         
@@ -59,9 +58,10 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         view.addSubview(self.pageControl)
         guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
         self.account.text = nickName
-        
+        self.currentData.nickName = nickName
         if let account = UserDefaults.standard.string(forKey: "account") {
             let photoName = "\(account).jpg"
+            self.currentData.account = account
             photo.image = loadImage(fileName: photoName)
         }
         
@@ -91,7 +91,8 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             self.currentData.message = self.textView.text
             self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
             self.postPhotoBtn()
-//            NotificationCenter.default.post(name: Notification.Name("updated"), object: nil, userInfo: ["note": self.currentData!])
+            
+
             self.dismiss(animated: true)
         }
         alert.addAction(okAction)
@@ -123,11 +124,11 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                 let dateFormat:DateFormatter = DateFormatter()
                 dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 let dateString:String = dateFormat.string(from: now)
-                guard let uid = Auth.auth().currentUser?.uid else {return}
+                self.currentData.date = dateString
                 guard let message = self.textView.text else { return}
+                guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
                 guard let account = UserDefaults.standard.string(forKey: "account") else {return}
                 guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
-
                 let postMessage: [String : Any] = ["account" : account,
                                                    "nickName" : nickName,
                                                    "date" : dateString,
@@ -141,6 +142,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                         assertionFailure()
                     }else {
                         print("上傳成功")
+//                        NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
                     }
                 }
             }

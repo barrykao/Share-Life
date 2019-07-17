@@ -70,13 +70,13 @@ class fullScreenViewController: UIViewController {
         pageControl.currentPage = index
         view.addSubview(self.pageControl)
         
-//        let doubleFingers = UITapGestureRecognizer( target:self, action:#selector(tapDoubleDid))
-//        // 點幾下才觸發 設置 1 時 則是點一下會觸發 依此類推
-//        doubleFingers.numberOfTapsRequired = 2
-//        // 幾根指頭觸發
-//        doubleFingers.numberOfTouchesRequired = 1
-//        // 為視圖加入監聽手勢
-//        self.view.addGestureRecognizer(doubleFingers)
+        let doubleFingers = UITapGestureRecognizer( target:self, action:#selector(tapDoubleDid))
+        // 點幾下才觸發 設置 1 時 則是點一下會觸發 依此類推
+        doubleFingers.numberOfTapsRequired = 2
+        // 幾根指頭觸發
+        doubleFingers.numberOfTouchesRequired = 1
+        // 為視圖加入監聽手勢
+        self.view.addGestureRecognizer(doubleFingers)
         
         // 單指輕點
         let singleFinger = UITapGestureRecognizer( target:self, action:#selector(tapSingleDid))

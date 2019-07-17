@@ -17,7 +17,7 @@ class HeartViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     
     var databaseRef: DatabaseReference!
-    var messageData: DatabaseData! = DatabaseData()
+    var messageData: PaperData! = PaperData()
     var heartData: [HeartData] = []
     let heartName: String = UUID().uuidString
     var refreshControl:UIRefreshControl!

@@ -18,8 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
-    var data : [DatabaseData] = []
-
+    var paperData : [PaperData] = []
+    var userData: [UserData] = []
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
@@ -33,18 +34,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         print("home= \(NSHomeDirectory())")
         
-        
         let databaseRefPaper = self.databaseRef.child("Paper")
-        
         databaseRefPaper.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
             
-            if let uploadDataDic = snapshot.value as? [String:Any] {
+            guard let uploadDataDic = snapshot.value as? [String:Any] else { return}
                 let dataDic = uploadDataDic
                 let keyArray = Array(dataDic.keys)
-                self?.data = []
+                self?.paperData = []
                 for i in 0 ..< keyArray.count {
                     let array = dataDic[keyArray[i]] as! [String:Any]
-                    let note = DatabaseData()
+                    let note = PaperData()
                     note.paperName = keyArray[i]
                     note.account = array["account"] as? String
                     note.message = array["message"] as? String
@@ -53,21 +52,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     note.uid = array["uid"] as? String
                     note.postTime = array["postTime"] as? Double
                     note.nickName = array["nickName"] as? String
-                    
                     if let comment = array["comment"] as? [String:Any] {
                         note.commentCount = comment.count
                     }else {
                         note.commentCount = 0
                     }
-                    
                     if let heart = array["heart"] as? [String:Any] {
                         note.heartUid = Array(heart.keys)
                         note.heartCount = heart.count
                     }else {
                         note.heartCount = 0
                     }
-                    self!.data.append(note)
-                    self?.data.sort(by: { (post1, post2) -> Bool in
+                    self?.paperData.append(note)
+                    self?.paperData.sort(by: { (post1, post2) -> Bool in
                         post1.postTime! > post2.postTime!
                     })
                     for j in 0 ..< note.imageName.count {
@@ -80,16 +77,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             let filePath = fileDocumentsPath(fileName: fileName)
                             do {
                                     try imageData.write(to: filePath)
-                                print("下載成功")
+                                print("下載Paper成功")
                             }catch{
                                 print("error: \(error)")
                             }
                         }
                     }
                 }
-            }
         })
         
+        let databaseUser = self.databaseRef.child("User")
+        databaseUser.observeSingleEvent(of: .value) { (snapshot) in
+            guard let uidDict = snapshot.value as? [String:Any] else {return}
+            let dataDic = uidDict
+            let keyArray = Array(dataDic.keys)
+            self.userData = []
+            for i in 0 ..< keyArray.count {
+                let array = dataDic[keyArray[i]] as! [String:Any]
+                let note = UserData()
+                note.account = array["account"] as? String
+                self.userData.append(note)
+                // loadImageToFile
+                guard let account = note.account else {return}
+                let fileName = "\(account).jpg"
+                let storageRefPhoto = self.storageRef.child(account).child(fileName)
+                storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in
+                    guard let imageData = data else {return}
+                    let filePath = fileDocumentsPath(fileName: fileName)
+                    do {
+                        try imageData.write(to: filePath)
+                        print("下載User成功")
+                    }catch{
+                        print("error: \(error)")
+                    }
+                }
+            }
+        }
+
         return true
     }
 

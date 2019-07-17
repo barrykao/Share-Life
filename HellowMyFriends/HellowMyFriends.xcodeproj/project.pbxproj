@@ -30,6 +30,8 @@
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67D83D922DC6D3B00EE1109 /* background3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C67D83D822DC6D3B00EE1109 /* background3.jpg */; };
 		C68439D522DD593B00CDC2A6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C68439D422DD593B00CDC2A6 /* GoogleService-Info.plist */; };
+		C68439D922DDE64300CDC2A6 /* UserCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C68439D822DDE64200CDC2A6 /* UserCardView.xib */; };
+		C68439DB22DDE6AA00CDC2A6 /* UserCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C68439DA22DDE6AA00CDC2A6 /* UserCardView.swift */; };
 		C6A897FD22AF8970008C7BF5 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FB22AF896F008C7BF5 /* member.png */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
@@ -68,6 +70,8 @@
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67D83D822DC6D3B00EE1109 /* background3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background3.jpg; sourceTree = "<group>"; };
 		C68439D422DD593B00CDC2A6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C68439D822DDE64200CDC2A6 /* UserCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserCardView.xib; sourceTree = "<group>"; };
+		C68439DA22DDE6AA00CDC2A6 /* UserCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCardView.swift; sourceTree = "<group>"; };
 		C6A897FB22AF896F008C7BF5 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
@@ -110,6 +114,8 @@
 			children = (
 				C65A131822B88F36002C2881 /* HomePage.storyboard */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
+				C68439D822DDE64200CDC2A6 /* UserCardView.xib */,
+				C68439DA22DDE6AA00CDC2A6 /* UserCardView.swift */,
 				C6008FFF22C88CC900F93F8D /* HeartViewController.swift */,
 				C65EB18322B6458F0093AAC6 /* MessageViewController.swift */,
 				C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */,
@@ -262,6 +268,7 @@
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
 				C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */,
 				C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */,
+				C68439D922DDE64300CDC2A6 /* UserCardView.xib in Resources */,
 				C65F50C922C22E2D00CAB067 /* register.png in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
@@ -357,6 +364,7 @@
 				C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */,
 				C64D914922BF918E002A7F2F /* DataModel.xcdatamodeld in Sources */,
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
+				C68439DB22DDE6AA00CDC2A6 /* UserCardView.swift in Sources */,
 				C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,

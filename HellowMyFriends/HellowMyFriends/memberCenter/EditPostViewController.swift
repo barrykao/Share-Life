@@ -26,7 +26,7 @@ class EditPostViewController: UIViewController {
     
     @IBOutlet var cameraBtn: UIBarButtonItem!
     
-    var currentData: DatabaseData!
+    var currentData: PaperData!
     var storageRef : StorageReference!
     var databaseRef : DatabaseReference!
     var isEdit : Bool = false
@@ -146,15 +146,15 @@ class EditPostViewController: UIViewController {
                                                    "nickName" : nickName,
                                                    "uid" : uid,
                                                    "photo" : self.currentData.imageName,
-                                                   "postTime": [".sv":"timestamp"],
-                                                   "comment" : "commentData",
-                                                   "heart" : "heartData"]
+                                                   "postTime": [".sv":"timestamp"]
+                                                  ]
                 
                 self.databaseRef.setValue(postMessage) { (error, data) in
                     if error != nil {
                         assertionFailure()
                     }else {
                         print("上傳成功")
+//                        NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
                     }
                 }
             }

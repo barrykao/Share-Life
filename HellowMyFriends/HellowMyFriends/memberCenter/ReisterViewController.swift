@@ -40,7 +40,7 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let alert = UIAlertController(title: "注意!!", message: "提醒您：請輸入正確的E-mail格式。\n忘記密碼時，將寄送驗證信件至信箱，以便修改密碼。\n暱稱無法更改", preferredStyle: .alert)
+        let alert = UIAlertController(title: "注意!!", message: "提醒您：暱稱無法更改。\n請輸入正確的E-mail格式。\n忘記密碼時，將寄送驗證信件至信箱，以便修改密碼。", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)

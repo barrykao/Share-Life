@@ -10,6 +10,14 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--memberVC-->
+        <scene sceneID="HRt-3I-CQd">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="memberVC" storyboardName="MemberCenter" referencedIdentifier="memberVC" id="Jat-tv-r2S" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yqM-1j-qd0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="21" y="-1312"/>
+        </scene>
         <!--Share Life-->
         <scene sceneID="KyK-Ui-oEb">
             <objects>
