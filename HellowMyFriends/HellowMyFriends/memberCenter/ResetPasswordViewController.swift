@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-
+import MessageUI
 
 class ResetPasswordViewController: UIViewController ,UITextFieldDelegate {
 
@@ -71,6 +71,9 @@ class ResetPasswordViewController: UIViewController ,UITextFieldDelegate {
         self.dismiss(animated: true, completion: nil)
         
     }
+    
+    
+    
     
     /*
     // MARK: - Navigation

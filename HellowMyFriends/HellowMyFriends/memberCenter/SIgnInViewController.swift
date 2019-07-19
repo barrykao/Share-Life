@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-
+import MessageUI
 class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewControllerDelegate {
     
     @IBOutlet weak var account: UITextField!
@@ -21,6 +21,9 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
     @IBOutlet weak var registerBtn: UIButton!
     
     @IBOutlet weak var resetPwdBtn: UIButton!
+    
+    @IBOutlet var reportBtn: UIButton!
+    
     
     var databaseRef: DatabaseReference! = Database.database().reference()
     var nickName: String?
@@ -36,9 +39,9 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         buttonDesign(button: signInBtn)
         buttonDesign(button: registerBtn)
         buttonDesign(button: resetPwdBtn)
+        buttonDesign(button: reportBtn)
         buttonDesign(button: self.account)
         buttonDesign(button: self.password)
-
         
         
         textFieldClearMode(textField: account)
@@ -102,6 +105,24 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         self.password.text = password
         self.nickName = nickName
     }
+    
+    
+    @IBAction func report(_ sender: Any) {
+        
+        if MFMailComposeViewController.canSendMail(){
+            let mailController = MFMailComposeViewController()
+            mailController.mailComposeDelegate = self
+            mailController.setSubject("回報問題")
+            
+            mailController.setToRecipients(["barrykao881@gmail.com"])
+            self.present(mailController, animated: true, completion: nil)
+        }else {
+            print("send mail Fail!")
+        }
+        
+    }
+    
+    
     /*
      // MARK: - Navigation
      
@@ -112,4 +133,11 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
      }
      */
     
+}
+
+//MARK:MFMailComposeViewControllerDelegate
+extension SignInViewController: MFMailComposeViewControllerDelegate{
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true, completion: nil)
+    }
 }

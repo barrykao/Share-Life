@@ -104,7 +104,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="name" translatesAutoresizingMaskIntoConstraints="NO" id="OmE-Tm-bvS">
-                                                                <rect key="frame" x="10" y="5" width="32" height="32"/>
+                                                                <rect key="frame" x="10" y="5" width="16" height="16"/>
                                                             </imageView>
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -128,7 +128,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fullHeart" translatesAutoresizingMaskIntoConstraints="NO" id="oWY-Fk-w87">
-                                                                <rect key="frame" x="10" y="0.0" width="32" height="40"/>
+                                                                <rect key="frame" x="10" y="0.0" width="16" height="40"/>
                                                             </imageView>
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -158,7 +158,7 @@
                                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                             </textView>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Us0-IP-7a3">
-                                                                <rect key="frame" x="146" y="0.0" width="32" height="32"/>
+                                                                <rect key="frame" x="162" y="0.0" width="16" height="22"/>
                                                                 <state key="normal" image="file"/>
                                                                 <connections>
                                                                     <action selector="sendBtn:" destination="A6p-q6-AKt" eventType="touchUpInside" id="k8m-MY-h1z"/>
@@ -399,10 +399,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="first.png" translatesAutoresizingMaskIntoConstraints="NO" id="6oN-hr-gdP">
-                                <rect key="frame" x="5" y="25" width="404" height="340"/>
+                                <rect key="frame" x="5" y="25" width="404" height="276"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="ouh-xm-y2t">
-                                <rect key="frame" x="60" y="370" width="294" height="316"/>
+                                <rect key="frame" x="60" y="306" width="294" height="380"/>
                                 <subviews>
                                     <textField opaque="NO" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="E-mail" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PV9-tv-ovg">
                                         <rect key="frame" x="0.0" y="0.0" width="294" height="40"/>
@@ -450,8 +450,22 @@
                                             <segue destination="OwN-zK-bzK" kind="presentation" id="9jT-C1-2ZL"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uTJ-Tf-BWn">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rdk-mH-P29">
                                         <rect key="frame" x="0.0" y="276" width="294" height="40"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="Ai1-AG-xZV"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="回報問題">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="report:" destination="KW9-tC-Som" eventType="touchUpInside" id="vsa-zz-PTx"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uTJ-Tf-BWn">
+                                        <rect key="frame" x="0.0" y="340" width="294" height="40"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="yQm-i5-ooo"/>
@@ -489,6 +503,7 @@
                         <outlet property="account" destination="PV9-tv-ovg" id="BdD-YV-2ZI"/>
                         <outlet property="password" destination="de5-3E-bg8" id="nn9-Ih-T03"/>
                         <outlet property="registerBtn" destination="xqG-SR-hbl" id="MiE-Yb-Bkf"/>
+                        <outlet property="reportBtn" destination="Rdk-mH-P29" id="fZ6-OM-nbr"/>
                         <outlet property="resetPwdBtn" destination="uTJ-Tf-BWn" id="HTw-Cz-3cn"/>
                         <outlet property="signInBtn" destination="ose-sB-U5R" id="WgZ-Iu-Pqg"/>
                     </connections>
@@ -720,14 +735,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nGS-a4-Mtb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2792.753623188406" y="244.56521739130437"/>
-        </scene>
-        <!--Page View Controller-->
-        <scene sceneID="V3b-wN-Zcr">
-            <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="3hG-Wp-Y13" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UHq-EY-OSL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2793" y="1008"/>
         </scene>
     </scenes>
     <resources>
