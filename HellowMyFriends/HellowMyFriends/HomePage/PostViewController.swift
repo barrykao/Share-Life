@@ -45,7 +45,6 @@ class PostViewController: UIViewController {
         } else {
             self.automaticallyAdjustsScrollViewInsets = false
         }
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,6 +82,7 @@ class PostViewController: UIViewController {
     @IBAction func clearPhotoBtn(_ sender: Any) {
         
         self.images = []
+        self.currentData = PaperData()
         self.collectionView.reloadData()
         self.clearPhotoBtn.isEnabled = false
         self.cameraBtn.isEnabled = true
@@ -96,10 +96,7 @@ class PostViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "postMessageSegue" {
-            
-            
             let postMessageVC = segue.destination as! PostMessageViewController
-            
             postMessageVC.images = images
             postMessageVC.currentData = currentData
         }

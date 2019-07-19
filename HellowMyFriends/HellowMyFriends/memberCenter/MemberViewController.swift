@@ -12,9 +12,12 @@ import FirebaseAuth
 import Lightbox
 import RSKImageCropper
 
-class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,UINavigationControllerDelegate ,RSKImageCropViewControllerDelegate{
-   
+protocol MemberViewControllerDelegate: class {
+    func didEditPaper(note: PaperData)
+}
 
+class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,UINavigationControllerDelegate ,RSKImageCropViewControllerDelegate, MessageViewControllerDelegate, EditPostViewControllerDelegate {
+   
     @IBOutlet var account: UILabel!
 
     @IBOutlet var collectionView: UICollectionView!
@@ -50,10 +53,12 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     let fullScreenSize = UIScreen.main.bounds.size
     var count: Int = 0
     var images: [UIImage] = []
+    var delegate: MemberViewControllerDelegate?
+
     var flag: Bool = true
     var index: Int!
     var lightboxController: LightboxController = LightboxController()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -73,6 +78,13 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.nickName.text = ""
+        collectionView.layer.borderWidth = 0.5
+        collectionView.layer.cornerRadius = 5.0
+        
+        let layout = collectionView.collectionViewLayout as?    UICollectionViewFlowLayout
+        let width = (UIScreen.main.bounds.width - 20 * 2) / 3
+        print(width)
+        layout?.itemSize = CGSize(width: width, height: width)
         
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
@@ -94,16 +106,12 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         editButton = UIButton(frame:  CGRect(x: fullScreenSize.width - 60, y: 100, width: 50, height: 50))
         editButton.setImage(UIImage(named: "file"), for: .normal)
         editButton.setTitleColor(UIColor.white, for: .normal)
-    
-        textView.isUserInteractionEnabled = false
+        
         textView.text = "在想些什麼?"
         textView.textColor = UIColor.lightGray
         textView.font = UIFont(name: "verdana", size: 14.0)
         textView.returnKeyType = .done
         textView.delegate = self
-        
-        
-        
         
         
     }
@@ -113,20 +121,21 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
 
         if Auth.auth().currentUser != nil {
             print("登入成功")
-        
+            isEdit = false
+            sendBtn.setImage(UIImage(named: "file"), for: .normal)
+            textView.isUserInteractionEnabled = false
+
+            print("顯示圖片")
             guard let account = UserDefaults.standard.string(forKey: "account") else {return}
             self.account.text = account
-            print("顯示圖片")
             let fileName = "\(account).jpg"
             let photoImage = loadImage(fileName: fileName)
             self.imageBtn.setImage(photoImage, for: .normal)
-            imageBtn.layer.cornerRadius = imageBtn.frame.height/2
-            imageBtn.backgroundColor = UIColor.clear
-            imageBtn.clipsToBounds = false
-            
+            imageBtn.imageView?.layer.cornerRadius = (imageBtn.imageView?.frame.height)!/2
+          
             guard let uid = Auth.auth().currentUser?.uid else {return}
             let databaseUid = self.databaseRef.child("User").child(uid)
-            databaseUid.observe(.value, with: { (snapshot) in
+            databaseUid.observeSingleEvent(of: .value, with: { (snapshot) in
                 guard let uidDict = snapshot.value as? [String:Any] else {return}
                 guard let nickName = uidDict["nickName"] as? String else {return}
                 UserDefaults.standard.set(nickName, forKey: "nickName")
@@ -141,6 +150,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                     self.textView.font = UIFont(name: "verdana", size: 14.0)
                 }
             })
+            
             collectionViewReloadData()
         }else{
             print("尚未登入")
@@ -176,7 +186,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             
             guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
             let databaseRefPaper = Database.database().reference().child("Paper")
-            databaseRefPaper.observe(.value, with: { (snapshot) in
+            databaseRefPaper.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let uploadDataDic = snapshot.value as? [String:Any] {
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)
@@ -218,7 +228,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                                     // loadImageToFile
                                     let fileName = "\(note.imageName[j]).jpg"
                                     if checkFile(fileName: fileName) {
-                                        print(fileName)
+//                                        print(fileName)
                                     }else {
                                     let storageRefPhoto = self.storageRef.child(note.account!).child(fileName)
                                         
@@ -281,6 +291,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         guard let image = info[.originalImage] as? UIImage else {return}
         
         let imagePicker1 = RSKImageCropViewController(image: image, cropMode: .circle)
+        self.imageBtn.setImage(image, for: .normal)
         imagePicker1.delegate = self
         imagePicker1.avoidEmptySpaceAroundImage = true
         imagePicker1.alwaysBounceHorizontal = true
@@ -294,6 +305,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         print("messageVC")
         let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
         let messageVC = navigationVC.topViewController as! MessageViewController
+        messageVC.delegate = self
         let note = self.memberData[self.index]
         messageVC.messageData = note
         lightboxController.present(navigationVC, animated: true)
@@ -326,7 +338,9 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         let editPostVC = navigationVC.topViewController as! EditPostViewController
                         editPostVC.currentData = current
                         editPostVC.images = self.images
+                        editPostVC.delegate = self
                         self.present(navigationVC, animated: true, completion: nil)
+                        
                     }
                     
                 }
@@ -343,19 +357,29 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         databaseRefPaper.child(currentData.paperName!).removeValue()
                         for i in 0 ..< currentData.imageName.count {
                             let imageName = "\(currentData.imageName[i]).jpg"
-                            storageRefAccount.child(imageName).delete(completion: nil)
-                            if checkFile(fileName: imageName) {
-                                let url = fileDocumentsPath(fileName: imageName)
-                                do{
-                                    try FileManager.default.removeItem(at: url)
-                                }catch{
+                            storageRefAccount.child(imageName).delete(completion: { (error) in
+                                if let error = error {
                                     print("error: \(error)")
                                 }
-                            }
+                                if checkFile(fileName: imageName) {
+                                    let url = fileDocumentsPath(fileName: imageName)
+                                    do{
+                                        try FileManager.default.removeItem(at: url)
+                                        if i == currentData.imageName.count - 1 {
+                                            DispatchQueue.main.async {
+                                                self.collectionView.reloadData()
+                                            }
+                                        }
+                                    }catch{
+                                        print("error: \(error)")
+                                    }
+                                }
+                            })
+                            
                         }
                         self.memberData.remove(at: self.index)
-                        self.collectionView.reloadData()
                         self.dismiss(animated: true)
+                        
                     }
                     controller.addAction(okAction)
                     let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
@@ -462,7 +486,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         
         isEdit = !isEdit
         if isEdit {
-//            sendBtn.setTitle("儲存", for: .normal)
             sendBtn.setImage(UIImage(named: "save"), for: .normal)
             textView.isUserInteractionEnabled = true
         }else {
@@ -477,9 +500,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         print("error: \(error)")
                     }else {
                         print("個人簡介上傳成功")
-//                        self.sendBtn.setTitle("編輯", for: .normal)
                         self.sendBtn.setImage(UIImage(named: "file"), for: .normal)
-
                         self.textView.isUserInteractionEnabled = false
                     }
                 }
@@ -488,19 +509,13 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             alert.addAction(okAction)
             self.present(alert, animated: true)
         }
-        
-        
-        
-        
-        
-        
-       
-        
-        
-        
-        
-        
-        
+    }
+    
+    func didUpdateMessage() {
+        refreshBtn(1)
+    }
+    func didUpdatePaper() {
+        refreshBtn(1)
     }
 }
 
@@ -536,42 +551,32 @@ extension MemberViewController : UICollectionViewDataSource, UICollectionViewDel
         guard self.memberData[indexPath.item].imageName.count > 0 else { return }
         let note = self.memberData[indexPath.item]
         let fileName = note.imageName
+    
         var light: [LightboxImage] = []
         for i in 0 ..< note.imageName.count {
             self.images.append(loadImage(fileName: "\(fileName[i]).jpg")!)
             light.append(LightboxImage(image: self.images[i], text: note.message!))
         }
-        /*
-        // 雙指輕點 (雙指以上手勢只能用實機測試)
-        let doubleFingers =
-            UITapGestureRecognizer(
-                target:self,
-                action:#selector(lightboxController.doubleTap(_:)))
-        
-        // 點幾下才觸發 設置 1 時 則是點一下會觸發 依此類推
-        doubleFingers.numberOfTapsRequired = 2
-        // 幾根指頭觸發
-        doubleFingers.numberOfTouchesRequired = 1
-        // 為視圖加入監聽手勢
-        self.view.addGestureRecognizer(doubleFingers)
-        */
+     
         lightboxController = LightboxController(images: light, startIndex: 0)
         lightboxController.dynamicBackground = true
         lightboxController.imageTouchDelegate = self
-        lightboxController.pageDelegate = self
-        lightboxController.dismissalDelegate = self
-        
+      
         self.present(lightboxController, animated: true, completion: nil)
         
         lightboxController.view.addSubview(messageButton)
         lightboxController.view.addSubview(heartButton)
         lightboxController.view.addSubview(editButton)
-        
-        
+        flag = true
+        UIView.animate(withDuration: 0.25, animations: {
+            self.messageButton.alpha = self.flag ? 1.0 : 0.0
+            self.heartButton.alpha = self.flag ? 1.0 : 0.0
+            self.editButton.alpha = self.flag ? 1.0 : 0.0
+        })
         messageButton.addTarget(self, action: #selector(messageVC), for: .touchUpInside)
         heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
-        
+ 
         self.index = indexPath.item
         
     }
@@ -597,35 +602,23 @@ extension MemberViewController: UITextViewDelegate {
     
 }
 
-extension MemberViewController: LightboxControllerTouchDelegate, LightboxControllerPageDelegate ,LightboxControllerDismissalDelegate
 
-{
-    
-    func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
-        print("didMoveToPage")
-        
-        print(page)
-    }
+extension MemberViewController: LightboxControllerTouchDelegate {
     
     func lightboxController(_ controller: LightboxController, didTouch image: LightboxImage, at index: Int) {
         print("didTouch")
         
         flag = !flag
-        print(flag)
-        if flag {
-            messageButton.isHidden = false
-            heartButton.isHidden = false
-            editButton.isHidden = false
-        }else {
-            messageButton.isHidden = true
-            heartButton.isHidden = true
-            editButton.isHidden = true
-        }
+        UIView.animate(withDuration: 0.25, animations: {
+            self.messageButton.alpha = self.flag ? 1.0 : 0.0
+            self.heartButton.alpha = self.flag ? 1.0 : 0.0
+            self.editButton.alpha = self.flag ? 1.0 : 0.0
+        })
+        
+        
+        
     }
     
-    func lightboxControllerWillDismiss(_ controller: LightboxController) {
-        
-        print("lightboxControllerWillDismiss")
-        
-    }
+  
 }
+ 

@@ -7,7 +7,8 @@ import FirebaseAuth
 import AudioToolbox.AudioServices //加入震動反饋
 import Lightbox
 
-class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate {
+class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate,MessageViewControllerDelegate {
+    
     
     @IBOutlet weak var tableView: UITableView!
 
@@ -29,26 +30,29 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     var touchedIndexPath : Int = 0
     var feedbackGenerator : UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .heavy)
   
-    deinit {
-        feedbackGenerator = nil
-//        NotificationCenter.default.removeObserver(self)
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+         NotificationCenter.default.addObserver(self, selector: #selector(HomePageViewController.finishUpdate(notification:)), name: Notification.Name("NoteUpdated"), object: nil)
     }
     
-   /*
+    deinit {
+        feedbackGenerator = nil
+        NotificationCenter.default.removeObserver(self)
+    }
+   
     @objc func finishUpdate(notification : Notification) {
      
-        let note = notification.userInfo?["note"] as! PaperData
-        self.data.insert(note, at: 0)
-        self.tableView.reloadData()
-        
+//        let note = notification.userInfo?["note"] as! PaperData
+//        self.data.insert(note, at: 0)
+//        self.tableView.reloadData()
+        refreshLoadData(1)
      }
-    */
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-        
         let home: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         self.data = home.paperData
         feedbackGenerator?.prepare()
@@ -72,12 +76,13 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         heartButton.setImage(UIImage(named: "fullHeart"), for: .normal)
         heartButton.setTitleColor(UIColor.white, for: .normal)
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(HomePageViewController.finishUpdate(notification:)), name: Notification.Name("NoteUpdated"), object: nil)
+       
 
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.loadData()
+//        self.loadData()
+        
     }
     
     @IBAction func refreshLoadData(_ sender: Any) {
@@ -100,7 +105,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             self.refreshControl.endRefreshing()
             
             let databaseRefPaper = self.databaseRef.child("Paper")
-            databaseRefPaper.observe(.value, with: { [weak self] (snapshot) in
+            databaseRefPaper.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
                 
                 if let uploadDataDic = snapshot.value as? [String:Any] {
                     let dataDic = uploadDataDic
@@ -110,6 +115,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         let array = dataDic[keyArray[i]] as! [String:Any]
                         let note = PaperData()
                         note.paperName = keyArray[i]
+                        note.paperNameArry = keyArray
                         note.account = array["account"] as? String
                         note.message = array["message"] as? String
                         note.date = array["date"] as? String
@@ -139,7 +145,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                          // loadImageToFile
                             let fileName = "\(note.imageName[j]).jpg"
                             if checkFile(fileName: fileName) {
-                                print(fileName)
+//                                print(fileName)
                             }else {
                                 guard let storageRefPhoto = self?.storageRef.child(note.account!).child(fileName) else {return}
                                 
@@ -263,11 +269,19 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
         cell?.heartCount.setTitle("\(note.heartCount)顆愛心", for: .normal)
         cell?.heartCount.tag = indexPath.section
-    
+        cell?.heartCount.addTarget(self, action: #selector(heartVC1), for: .touchUpInside)
+
+        
+        
+        
+        
         cell?.messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
         cell?.messageCount.tag = indexPath.section
         cell?.messageBtn.tag = indexPath.section
-    
+        cell?.messageBtn.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
+        cell?.messageCount.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
+
+        
         return cell!
     }
     
@@ -299,6 +313,61 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         lightboxController.present(navigationVC, animated: true, completion: nil)
     }
     
+    @objc func messageVC1 (sender: UIButton) {
+      
+        let indexTag = sender.tag
+        let note = self.data[indexTag - 1]
+        guard let paperName = note.paperName else { return}
+        
+        let databasePaper = self.databaseRef.child("Paper")
+        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+            
+            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+            let paperNameArray = Array(paperNameDict.keys)
+            if paperNameArray.contains(paperName) {
+                let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
+                let messageVC = navigationVC.topViewController as! MessageViewController
+                messageVC.messageData = note
+                self.present(navigationVC, animated: true)
+            
+            }else {
+                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                self.refreshLoadData(1)
+            }
+            
+        }
+        
+    }
+    @objc func heartVC1 (sender: UIButton) {
+        
+        let indexTag = sender.tag
+        let note = self.data[indexTag - 1]
+        guard let paperName = note.paperName else { return}
+        
+        let databasePaper = self.databaseRef.child("Paper")
+        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+            
+            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+            let paperNameArray = Array(paperNameDict.keys)
+            if paperNameArray.contains(paperName) {
+                let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "heartVC") as! UINavigationController
+                let messageVC = navigationVC.topViewController as! HeartViewController
+                messageVC.messageData = note
+                self.present(navigationVC, animated: true, completion: nil)
+            }else {
+                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                self.refreshLoadData(1)
+            }
+            
+        }
+        
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
  
         if segue.identifier == "messageSegue" {
@@ -306,9 +375,26 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             let indexPath = index.tag
             print(indexPath)
             let home = self.data[indexPath - 1]
-            let navigationVC = segue.destination as! UINavigationController
-            let messageVC = navigationVC.topViewController as! MessageViewController
-            messageVC.messageData = home
+            guard let paperName = home.paperName else { return}
+
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    let navigationVC = segue.destination as! UINavigationController
+                    let messageVC = navigationVC.topViewController as! MessageViewController
+                    messageVC.messageData = home
+                    messageVC.delegate = self
+                }else {
+                    let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                    self.refreshLoadData(1)
+                }
+            }
+            
         }
  
         if segue.identifier == "heartSegue" {
@@ -327,44 +413,72 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
     @objc func heartBtnPressed(sender:UIButton) {
         
+        
         guard let account = UserDefaults.standard.string(forKey: "account") else { return}
         guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
         guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
-
-        let indexPath = (sender.tag) / 10
-        let note = self.data[indexPath - 1]
+        
+        let indexTag = (sender.tag) / 10
+        let note = self.data[indexTag - 1]
         guard let paperName = note.paperName else { return}
-        let databasePaperName = self.databaseRef.child("Paper").child(paperName)
-       
-        if note.heartUid.contains(uid) {
-            // delete
-            databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
-                if let error = error {
-                    assertionFailure("Fail To postMessage \(error)")
+
+        let databasePaper = self.databaseRef.child("Paper")
+        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+            
+            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+            let paperNameArray = Array(paperNameDict.keys)
+            if paperNameArray.contains(paperName) {
+                let databasePaperName = self.databaseRef.child("Paper").child(paperName)
+                let indexPath = IndexPath(row: 0, section: indexTag)
+                if note.heartUid.contains(uid) {
+                    // delete
+                    guard let index = note.heartUid.firstIndex(of: uid) else {return}
+                    print(index)
+                    sender.setImage(UIImage(named: "emptyHeart"), for: .normal)
+                    databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
+                        if let error = error {
+                            assertionFailure("Fail To postMessage \(error)")
+                        }else {
+                            print("刪除離留言成功")
+                            note.heartUid.remove(at: index)
+                            note.heartCount -= 1
+                            print(note.heartCount)
+                            DispatchQueue.main.async {
+                                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                            }
+                        }
+                    })
                 }else {
-                    print("刪除離留言成功")
-                    DispatchQueue.main.async {
-//                     self.loadData()
+                    // add
+                    sender.setImage(UIImage(named: "fullHeart"), for: .normal)
+                    let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
+                                                 "account" : account,
+                                                 "uid" : uid,
+                                                 "nickName" : nickName]
+                    databasePaperName.child("heart").child(uid).setValue(heart){ (error, database) in
+                        if let error = error {
+                            assertionFailure("Fail To postMessage \(error)")
+                        }
+                        print("上傳愛心成功")
+                        note.heartUid.append(uid)
+                        note.heartCount += 1
+                        print(note.heartCount)
+                        DispatchQueue.main.async {
+                            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                        }
                     }
                 }
-            })
-        }else {
-            // add
-            let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
-                                         "account" : account,
-                                         "uid" : uid,
-                                         "nickName" : nickName]
-            databasePaperName.child("heart").child(uid).setValue(heart){ (error, database) in
-                if let error = error {
-                    assertionFailure("Fail To postMessage \(error)")
-                }
-                print("上傳愛心成功")
-                DispatchQueue.main.async {
-//                    self.loadData()
-                }
+                self.scaleLikeButton(sender: sender)
+            }else {
+                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                self.refreshLoadData(1)
             }
+            
         }
-        scaleLikeButton(sender: sender)
+        
     }
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
@@ -440,8 +554,13 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         lightboxController = LightboxController(images: light, startIndex: 0)
         lightboxController.dynamicBackground = true
         lightboxController.imageTouchDelegate = self
-        lightboxController.pageDelegate = self
-        lightboxController.dismissalDelegate = self
+        
+        flag = true
+        UIView.animate(withDuration: 0.25, animations: {
+            self.messageButton.alpha = self.flag ? 1.0 : 0.0
+            self.heartButton.alpha = self.flag ? 1.0 : 0.0
+            
+        })
         
         self.present(lightboxController, animated: true, completion: nil)
         lightboxController.view.addSubview(messageButton)
@@ -466,38 +585,22 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         
         feedbackGenerator?.impactOccurred()
     }
-
-}
-
-extension HomePageViewController: LightboxControllerTouchDelegate, LightboxControllerPageDelegate ,LightboxControllerDismissalDelegate
     
-{
-    
-    func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
-        print("didMoveToPage")
-        
-        print(page)
+    func didUpdateMessage() {
+        refreshLoadData(1)
     }
     
+}
+
+extension HomePageViewController: LightboxControllerTouchDelegate {
     func lightboxController(_ controller: LightboxController, didTouch image: LightboxImage, at index: Int) {
         print("didTouch")
         
         flag = !flag
-        print(flag)
-        if flag {
-            messageButton.isHidden = false
-            heartButton.isHidden = false
+        UIView.animate(withDuration: 0.25, animations: {
+            self.messageButton.alpha = self.flag ? 1.0 : 0.0
+            self.heartButton.alpha = self.flag ? 1.0 : 0.0
             
-        }else {
-            messageButton.isHidden = true
-            heartButton.isHidden = true
-            
-        }
-    }
-    
-    func lightboxControllerWillDismiss(_ controller: LightboxController) {
-        
-        print("lightboxControllerWillDismiss")
-        
+        })
     }
 }

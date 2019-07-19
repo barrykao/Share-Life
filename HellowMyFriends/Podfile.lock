@@ -1,5 +1,7 @@
 PODS:
   - Cache (5.2.0)
+  - Firebase/Analytics (6.4.0):
+    - Firebase/Core
   - Firebase/Auth (6.4.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.2.0)
@@ -86,6 +88,7 @@ PODS:
   - RSKImageCropper (2.2.2)
 
 DEPENDENCIES:
+  - Firebase/Analytics
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -141,6 +144,6 @@ SPEC CHECKSUMS:
   PageMenu: 9c38fd7e0d9ef4b1408320f55bb907bbc0e538dc
   RSKImageCropper: 05e3b82a18da83ea3c2b7bffa7f2199a621d6802
 
-PODFILE CHECKSUM: d281554f7db80f73ada998089ce75c6a4e8b89f9
+PODFILE CHECKSUM: 82b34ea14bf0688752b1be590460253d5a9446cc
 
 COCOAPODS: 1.6.1

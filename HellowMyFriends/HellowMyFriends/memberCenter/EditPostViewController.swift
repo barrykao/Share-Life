@@ -11,6 +11,10 @@ import Firebase
 import FirebaseAuth
 import ImagePicker
 import Lightbox
+protocol EditPostViewControllerDelegate {
+    func didUpdatePaper()
+}
+
 
 class EditPostViewController: UIViewController {
     
@@ -33,7 +37,8 @@ class EditPostViewController: UIViewController {
     var images: [UIImage] = []
     let fullScreenSize = UIScreen.main.bounds.size
     var pageControl : UIPageControl! = UIPageControl()
-
+    var delegate: EditPostViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -105,7 +110,7 @@ class EditPostViewController: UIViewController {
             self.currentData.message = self.textView.text
             self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
             self.postPhotoBtn()
-            
+            self.delegate?.didUpdatePaper()
             self.dismiss(animated: true)
         }
         alert.addAction(okAction)
@@ -172,7 +177,6 @@ class EditPostViewController: UIViewController {
         
         self.dismiss(animated: true)
     }
-    
     
     @IBAction func clearPhotoBtn(_ sender: Any) {
         

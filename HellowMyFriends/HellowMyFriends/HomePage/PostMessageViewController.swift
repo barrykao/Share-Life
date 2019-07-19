@@ -65,12 +65,15 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             photo.image = loadImage(fileName: photoName)
         }
         
-//        buttonDesign(button: textView)
-        
         textView.layer.borderWidth = 0.5
         textView.layer.cornerRadius = 5.0
         self.navigationItem.rightBarButtonItem?.isEnabled = false
-
+        
+        let item =  UIBarButtonItem(image: UIImage(named: "return"), style: .plain, target: self, action: #selector(back))
+        self.navigationItem.leftBarButtonItem = item
+        self.navigationItem.hidesBackButton = true
+        
+        
         textView.text = "在想些什麼?"
         textView.textColor = UIColor.lightGray
 //        textView.font = UIFont(name: "verdana", size: 13.0)
@@ -78,6 +81,10 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
         textView.delegate = self
         
         
+    }
+    
+    @objc func back() {
+        self.navigationController!.popViewController(animated: true)
     }
     
     @IBAction func postToServer(_ sender: Any) {
@@ -117,7 +124,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             storageFileName.putData(imageData, metadata: metadata) { (data, error) in
                 print("執行putData")
                 if error != nil {
-                    print("Error: \(error!.localizedDescription)")
+                    assertionFailure("fail to setValue!")
                     return
                 }
                 let now: Date = Date()
@@ -139,10 +146,10 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
                                                    ]
                 self.databaseRef.setValue(postMessage) { (error, data) in
                     if error != nil {
-                        assertionFailure()
+                        assertionFailure("fail to setValue!")
                     }else {
                         print("上傳成功")
-//                        NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
+                        NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
                     }
                 }
             }
@@ -161,14 +168,7 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
             textView.font = UIFont(name: "verdana", size: 18.0)
         }
     }
-    /*
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-        }
-        return true
-    }
- */
+    
     func textViewDidChangeSelection(_ textView: UITextView) {
         if textView.text == "在想些什麼?" || textView.text == ""{
             self.navigationItem.rightBarButtonItem?.isEnabled = false

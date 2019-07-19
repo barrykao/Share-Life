@@ -28,6 +28,7 @@ static func == (lhs: PaperData, rhs: PaperData) -> Bool {
     var heartUid: [String] = []
     var imageName : [String] = []
     var nickName : String?
+    var paperNameArry: [String] = []
     
 }
 

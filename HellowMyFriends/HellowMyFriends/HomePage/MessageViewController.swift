@@ -10,6 +10,10 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+protocol MessageViewControllerDelegate: class {
+    func didUpdateMessage()
+}
+
 class MessageViewController: UIViewController {
 
     
@@ -31,6 +35,7 @@ class MessageViewController: UIViewController {
     var commentData: [CommentData] = []
     var refreshControl:UIRefreshControl!
     var isEdit: Bool = false
+    var delegate: MessageViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,10 +73,6 @@ class MessageViewController: UIViewController {
         
     }
   
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.view.endEditing(true)
-//        isEditing()
-//    }
     
     @objc func dismissKeyBoard() {
         self.view.endEditing(true)
@@ -127,33 +128,49 @@ class MessageViewController: UIViewController {
     
     @IBAction func postBtn(_ sender: Any) {
         
-        guard let paperName = self.messageData.paperName else { return}
-        guard let uid = Auth.auth().currentUser?.uid else { return}
-        guard let account = UserDefaults.standard.string(forKey: "account") else { return}
-        guard let nickName = UserDefaults.standard.string(forKey: "nickName") else { return}
-        
-        let note = CommentData()
-        let postMessage: [String : Any] = [ "comment" : self.textView.text!,
-                                            "postTime": [".sv":"timestamp"],
-                                            "account" : account,
-                                            "uid" : uid,
-                                            "nickName" :nickName
-                                          ]
-    self.databaseRef.child("Paper").child(paperName).child("comment").child(note.commentUUID).setValue(postMessage) { (error, database) in
-            if let error = error {
-                assertionFailure("Fail To postMessage \(error)")
+        guard let paperName = messageData.paperName else {return}
+        let databasePaper = self.databaseRef.child("Paper")
+        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+            let paperNameArray = Array(paperNameDict.keys)
+            if paperNameArray.contains(paperName) {
+                guard let uid = Auth.auth().currentUser?.uid else { return}
+                guard let account = UserDefaults.standard.string(forKey: "account") else { return}
+                guard let nickName = UserDefaults.standard.string(forKey: "nickName") else { return}
+                guard let comment = self.textView.text else {return}
+                let note = CommentData()
+                let postMessage: [String : Any] = [ "comment" : comment,
+                                                    "postTime": [".sv":"timestamp"],
+                                                    "account" : account,
+                                                    "uid" : uid,
+                                                    "nickName" :nickName]
+                self.databaseRef.child("Paper").child(paperName).child("comment").child(note.commentUUID).setValue(postMessage) { (error, database) in
+                    if let error = error {
+                        assertionFailure("Fail To postMessage \(error)")
+                    }
+                    print("上傳留言成功")
+                }
+                self.textView.text = ""
+                self.dismissKeyBoard()
+                self.loadData()
+                
+            }else {
+                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
+                    self.dismiss(animated: true)
+                })
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
             }
-            print("上傳留言成功")
+            
         }
-        self.textView.text = ""
-        dismissKeyBoard()
-        
-        self.loadData()
         
     }
     
     @IBAction func backBtn(_ sender: Any) {
+        self.delegate?.didUpdateMessage()
         self.dismiss(animated: true)
+
     }
     
     func isEditing() {

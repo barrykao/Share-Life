@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var paperData : [PaperData] = []
     var userData: [UserData] = []
     
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
@@ -96,6 +97,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let array = dataDic[keyArray[i]] as! [String:Any]
                 let note = UserData()
                 note.account = array["account"] as? String
+                note.nickName = array["nickName"] as? String
+                note.profile = array["profile"] as? String
+                
                 self.userData.append(note)
                 // loadImageToFile
                 guard let account = note.account else {return}
@@ -131,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         print("applicationDidEnterBackground")
         print("2")
-        
+        self.databaseRef.removeAllObservers()
 
     }
 
