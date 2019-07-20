@@ -19,8 +19,10 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
     
     @IBOutlet weak var backBtn: UIButton!
     
-    var databaseRef : DatabaseReference!
+    @IBOutlet var textView: UITextView!
     
+    var databaseRef : DatabaseReference!
+    var currentData: PaperData! = PaperData()
     
     weak var delegate : RegisterViewControllerDelegate?
     
@@ -37,13 +39,15 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
         textFieldClearMode(textField: newAccount)
         textFieldClearMode(textField: newPassword)
         textFieldClearMode(textField: nickName)
+        
+        let item =  UIBarButtonItem(image: UIImage(named: "return"), style: .plain, target: self, action: #selector(back))
+        self.navigationItem.leftBarButtonItem = item
+        self.navigationItem.hidesBackButton = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let alert = UIAlertController(title: "注意!!", message: "提醒您：暱稱無法更改。\n請輸入正確的E-mail格式。\n忘記密碼時，將寄送驗證信件至信箱，以便修改密碼。", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
+        alertAction(controller: self, title: "注意!!", message: "提醒您：暱稱無法更改。\n請輸入正確的E-mail格式。\n忘記密碼時，將寄送驗證信件至信箱，以便修改密碼。")
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -58,34 +62,37 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
     @IBAction func SignUp(_ sender: Any) {
         
         guard self.newAccount.text != "" && self.newPassword.text != "" && self.nickName.text != "" else {
-            isEmpty(controller: self)
+            alertAction(controller: self, title: "警告", message: "有空格尚未填寫!")
             return
         }
+        guard let account = newAccount.text else {return}
+        guard let password = newPassword.text else {return}
+        guard let nickName = nickName.text else {return}
+
         
-        Auth.auth().createUser(withEmail: newAccount.text!, password: newPassword.text!) { (user, error) in
+        Auth.auth().createUser(withEmail: account, password: password) { (user, error) in
             if error == nil {
                 print("You have successfully signed up")
                 let alert = UIAlertController(title: "註冊", message: "註冊成功!", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default, handler: { (ok) in
-                    
-                    self.delegate?.didFinishRegister(account: self.newAccount.text, password: self.newPassword.text, nickName: self.nickName.text)
-                    
+                    self.currentData.account = account
+                    self.currentData.nickName = password
+//                    self.delegate?.didFinishRegister(account: self.newAccount.text, password: self.newPassword.text, nickName: self.nickName.text)
+                    NotificationCenter.default.post(name: Notification.Name("AccountUpdated"), object: nil, userInfo: ["account": self.currentData!])
+
                     let uid = Auth.auth().currentUser!.uid
-                    let accoutdict = ["account":self.newAccount.text!, "nickName": self.nickName.text!]
+                    let accoutdict = ["account":account, "nickName": nickName]
                     
                     self.databaseRef.child("User").child("\(uid)").setValue(accoutdict)
-                    
                     self.dismiss(animated: true, completion: nil)
                 })
                 alert.addAction(okAction)
                 self.present(alert, animated: true, completion: nil)
             } else {
-                let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
-                let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-                alertController.addAction(defaultAction)
-                self.present(alertController, animated: true, completion: nil)
+                alertAction(controller: self, title: "錯誤", message: "帳號或密碼重複或是錯誤!")
             }
         }
+        
         
     }
     

@@ -18,6 +18,7 @@
 		C65A132022B89514002C2881 /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */; };
 		C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C65A132122B8AB9D002C2881 /* background 2.jpg */; };
 		C65BDE9F22E1A21E00DD9400 /* background4.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C65BDE9E22E1A21E00DD9400 /* background4.jpeg */; };
+		C65BDEA122E2C1B700DD9400 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65BDEA022E2C1B700DD9400 /* PrivacyViewController.swift */; };
 		C65EB18422B6458F0093AAC6 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65EB18322B6458F0093AAC6 /* MessageViewController.swift */; };
 		C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */; };
 		C65F50BF22C1E71F00CAB067 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */; };
@@ -27,7 +28,6 @@
 		C65F510B22C5D26C00CAB067 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */; };
 		C673B5A822E01BE1000E9379 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C673B5A722E01BE1000E9379 /* GoogleService-Info.plist */; };
 		C673B5AD22E068A9000E9379 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C673B5AC22E068A8000E9379 /* member.png */; };
-		C676073322D05AEC00848AFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C676073222D05AEB00848AFF /* ViewController.swift */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67D83D922DC6D3B00EE1109 /* background3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C67D83D822DC6D3B00EE1109 /* background3.jpg */; };
 		C68439D922DDE64300CDC2A6 /* UserCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C68439D822DDE64200CDC2A6 /* UserCardView.xib */; };
@@ -57,6 +57,7 @@
 		C65A131F22B89514002C2881 /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
 		C65A132122B8AB9D002C2881 /* background 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background 2.jpg"; sourceTree = "<group>"; };
 		C65BDE9E22E1A21E00DD9400 /* background4.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background4.jpeg; sourceTree = "<group>"; };
+		C65BDEA022E2C1B700DD9400 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PrivacyViewController.swift; path = HellowMyFriends/memberCenter/PrivacyViewController.swift; sourceTree = SOURCE_ROOT; };
 		C65EB18322B6458F0093AAC6 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MemberCenter.storyboard; sourceTree = "<group>"; };
 		C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -66,7 +67,6 @@
 		C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		C673B5A722E01BE1000E9379 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C673B5AC22E068A8000E9379 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
-		C676073222D05AEB00848AFF /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67D83D822DC6D3B00EE1109 /* background3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background3.jpg; sourceTree = "<group>"; };
 		C68439D822DDE64200CDC2A6 /* UserCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserCardView.xib; sourceTree = "<group>"; };
@@ -126,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				C65EB18722B64F960093AAC6 /* MemberCenter.storyboard */,
+				C65BDEA022E2C1B700DD9400 /* PrivacyViewController.swift */,
 				C65F50BE22C1E71F00CAB067 /* PhotoCollectionViewCell.swift */,
 				C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */,
 				C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */,
@@ -178,7 +179,6 @@
 				C6F6568A226F14EF00706BEA /* Main.storyboard */,
 				C6F3F486227C557400D4F246 /* function.swift */,
 				C6B0574B22BB5AA600D00761 /* Database.swift */,
-				C676073222D05AEB00848AFF /* ViewController.swift */,
 				C65EB18222B642B00093AAC6 /* HomePage */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
@@ -364,10 +364,10 @@
 				C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
+				C65BDEA122E2C1B700DD9400 /* PrivacyViewController.swift in Sources */,
 				C64882BB22BBE4C900D0CB9E /* PostMessageViewController.swift in Sources */,
 				C61E7D0122D1E41F00473FA6 /* OpenSegueAnimation.swift in Sources */,
 				C6B0574C22BB5AA600D00761 /* Database.swift in Sources */,
-				C676073322D05AEC00848AFF /* ViewController.swift in Sources */,
 				C65F510B22C5D26C00CAB067 /* EditPostViewController.swift in Sources */,
 				C6F3F487227C557400D4F246 /* function.swift in Sources */,
 			);

@@ -6,7 +6,7 @@ import Firebase
 import FirebaseAuth
 import AudioToolbox.AudioServices //加入震動反饋
 import Lightbox
-
+import MessageUI
 class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate,MessageViewControllerDelegate {
     
     
@@ -42,10 +42,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     }
    
     @objc func finishUpdate(notification : Notification) {
-     
-//        let note = notification.userInfo?["note"] as! PaperData
-//        self.data.insert(note, at: 0)
-//        self.tableView.reloadData()
         refreshLoadData(1)
      }
  
@@ -80,10 +76,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-//        self.loadData()
-        
-    }
     
     @IBAction func refreshLoadData(_ sender: Any) {
         
@@ -125,6 +117,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         note.nickName = array["nickName"] as? String
                        
                         if let comment = array["comment"] as? [String:Any] {
+                            note.commentNameArray = Array(comment.keys)
                             note.commentCount = comment.count
                         }else {
                             note.commentCount = 0
@@ -178,13 +171,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         }
         
 
-    }
-    
-    
-    @IBAction func scrollToTop(_ sender: Any) {
-        
-        let topIndex = IndexPath(row: 0, section: 0)
-        self.tableView.scrollToRow(at: topIndex, at: .top, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -272,15 +258,15 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.heartCount.addTarget(self, action: #selector(heartVC1), for: .touchUpInside)
 
         
-        
-        
-        
         cell?.messageCount.setTitle("\(note.commentCount)則留言", for: .normal)
         cell?.messageCount.tag = indexPath.section
         cell?.messageBtn.tag = indexPath.section
         cell?.messageBtn.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
         cell?.messageCount.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
 
+        cell?.editBtn.tag = indexPath.section * 5
+        cell?.editBtn.addTarget(self, action: #selector(editPaper), for: .touchUpInside)
+        
         
         return cell!
     }
@@ -290,16 +276,47 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         self.tableView.deselectRow(at: indexPath, animated: true)
         print("\(indexPath.section), \(indexPath.row)")
        
-       
-       
     }
     
+    @objc func editPaper(sender: UIButton) {
+        let indexTage = sender.tag / 5
+        let note = self.data[indexTage - 1]
+        guard let paperName = note.paperName else {return}
+        guard let nickName = note.nickName else {return}
+        guard let message = note.message else {return}
+
+        if note.paperNameArry.contains(paperName) {
+            let controller = UIAlertController(title: "文章", message: "請選擇操作", preferredStyle: .actionSheet)
+            let action = UIAlertAction(title: "檢舉文章", style: .default) { (action) in
+                if MFMailComposeViewController.canSendMail(){
+                    let mailController = MFMailComposeViewController()
+                    mailController.mailComposeDelegate = self
+                    mailController.setSubject("檢舉文章")
+                    mailController.setToRecipients(["barrykao881@gmail.com"])
+                    mailController.setMessageBody("發文文章：\(paperName))\n發文人姓名：\(nickName)\n文章內容：\(message)\n檢舉原因：", isHTML: false)
+                    self.present(mailController, animated: true, completion: nil)
+                }else {
+                    print("send mail Fail!")
+                }
+            }
+            controller.addAction(action)
+            let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+            controller.addAction(cancelAction)
+            self.present(controller, animated: true, completion: nil)
+        }else {
+            alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
+            self.refreshLoadData(1)
+        }
+        
+        
+    }
     @objc func messageVC() {
         print("messageVC")
         let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
         let messageVC = navigationVC.topViewController as! MessageViewController
         let note = self.data[self.index]
         messageVC.messageData = note
+        messageVC.delegate = self
         lightboxController.present(navigationVC, animated: true)
     }
     
@@ -328,13 +345,11 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
                 let messageVC = navigationVC.topViewController as! MessageViewController
                 messageVC.messageData = note
+                messageVC.delegate = self
                 self.present(navigationVC, animated: true)
             
             }else {
-                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alert.addAction(okAction)
-                self.present(alert, animated: true, completion: nil)
+                alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                 self.refreshLoadData(1)
             }
             
@@ -358,10 +373,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 messageVC.messageData = note
                 self.present(navigationVC, animated: true, completion: nil)
             }else {
-                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alert.addAction(okAction)
-                self.present(alert, animated: true, completion: nil)
+                alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                 self.refreshLoadData(1)
             }
             
@@ -369,33 +381,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
- 
-        if segue.identifier == "messageSegue" {
-            guard let index = sender as? UIButton else {return}
-            let indexPath = index.tag
-            print(indexPath)
-            let home = self.data[indexPath - 1]
-            guard let paperName = home.paperName else { return}
-
-            let databasePaper = self.databaseRef.child("Paper")
-            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
-                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
-                let paperNameArray = Array(paperNameDict.keys)
-                if paperNameArray.contains(paperName) {
-                    let navigationVC = segue.destination as! UINavigationController
-                    let messageVC = navigationVC.topViewController as! MessageViewController
-                    messageVC.messageData = home
-                    messageVC.delegate = self
-                }else {
-                    let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alert.addAction(okAction)
-                    self.present(alert, animated: true, completion: nil)
-                    self.refreshLoadData(1)
-                }
-            }
-            
-        }
  
         if segue.identifier == "heartSegue" {
             print("heartSegue")
@@ -470,10 +455,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 }
                 self.scaleLikeButton(sender: sender)
             }else {
-                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alert.addAction(okAction)
-                self.present(alert, animated: true, completion: nil)
+                alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                 self.refreshLoadData(1)
             }
             
@@ -603,4 +585,24 @@ extension HomePageViewController: LightboxControllerTouchDelegate {
             
         })
     }
+}
+
+
+
+//MARK:MFMailComposeViewControllerDelegate
+extension HomePageViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if result == .sent {
+            alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
+        }
+        
+        if result == .cancelled {
+            controller.dismiss(animated: true)
+        }
+        if result == .saved {
+            alertAction(controller: controller, title: "儲存草稿", message: "草稿儲存成功")
+        }
+    }
+    
+    
 }

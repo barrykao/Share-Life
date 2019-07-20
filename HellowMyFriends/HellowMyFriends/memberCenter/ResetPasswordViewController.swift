@@ -42,25 +42,14 @@ class ResetPasswordViewController: UIViewController ,UITextFieldDelegate {
     @IBAction func send(_ sender: Any) {
         
         if self.emailText.text == "" {
-            let alertController = UIAlertController(title: "警告", message: "請輸入E-mail", preferredStyle: .alert)
-            let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-            alertController.addAction(defaultAction)
-            present(alertController, animated: true, completion: nil)
+            alertAction(controller: self, title: "警告", message: "請輸入E-mail")
         } else {
             Auth.auth().sendPasswordReset(withEmail: self.emailText.text!, completion: { (error) in
                 if error == nil {
                     self.emailText.text = ""
-                    let alertController = UIAlertController(title: "成功", message: "已成功將驗證信件寄送至您的信箱", preferredStyle: .alert)
-                    
-                    let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alertController.addAction(defaultAction)
-                    self.present(alertController, animated: true, completion: nil)
-                    
+                    alertActionDismiss(controller: self, title: "成功", message: "已成功將驗證信件寄送至您的信箱")
                 } else {
-                    let alertController = UIAlertController(title: "失敗", message: "請輸入正確的E-mail", preferredStyle: .alert)
-                    let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alertController.addAction(defaultAction)
-                    self.present(alertController, animated: true, completion: nil)
+                    alertAction(controller: self, title: "失敗", message: "請輸入正確的E-mail")
                 }
             })
         }

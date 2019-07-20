@@ -29,7 +29,7 @@ static func == (lhs: PaperData, rhs: PaperData) -> Bool {
     var imageName : [String] = []
     var nickName : String?
     var paperNameArry: [String] = []
-    
+    var commentNameArray: [String] = []
 }
 
 class UserData {

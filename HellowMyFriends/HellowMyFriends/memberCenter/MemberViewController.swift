@@ -11,6 +11,7 @@ import Firebase
 import FirebaseAuth
 import Lightbox
 import RSKImageCropper
+import MessageUI
 
 protocol MemberViewControllerDelegate: class {
     func didEditPaper(note: PaperData)
@@ -38,6 +39,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @IBOutlet var profileView: UIView!
     
+    @IBOutlet var accountView: UIView!
     
     var messageButton: UIButton!
     var heartButton: UIButton!
@@ -59,11 +61,13 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     var index: Int!
     var lightboxController: LightboxController = LightboxController()
     
+  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        account.layer.borderWidth = 0.5
-        account.layer.cornerRadius = 5.0
+        accountView.layer.borderWidth = 0.5
+        accountView.layer.cornerRadius = 5.0
        
         nicknameView.layer.borderWidth = 0.5
         nicknameView.layer.cornerRadius = 5.0
@@ -305,9 +309,9 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         print("messageVC")
         let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
         let messageVC = navigationVC.topViewController as! MessageViewController
-        messageVC.delegate = self
         let note = self.memberData[self.index]
         messageVC.messageData = note
+        messageVC.delegate = self
         lightboxController.present(navigationVC, animated: true)
     }
     
@@ -483,7 +487,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @IBAction func sendBtn(_ sender: Any) {
         
-        
         isEdit = !isEdit
         if isEdit {
             sendBtn.setImage(UIImage(named: "save"), for: .normal)
@@ -511,12 +514,29 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         }
     }
     
+    @IBAction func reportBtn(_ sender: Any) {
+        
+        if MFMailComposeViewController.canSendMail(){
+            let mailController = MFMailComposeViewController()
+            mailController.mailComposeDelegate = self
+            mailController.setSubject("回報問題")
+            mailController.setToRecipients(["barrykao881@gmail.com"])
+            mailController.setMessageBody("問題：", isHTML: false)
+            self.present(mailController, animated: true, completion: nil)
+        }else {
+            print("send mail Fail!")
+        }
+        
+    }
+    
     func didUpdateMessage() {
         refreshBtn(1)
     }
+    
     func didUpdatePaper() {
         refreshBtn(1)
     }
+    
 }
 
 
@@ -618,7 +638,24 @@ extension MemberViewController: LightboxControllerTouchDelegate {
         
         
     }
-    
+
   
 }
  
+//MARK:MFMailComposeViewControllerDelegate
+extension MemberViewController: MFMailComposeViewControllerDelegate{
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        if result == .sent {
+            alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
+        }
+        
+        if result == .cancelled {
+            controller.dismiss(animated: true)
+        }
+        if result == .saved {
+            alertAction(controller: controller, title: "儲存草稿", message: "草稿儲存成功")
+        }
+    }
+}
+

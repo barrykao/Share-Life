@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import MessageUI
 
 protocol MessageViewControllerDelegate: class {
     func didUpdateMessage()
@@ -57,8 +58,8 @@ class MessageViewController: UIViewController {
         // Meesage
         message.text = messageData.message
         self.postBtn.isEnabled = false
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyBoard))
-        self.view.addGestureRecognizer(tap) // to Replace "TouchesBegan"
+//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyBoard))
+//        self.view.addGestureRecognizer(tap) // to Replace "TouchesBegan"
 
         textView.text = "留言......"
         textView.textColor = UIColor.lightGray
@@ -69,16 +70,15 @@ class MessageViewController: UIViewController {
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(loadData), for: UIControl.Event.valueChanged)
-        refreshLoadData(1)
+        refreshLoadData()
         
     }
-  
     
     @objc func dismissKeyBoard() {
         self.view.endEditing(true)
     }
     
-    @IBAction func refreshLoadData(_ sender: Any) {
+    func refreshLoadData() {
         
         refreshControl.beginRefreshing()
         // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
@@ -104,6 +104,7 @@ class MessageViewController: UIViewController {
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)
                     self?.commentData = []
+                    self?.messageData.commentNameArray = keyArray
                     for i in 0 ..< keyArray.count {
                         let array = dataDic[keyArray[i]] as! [String:Any]
                         print(array)
@@ -114,6 +115,7 @@ class MessageViewController: UIViewController {
                         note.uid = array["uid"] as? String
                         note.postTime = array["postTime"] as? Double
                         note.nickName = array["nickName"] as? String
+
                         self?.commentData.append(note)
                         self?.commentData.sort(by: { (post1, post2) -> Bool in
                             post1.postTime ?? 0.0 > post2.postTime ?? 0.0
@@ -139,20 +141,21 @@ class MessageViewController: UIViewController {
                 guard let nickName = UserDefaults.standard.string(forKey: "nickName") else { return}
                 guard let comment = self.textView.text else {return}
                 let note = CommentData()
+                
                 let postMessage: [String : Any] = [ "comment" : comment,
                                                     "postTime": [".sv":"timestamp"],
                                                     "account" : account,
                                                     "uid" : uid,
                                                     "nickName" :nickName]
                 self.databaseRef.child("Paper").child(paperName).child("comment").child(note.commentUUID).setValue(postMessage) { (error, database) in
-                    if let error = error {
-                        assertionFailure("Fail To postMessage \(error)")
-                    }
-                    print("上傳留言成功")
+                        if let error = error {
+                            assertionFailure("Fail To postMessage \(error)")
+                        }
+                        print("上傳留言成功")
+                        self.loadData()
                 }
                 self.textView.text = ""
                 self.dismissKeyBoard()
-                self.loadData()
                 
             }else {
                 let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
@@ -183,7 +186,7 @@ class MessageViewController: UIViewController {
     
 }
 
-extension MessageViewController: UITableViewDataSource {
+extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
     
     //MARK:  UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -202,44 +205,105 @@ extension MessageViewController: UITableViewDataSource {
         }
         return cell
     }
-}
-
-extension MessageViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
-        self.view.endEditing(true)
-        print("\(indexPath.section), \(indexPath.row)")
-    }
-    
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        self.tableView.setEditing(editing, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        if let uid = Auth.auth().currentUser?.uid {
-            let note = self.commentData[indexPath.row]
-            if note.uid == uid {
-             if editingStyle == .delete {
-                 guard let paperName = self.messageData.paperName else { return}
-                 guard let commentName = note.commentName else {return}
-                    let databasePaperName = self.databaseRef.child("Paper").child(paperName)
-                    databasePaperName.child("comment").child(commentName).removeValue(completionBlock: { (error, data) in
-                        print("刪除離留言成功")
-                        self.commentData.remove(at: indexPath.row)
-                        self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                        
+        self.tableView.deselectRow(at: indexPath, animated: true)
+        print("\(indexPath.section), \(indexPath.row)")
+        let note = self.commentData[indexPath.row]
+        
+        guard let paperName = messageData.paperName else {return}
+        guard let nickName = note.nickName else {return}
+        guard let commentName = note.commentName else {return}
+        guard let comment = note.comment else {return}
+        let commentNameArray = messageData.commentNameArray
+        let databasePaper = self.databaseRef.child("Paper")
+        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+            let paperNameArray = Array(paperNameDict.keys)
+            if paperNameArray.contains(paperName) {
+                if commentNameArray.contains(commentName) {
+                    guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+                    if note.uid == uid {
+                        let controller = UIAlertController(title: "留言", message: "請選擇操作", preferredStyle: .actionSheet)
+                        let action = UIAlertAction(title: "刪除留言", style: .default) { (action) in
+                            guard let paperName = self.messageData.paperName else { return}
+                            guard let commentName = note.commentName else {return}
+                            let databasePaperName = self.databaseRef.child("Paper").child(paperName)
+                            databasePaperName.child("comment").child(commentName).removeValue(completionBlock: { (error, data) in
+                                print("刪除留言成功")
+                                self.commentData.remove(at: indexPath.row)
+                                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                            })
+                        }
+                        controller.addAction(action)
+                        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                        controller.addAction(cancelAction)
+                        self.present(controller, animated: true, completion: nil)
+                    }else {
+                        let controller = UIAlertController(title: "留言", message: "請選擇操作", preferredStyle: .actionSheet)
+                        let action = UIAlertAction(title: "檢舉留言", style: .default) { (action) in
+                            
+                            if MFMailComposeViewController.canSendMail(){
+                                let mailController = MFMailComposeViewController()
+                                mailController.mailComposeDelegate = self
+                                mailController.setSubject("檢舉留言")
+                                mailController.setToRecipients(["barrykao881@gmail.com"])
+                                mailController.setMessageBody("發文文章：\(paperName)\n留言文章：\(commentName)\n留言人姓名：\(nickName)\n留言訊息：\(comment)\n檢舉原因：", isHTML: false)
+                                self.present(mailController, animated: true, completion: nil)
+                            }else {
+                                print("send mail Fail!")
+                            }
+                        }
+                        controller.addAction(action)
+                        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                        controller.addAction(cancelAction)
+                        self.present(controller, animated: true, completion: nil)
+                    }
+                }else {
+                    print("請留言已刪除!")
+                    let alert = UIAlertController(title: "警告", message: "請留言已刪除!", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
+                        self.refreshLoadData()
                     })
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }else {
+                alertActionDismiss(controller: self, title: "警告", message: "請貼文已刪除或修改!")
 
-                 }
             }
+            
         }
+        
+        
     }
+    
+    
 }
 
 
+//MARK:MFMailComposeViewControllerDelegate
+extension MessageViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        if result == .sent {
+            alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
+        }
+        
+        if result == .cancelled {
+            controller.dismiss(animated: true)
+        }
+        if result == .saved {
+            alertAction(controller: controller, title: "儲存草稿", message: "草稿儲存成功")
+        }
+    }
+    
+    
+}
+
 extension MessageViewController: UITextViewDelegate {
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "留言......" {
             textView.text = ""
@@ -247,13 +311,7 @@ extension MessageViewController: UITextViewDelegate {
             textView.font = UIFont(name: "verdana", size: 18.0)
         }
     }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-        }
-        return true
-    }
+   
     func textViewDidChangeSelection(_ textView: UITextView) {
         if textView.text == "留言......" || textView.text == ""{
             self.postBtn?.isEnabled = false
@@ -261,6 +319,7 @@ extension MessageViewController: UITextViewDelegate {
             self.postBtn?.isEnabled = true
         }
     }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         isEditing()
         if textView.text == "" {

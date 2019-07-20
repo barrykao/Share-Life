@@ -57,8 +57,6 @@ class EditPostViewController: UIViewController {
         textView.returnKeyType = .done
         textView.delegate = self
         
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -75,7 +73,12 @@ class EditPostViewController: UIViewController {
         
     }
     
-
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        isEditing()
+        
+    }
+    
     @IBAction func saveData(_ sender: Any) {
         let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
@@ -276,14 +279,7 @@ extension EditPostViewController : UITextViewDelegate {
             textView.font = UIFont(name: "verdana", size: 18.0)
         }
     }
-    /*
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-        }
-        return true
-    }
-    */
+    
     func textViewDidChangeSelection(_ textView: UITextView) {
         if textView.text == "在想些什麼?" || textView.text == ""{
             self.navigationItem.rightBarButtonItem?.isEnabled = false
@@ -303,12 +299,7 @@ extension EditPostViewController : UITextViewDelegate {
             textView.font = UIFont(name: "verdana", size: 18.0)
         }
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        isEditing()
-        
-    }
+  
     
     func isEditing() {
         if textView.text != "在想些什麼?"{

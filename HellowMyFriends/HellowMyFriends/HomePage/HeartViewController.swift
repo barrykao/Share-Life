@@ -12,8 +12,6 @@ import FirebaseAuth
 
 class HeartViewController: UIViewController {
 
-    
-    
     @IBOutlet var tableView: UITableView!
     
     var databaseRef: DatabaseReference!

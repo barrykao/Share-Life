@@ -95,16 +95,16 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </imageView>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="BJv-Tc-P5D">
-                                                                    <rect key="frame" x="85" y="0.0" width="190" height="60"/>
+                                                                    <rect key="frame" x="85" y="0.0" width="200" height="60"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6H-DQ-GnA">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="190" height="43"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="43"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                             <nil key="textColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2019-01-01 01:01:01" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSU-8K-lvc">
-                                                                            <rect key="frame" x="0.0" y="43" width="190" height="17"/>
+                                                                            <rect key="frame" x="0.0" y="43" width="200" height="17"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="17" id="k1e-X2-Lmy"/>
                                                                             </constraints>
@@ -114,8 +114,17 @@
                                                                         </label>
                                                                     </subviews>
                                                                 </stackView>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGl-ck-1B5">
+                                                                    <rect key="frame" x="310" y="0.0" width="30" height="60"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="30" id="i4Y-w3-iZa"/>
+                                                                    </constraints>
+                                                                    <state key="normal" image="file">
+                                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    </state>
+                                                                </button>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fullScreen" translatesAutoresizingMaskIntoConstraints="NO" id="Z93-m0-k68">
-                                                                    <rect key="frame" x="300" y="0.0" width="98" height="60"/>
+                                                                    <rect key="frame" x="365" y="0.0" width="33" height="60"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="60" id="Tev-H6-tSE"/>
                                                                     </constraints>
@@ -123,8 +132,7 @@
                                                             </subviews>
                                                             <color key="backgroundColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="Z93-m0-k68" secondAttribute="trailing" id="hht-SC-mkx"/>
-                                                                <constraint firstItem="Z93-m0-k68" firstAttribute="leading" secondItem="bK1-aC-w4J" secondAttribute="leading" constant="300" id="k5k-3n-uWu"/>
+                                                                <constraint firstItem="Z93-m0-k68" firstAttribute="leading" secondItem="bK1-aC-w4J" secondAttribute="leading" constant="365" id="k5k-3n-uWu"/>
                                                             </constraints>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g6l-Bv-sHz">
@@ -231,6 +239,7 @@
                                             <outlet property="account" destination="W6H-DQ-GnA" id="K2g-Qu-f6d"/>
                                             <outlet property="collectionView" destination="2A7-Ng-6OE" id="EbT-gj-sCK"/>
                                             <outlet property="date" destination="bSU-8K-lvc" id="6Y0-wL-th0"/>
+                                            <outlet property="editBtn" destination="WGl-ck-1B5" id="hBD-Dk-dXe"/>
                                             <outlet property="heartCount" destination="2ub-WX-h0l" id="eTE-b5-dsJ"/>
                                             <outlet property="heartImageBtn" destination="zRC-ya-8xQ" id="x6R-Pt-TcR"/>
                                             <outlet property="label" destination="g6l-Bv-sHz" id="qXv-mt-KfR"/>
@@ -258,11 +267,6 @@
                         <viewLayoutGuide key="safeArea" id="wpf-ZU-WvA"/>
                     </view>
                     <navigationItem key="navigationItem" title="Share Life" id="vlx-dC-XgT">
-                        <barButtonItem key="leftBarButtonItem" image="top" id="eKV-bH-kaE">
-                            <connections>
-                                <action selector="scrollToTop:" destination="B6S-TY-9FS" id="PEw-6C-Ry3"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Item" image="refresh" id="eAv-ZV-jpN">
                             <connections>
                                 <action selector="refreshLoadData:" destination="B6S-TY-9FS" id="imU-dm-n4o"/>
@@ -582,11 +586,6 @@
                                 <action selector="backBtn:" destination="vDb-Fj-imm" id="VoS-Z2-qpm"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="refresh" id="mcp-7w-NCc">
-                            <connections>
-                                <action selector="refreshLoadData:" destination="vDb-Fj-imm" id="Ecf-Pr-0dy"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="z0X-sX-R2H" id="lTd-uB-qyL"/>
@@ -611,7 +610,7 @@
                                 <rect key="frame" x="0.0" y="64" width="414" height="672"/>
                                 <color key="backgroundColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </scrollView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="O7n-tZ-JyM">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="O7n-tZ-JyM">
                                 <rect key="frame" x="0.0" y="142" width="414" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -619,7 +618,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="192"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZDh-YG-5iZ" id="FEU-Su-J4G">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="192"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="191.66666666666666"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qgV-OY-ezz">
@@ -772,11 +771,6 @@
                                 <action selector="backBtn:" destination="GeD-UK-2f9" id="094-br-i4q"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="refresh" id="eyH-D9-vAA">
-                            <connections>
-                                <action selector="refreshLoadData:" destination="GeD-UK-2f9" id="SPY-vX-BiU"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="message" destination="SLO-Lk-ujr" id="3JY-LH-QMc"/>
@@ -853,6 +847,7 @@
         <image name="003-house" width="16" height="16"/>
         <image name="background3.jpg" width="1524.719970703125" height="2537.280029296875"/>
         <image name="emptyHeart" width="32" height="32"/>
+        <image name="file" width="32" height="32"/>
         <image name="fullScreen" width="32" height="32"/>
         <image name="member.png" width="215" height="215"/>
         <image name="next" width="32" height="32"/>
@@ -860,7 +855,6 @@
         <image name="refresh" width="32" height="32"/>
         <image name="return" width="32" height="32"/>
         <image name="send" width="32" height="32"/>
-        <image name="top" width="32" height="32"/>
         <image name="trash" width="32" height="32"/>
     </resources>
 </document>

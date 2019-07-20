@@ -16,12 +16,20 @@ var databaseRef : DatabaseReference! = Database.database().reference()
 var storageRef : StorageReference!
 
 
-func isEmpty(controller: UIViewController){
-    let alert = UIAlertController(title: "警告", message: "請輸入E-mail及密碼!", preferredStyle: .alert)
+func alertAction(controller: UIViewController, title: String, message: String){
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
     alert.addAction(okAction)
     controller.present(alert, animated: true, completion: nil)
-    
+}
+
+func alertActionDismiss(controller: UIViewController, title: String, message: String){
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+        controller.dismiss(animated: true)
+    }
+    alert.addAction(okAction)
+    controller.present(alert, animated: true, completion: nil)
 }
 
 func buttonDesign (button: AnyObject) {

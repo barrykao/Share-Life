@@ -28,10 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
-        
+      
         let tabBarController = self.window?.rootViewController as! UITabBarController
         tabBarController.selectedIndex = 1
-       
+      
         IQKeyboardManager.shared.enable = true
         print("home= \(NSHomeDirectory())")
         
@@ -46,6 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let array = dataDic[keyArray[i]] as! [String:Any]
                     let note = PaperData()
                     note.paperName = keyArray[i]
+                    note.paperNameArry = keyArray
                     note.account = array["account"] as? String
                     note.message = array["message"] as? String
                     note.date = array["date"] as? String
@@ -54,6 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     note.postTime = array["postTime"] as? Double
                     note.nickName = array["nickName"] as? String
                     if let comment = array["comment"] as? [String:Any] {
+                        note.commentNameArray = Array(comment.keys)
                         note.commentCount = comment.count
                     }else {
                         note.commentCount = 0

@@ -24,9 +24,25 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
     
     @IBOutlet var reportBtn: UIButton!
     
-    
     var databaseRef: DatabaseReference! = Database.database().reference()
     var nickName: String?
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(HomePageViewController.finishUpdate(notification:)), name: Notification.Name("AccountUpdated"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func finishUpdate(notification : Notification) {
+        
+        let note = notification.userInfo?["account"] as! PaperData
+        self.account.text = note.account
+        nickName = note.nickName
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +59,7 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         buttonDesign(button: self.account)
         buttonDesign(button: self.password)
         
-        
+        self.password.text = ""
         textFieldClearMode(textField: account)
         textFieldClearMode(textField: password)
         
@@ -65,7 +81,8 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
         UserDefaults.standard.set(self.nickName, forKey: "nickName")
     
         guard self.account.text != "" && self.password.text != "" else {
-            isEmpty(controller: self)
+//            isEmpty(controller: self)
+            alertAction(controller: self, title: "警告", message: "有空格尚未填寫!")
             return
         }
         
@@ -75,20 +92,17 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
             if error == nil {
                     print("log in!")
                     let alert = UIAlertController(title: "登入成功", message: "觀迎來到Share Life!", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
-                    self.dismiss(animated: true)
-                })
+                    let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
+                        self.dismiss(animated: true)
+                    })
                     guard let uid = Auth.auth().currentUser?.uid else {return}
                     UserDefaults.standard.set(uid, forKey: "uid")
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
 
             } else {
-                // 提示用戶從 firebase 返回了一個錯誤。
-                let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
-                let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-                alertController.addAction(defaultAction)
-                self.present(alertController, animated: true, completion: nil)
+                alertAction(controller: self, title: "錯誤", message: "帳號或密碼錯誤!")
+
             }
         }
     }
@@ -113,8 +127,8 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
             let mailController = MFMailComposeViewController()
             mailController.mailComposeDelegate = self
             mailController.setSubject("回報問題")
-            
             mailController.setToRecipients(["barrykao881@gmail.com"])
+            mailController.setMessageBody("問題：", isHTML: false)
             self.present(mailController, animated: true, completion: nil)
         }else {
             print("send mail Fail!")
@@ -138,6 +152,16 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
 //MARK:MFMailComposeViewControllerDelegate
 extension SignInViewController: MFMailComposeViewControllerDelegate{
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        dismiss(animated: true, completion: nil)
+        
+        if result == .sent {
+            alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
+        }
+        
+        if result == .cancelled {
+            controller.dismiss(animated: true)
+        }
+        if result == .saved {
+            alertAction(controller: controller, title: "儲存草稿", message: "草稿儲存成功")
+        }
     }
 }
