@@ -11,6 +11,7 @@
 		C600900022C88CC900F93F8D /* HeartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6008FFF22C88CC900F93F8D /* HeartViewController.swift */; };
 		C608C2D722B4C71100C595E8 /* SIgnInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */; };
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
+		C619DE0622E4BC720044346C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C619DE0522E4BC710044346C /* Reachability.m */; };
 		C61E7D0122D1E41F00473FA6 /* OpenSegueAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */; };
 		C64882BB22BBE4C900D0CB9E /* PostMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64882BA22BBE4C900D0CB9E /* PostMessageViewController.swift */; };
 		C64882BF22BBE6A500D0CB9E /* ReisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */; };
@@ -50,6 +51,9 @@
 		C6008FFF22C88CC900F93F8D /* HeartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartViewController.swift; sourceTree = "<group>"; };
 		C608C2D622B4C71100C595E8 /* SIgnInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIgnInViewController.swift; sourceTree = "<group>"; };
 		C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
+		C619DE0322E4BC700044346C /* HellowMyFriends-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HellowMyFriends-Bridging-Header.h"; sourceTree = "<group>"; };
+		C619DE0422E4BC710044346C /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		C619DE0522E4BC710044346C /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSegueAnimation.swift; sourceTree = "<group>"; };
 		C64882BA22BBE4C900D0CB9E /* PostMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostMessageViewController.swift; sourceTree = "<group>"; };
 		C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReisterViewController.swift; sourceTree = "<group>"; };
@@ -185,6 +189,9 @@
 				C673B5A722E01BE1000E9379 /* GoogleService-Info.plist */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
 				C6F65692226F14F000706BEA /* Info.plist */,
+				C619DE0422E4BC710044346C /* Reachability.h */,
+				C619DE0522E4BC710044346C /* Reachability.m */,
+				C619DE0322E4BC700044346C /* HellowMyFriends-Bridging-Header.h */,
 				C6A897FA22AF896F008C7BF5 /* images */,
 			);
 			path = HellowMyFriends;
@@ -233,6 +240,7 @@
 				TargetAttributes = {
 					C6F65682226F14EF00706BEA = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -299,6 +307,7 @@
 				"${BUILT_PRODUCTS_DIR}/Lightbox/Lightbox.framework",
 				"${BUILT_PRODUCTS_DIR}/PageMenu/PageMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/RSKImageCropper/RSKImageCropper.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -315,6 +324,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lightbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PageMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RSKImageCropper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -362,6 +372,7 @@
 				C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */,
 				C68439DB22DDE6AA00CDC2A6 /* UserCardView.swift in Sources */,
 				C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */,
+				C619DE0622E4BC720044346C /* Reachability.m in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
 				C65BDEA122E2C1B700DD9400 /* PrivacyViewController.swift in Sources */,
@@ -516,6 +527,7 @@
 			baseConfigurationReference = DB1E6627FB83BE45DD9ABA46 /* Pods-HellowMyFriends.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F935NPNPXP;
 				INFOPLIST_FILE = HellowMyFriends/Info.plist;
@@ -525,6 +537,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "HellowMyFriends/HellowMyFriends-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -535,6 +549,7 @@
 			baseConfigurationReference = 38C315E62EB3F4D5A78B5532 /* Pods-HellowMyFriends.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F935NPNPXP;
 				INFOPLIST_FILE = HellowMyFriends/Info.plist;
@@ -544,6 +559,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "HellowMyFriends/HellowMyFriends-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -7,9 +7,10 @@ import FirebaseAuth
 import AudioToolbox.AudioServices //加入震動反饋
 import Lightbox
 import MessageUI
+import Reachability
+
 class HomePageViewController: UIViewController ,UITableViewDataSource,UITableViewDelegate,MessageViewControllerDelegate {
-    
-    
+   
     @IBOutlet weak var tableView: UITableView!
 
     var messageButton: UIButton!
@@ -29,7 +30,8 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
 
     var touchedIndexPath : Int = 0
     var feedbackGenerator : UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .heavy)
-  
+    //先呼叫Reachability，並且讓他嘗試連線到"www.apple.com"
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -72,22 +74,28 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         heartButton.setImage(UIImage(named: "fullHeart"), for: .normal)
         heartButton.setTitleColor(UIColor.white, for: .normal)
         
-       
-
     }
     
-    
     @IBAction func refreshLoadData(_ sender: Any) {
-        
-        refreshControl.beginRefreshing()
-        // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
-        // 動畫結束之後使用 loadData()
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
-            self.tableView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            refreshControl.beginRefreshing()
+            // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
+            // 動畫結束之後使用 loadData()
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
+                
+            }) { (finish) in
+                self.loadData()
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
             
-        }) { (finish) in
-            self.loadData()
         }
+       
     }
     
     @objc func loadData(){
@@ -107,7 +115,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                         let array = dataDic[keyArray[i]] as! [String:Any]
                         let note = PaperData()
                         note.paperName = keyArray[i]
-                        note.paperNameArry = keyArray
+                        note.paperNameArray = keyArray
                         note.account = array["account"] as? String
                         note.message = array["message"] as? String
                         note.date = array["date"] as? String
@@ -279,178 +287,231 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     }
     
     @objc func editPaper(sender: UIButton) {
-        let indexTage = sender.tag / 5
-        let note = self.data[indexTage - 1]
-        guard let paperName = note.paperName else {return}
-        guard let nickName = note.nickName else {return}
-        guard let message = note.message else {return}
-
-        if note.paperNameArry.contains(paperName) {
-            let controller = UIAlertController(title: "文章", message: "請選擇操作", preferredStyle: .actionSheet)
-            let action = UIAlertAction(title: "檢舉文章", style: .default) { (action) in
-                if MFMailComposeViewController.canSendMail(){
-                    let mailController = MFMailComposeViewController()
-                    mailController.mailComposeDelegate = self
-                    mailController.setSubject("檢舉文章")
-                    mailController.setToRecipients(["barrykao881@gmail.com"])
-                    mailController.setMessageBody("發文文章：\(paperName))\n發文人姓名：\(nickName)\n文章內容：\(message)\n檢舉原因：", isHTML: false)
-                    self.present(mailController, animated: true, completion: nil)
-                }else {
-                    print("send mail Fail!")
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            let indexTage = sender.tag / 5
+            let note = self.data[indexTage - 1]
+            guard let paperName = note.paperName else {return}
+            guard let nickName = note.nickName else {return}
+            guard let message = note.message else {return}
+            
+            if note.paperNameArray.contains(paperName) {
+                let controller = UIAlertController(title: "文章", message: "請選擇操作", preferredStyle: .actionSheet)
+                let action = UIAlertAction(title: "檢舉文章", style: .default) { (action) in
+                    if MFMailComposeViewController.canSendMail(){
+                        let mailController = MFMailComposeViewController()
+                        mailController.mailComposeDelegate = self
+                        mailController.setSubject("檢舉文章")
+                        mailController.setToRecipients(["barrykao881@gmail.com"])
+                        mailController.setMessageBody("發文文章：\(paperName))\n發文人姓名：\(nickName)\n文章內容：\(message)\n檢舉原因：", isHTML: false)
+                        self.present(mailController, animated: true, completion: nil)
+                    }else {
+                        print("send mail Fail!")
+                    }
                 }
-            }
-            controller.addAction(action)
-            let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-            controller.addAction(cancelAction)
-            self.present(controller, animated: true, completion: nil)
-        }else {
-            alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
-            self.refreshLoadData(1)
-        }
-        
-        
-    }
-    @objc func messageVC() {
-        print("messageVC")
-        let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
-        let messageVC = navigationVC.topViewController as! MessageViewController
-        let note = self.data[self.index]
-        messageVC.messageData = note
-        messageVC.delegate = self
-        lightboxController.present(navigationVC, animated: true)
-    }
-    
-    @objc func heartVC() {
-        print("heartVC")
-        
-        let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "heartVC") as! UINavigationController
-        let messageVC = navigationVC.topViewController as! HeartViewController
-        let note = self.data[self.index]
-        messageVC.messageData = note
-        lightboxController.present(navigationVC, animated: true, completion: nil)
-    }
-    
-    @objc func messageVC1 (sender: UIButton) {
-      
-        let indexTag = sender.tag
-        let note = self.data[indexTag - 1]
-        guard let paperName = note.paperName else { return}
-        
-        let databasePaper = self.databaseRef.child("Paper")
-        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
-            
-            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
-            let paperNameArray = Array(paperNameDict.keys)
-            if paperNameArray.contains(paperName) {
-                let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
-                let messageVC = navigationVC.topViewController as! MessageViewController
-                messageVC.messageData = note
-                messageVC.delegate = self
-                self.present(navigationVC, animated: true)
-            
+                controller.addAction(action)
+                let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                controller.addAction(cancelAction)
+                self.present(controller, animated: true, completion: nil)
             }else {
                 alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                 self.refreshLoadData(1)
             }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
             
         }
+       
+        
+        
+    }
+    // MARK: tableVIew lightbox
+    @objc func messageVC() {
+        print("messageVC")
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            let note = self.data[self.index]
+            guard let paperName = note.paperName else { return}
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
+                    let messageVC = navigationVC.topViewController as! MessageViewController
+                    messageVC.messageData = note
+                    messageVC.delegate = self
+                    self.lightboxController.present(navigationVC, animated: true)
+                    
+                }else {
+                    alertAction(controller: self.lightboxController, title: "警告", message: "請貼文已刪除或修改!")
+                    self.refreshLoadData(1)
+                }
+                
+            }
+            
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: lightboxController, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
+        }
+        
+    }
+    @objc func heartVC() {
+        print("heartVC")
+        if checkInternetFunction() == true {
+            //write something to download
+            let note = self.data[self.index]
+            guard let paperName = note.paperName else { return}
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "heartVC") as! UINavigationController
+                    let messageVC = navigationVC.topViewController as! HeartViewController
+                    messageVC.messageData = note
+                    self.lightboxController.present(navigationVC, animated: true, completion: nil)
+                }else {
+                    alertAction(controller: self.lightboxController, title: "警告", message: "請貼文已刪除或修改!")
+                    self.refreshLoadData(1)
+                }
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: lightboxController, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
+        }
+       
+    }
+    // MARK: tableView Message
+    @objc func messageVC1 (sender: UIButton) {
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            let indexTag = sender.tag
+            let note = self.data[indexTag - 1]
+            guard let paperName = note.paperName else { return}
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "messageVC") as! UINavigationController
+                    let messageVC = navigationVC.topViewController as! MessageViewController
+                    messageVC.messageData = note
+                    messageVC.delegate = self
+                    self.present(navigationVC, animated: true)
+                    
+                }else {
+                    alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
+                    self.refreshLoadData(1)
+                }
+                
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
+        }
+        
         
     }
     @objc func heartVC1 (sender: UIButton) {
-        
-        let indexTag = sender.tag
-        let note = self.data[indexTag - 1]
-        guard let paperName = note.paperName else { return}
-        
-        let databasePaper = self.databaseRef.child("Paper")
-        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            let indexTag = sender.tag
+            let note = self.data[indexTag - 1]
+            guard let paperName = note.paperName else { return}
             
-            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
-            let paperNameArray = Array(paperNameDict.keys)
-            if paperNameArray.contains(paperName) {
-                let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "heartVC") as! UINavigationController
-                let messageVC = navigationVC.topViewController as! HeartViewController
-                messageVC.messageData = note
-                self.present(navigationVC, animated: true, completion: nil)
-            }else {
-                alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
-                self.refreshLoadData(1)
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+                
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "heartVC") as! UINavigationController
+                    let messageVC = navigationVC.topViewController as! HeartViewController
+                    messageVC.messageData = note
+                    self.present(navigationVC, animated: true, completion: nil)
+                }else {
+                    alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
+                    self.refreshLoadData(1)
+                }
+                
             }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
             
         }
+       
         
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
  
-        if segue.identifier == "heartSegue" {
-            print("heartSegue")
-            guard let index = sender as? UIButton else {return}
-            let indexPath = index.tag
-            print(indexPath)
-            let home = self.data[indexPath - 1]
-            let navigationVC = segue.destination as! UINavigationController
-            let heartVC = navigationVC.topViewController as! HeartViewController
-            heartVC.messageData = home
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            if segue.identifier == "heartSegue" {
+                print("heartSegue")
+                guard let index = sender as? UIButton else {return}
+                let indexPath = index.tag
+                print(indexPath)
+                let home = self.data[indexPath - 1]
+                let navigationVC = segue.destination as! UINavigationController
+                let heartVC = navigationVC.topViewController as! HeartViewController
+                heartVC.messageData = home
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
         }
-        
-        
+      
     }
 
+    
     @objc func heartBtnPressed(sender:UIButton) {
         
-        
-        guard let account = UserDefaults.standard.string(forKey: "account") else { return}
-        guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
-        guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
-        
-        let indexTag = (sender.tag) / 10
-        let note = self.data[indexTag - 1]
-        guard let paperName = note.paperName else { return}
-
-        let databasePaper = self.databaseRef.child("Paper")
-        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
-            
-            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
-            let paperNameArray = Array(paperNameDict.keys)
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            guard let account = UserDefaults.standard.string(forKey: "account") else { return}
+            guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+            guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+            let indexTag = (sender.tag) / 10
+            let note = self.data[indexTag - 1]
+            guard let paperName = note.paperName else { return}
+            let paperNameArray = note.paperNameArray
+            let heartUid = note.heartUid
+            let indexPath = IndexPath(row: 0, section: indexTag)
             if paperNameArray.contains(paperName) {
-                let databasePaperName = self.databaseRef.child("Paper").child(paperName)
-                let indexPath = IndexPath(row: 0, section: indexTag)
-                if note.heartUid.contains(uid) {
-                    // delete
+                if heartUid.contains(uid) {
                     guard let index = note.heartUid.firstIndex(of: uid) else {return}
-                    print(index)
-                    sender.setImage(UIImage(named: "emptyHeart"), for: .normal)
-                    databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
-                        if let error = error {
-                            assertionFailure("Fail To postMessage \(error)")
-                        }else {
-                            print("刪除離留言成功")
-                            note.heartUid.remove(at: index)
-                            note.heartCount -= 1
-                            print(note.heartCount)
-                            DispatchQueue.main.async {
-                                self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                            }
-                        }
-                    })
+                    note.heartUid.remove(at: index)
+                    note.heartCount -= 1
+                    print(note.heartCount)
+                    DispatchQueue.main.async {
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    }
                 }else {
-                    // add
-                    sender.setImage(UIImage(named: "fullHeart"), for: .normal)
-                    let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
-                                                 "account" : account,
-                                                 "uid" : uid,
-                                                 "nickName" : nickName]
-                    databasePaperName.child("heart").child(uid).setValue(heart){ (error, database) in
-                        if let error = error {
-                            assertionFailure("Fail To postMessage \(error)")
-                        }
-                        print("上傳愛心成功")
-                        note.heartUid.append(uid)
-                        note.heartCount += 1
-                        print(note.heartCount)
-                        DispatchQueue.main.async {
-                            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                        }
+                    note.heartUid.append(uid)
+                    note.heartCount += 1
+                    print(note.heartCount)
+                    DispatchQueue.main.async {
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
                 }
                 self.scaleLikeButton(sender: sender)
@@ -459,7 +520,49 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 self.refreshLoadData(1)
             }
             
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    let databasePaperName = self.databaseRef.child("Paper").child(paperName)
+                    if note.heartUid.contains(uid) {
+                        // delete
+                        guard let index = note.heartUid.firstIndex(of: uid) else {return}
+                        print(index)
+                        databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
+                            if let error = error {
+                                assertionFailure("Fail To postMessage \(error)")
+                            }else {
+                                print("刪除愛心成功")
+                            }
+                        })
+                    }else {
+                        // add
+                        let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
+                                                     "account" : account,
+                                                     "uid" : uid,
+                                                     "nickName" : nickName]
+                        databasePaperName.child("heart").child(uid).setValue(heart){ (error, database) in
+                            if let error = error {
+                                assertionFailure("Fail To postMessage \(error)")
+                            }
+                            print("上傳愛心成功")
+                        }
+                    }
+                }else {
+                    alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
+                    self.refreshLoadData(1)
+                }
+                
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
         }
+        
         
     }
     
@@ -468,46 +571,56 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         let indexPath = tappedImage.tag / 100
         // Your action
         let note = self.data[indexPath - 1]
-        
-        self.backView.frame = self.view.frame
-        self.backView.tag = 997
-        self.backView.backgroundColor = UIColor.black
-        backView.alpha = 0.3
-        self.view.addSubview(self.backView)
-        
-        let userCardView = UserCardView()
-        userCardView.tag = 998
-        userCardView.frame = CGRect(x: 12.5, y: 100, width: fullScreenSize.width - 20, height: self.userCardView.frame.size.height)
-        userCardView.mainView.layer.cornerRadius = 5.0
-        userCardView.mainView.backgroundColor = UIColor.darkGray
-        
-        userCardView.topView.backgroundColor = UIColor.darkGray
-        userCardView.topView.layer.cornerRadius = 5.0
-        userCardView.bottomView.backgroundColor = UIColor.darkGray
-        userCardView.bottomView.layer.cornerRadius = 5.0
-
-        guard let account = note.account else {return}
-        guard let nickName = note.nickName else {return}
-        guard let uid = note.uid else {return}
-     
-        let databaseUser = self.databaseRef.child("User")
-        databaseUser.child(uid).observeSingleEvent(of: .value) { (snapshot) in
-            guard let uidDict = snapshot.value as? [String:Any] else {return}
-            guard let profile = uidDict["profile"] as? String else {return}
-            userCardView.photo.image = loadImage(fileName: "\(account).jpg")
-            userCardView.photo.layer.cornerRadius = userCardView.photo.bounds.height / 2
-            userCardView.nickName.text = nickName
-            userCardView.profile.text = profile
-            userCardView.nickName.textColor = UIColor.white
-            userCardView.profile.textColor = UIColor.white
-            UIView.transition(with: self.view, duration: 0.3, options: [.transitionCrossDissolve], animations: {self.view.addSubview(userCardView)}, completion: nil)//加入此視窗
-            let cancelBT = UIButton()
-            cancelBT.tag = 999
-            cancelBT.frame = CGRect(x: self.view.center.x - 25, y: (self.view.frame.height - (self.tabBarController?.tabBar.frame.size.height)!) - 100, width: 50, height: 50)
-            cancelBT.setImage(UIImage(named: "cancel1"), for: .normal)
-            cancelBT.addTarget(self, action: #selector(self.dissMissUserCardView), for: .touchUpInside)
-            UIView.transition(with: self.view, duration: 0.3, options: [.transitionCrossDissolve], animations: {self.view.addSubview(cancelBT)}, completion: nil)//加入此視窗
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            self.backView.frame = self.view.frame
+            self.backView.tag = 997
+            self.backView.backgroundColor = UIColor.black
+            backView.alpha = 0.3
+            self.view.addSubview(self.backView)
+            
+            let userCardView = UserCardView()
+            userCardView.tag = 998
+            userCardView.frame = CGRect(x: 12.5, y: 100, width: fullScreenSize.width - 20, height: self.userCardView.frame.size.height)
+            userCardView.mainView.layer.cornerRadius = 5.0
+            userCardView.mainView.backgroundColor = UIColor.darkGray
+            
+            userCardView.topView.backgroundColor = UIColor.darkGray
+            userCardView.topView.layer.cornerRadius = 5.0
+            userCardView.bottomView.backgroundColor = UIColor.darkGray
+            userCardView.bottomView.layer.cornerRadius = 5.0
+            
+            guard let account = note.account else {return}
+            guard let nickName = note.nickName else {return}
+            guard let uid = note.uid else {return}
+            
+            let databaseUser = self.databaseRef.child("User")
+            databaseUser.child(uid).observeSingleEvent(of: .value) { (snapshot) in
+                guard let uidDict = snapshot.value as? [String:Any] else {return}
+                guard let profile = uidDict["profile"] as? String else {return}
+                userCardView.photo.image = loadImage(fileName: "\(account).jpg")
+                userCardView.photo.layer.cornerRadius = userCardView.photo.bounds.height / 2
+                userCardView.nickName.text = nickName
+                userCardView.profile.text = profile
+                userCardView.nickName.textColor = UIColor.white
+                userCardView.profile.textColor = UIColor.white
+                UIView.transition(with: self.view, duration: 0.3, options: [.transitionCrossDissolve], animations: {self.view.addSubview(userCardView)}, completion: nil)//加入此視窗
+                let cancelBT = UIButton()
+                cancelBT.tag = 999
+                cancelBT.frame = CGRect(x: self.view.center.x - 25, y: (self.view.frame.height - (self.tabBarController?.tabBar.frame.size.height)!) - 100, width: 50, height: 50)
+                cancelBT.setImage(UIImage(named: "cancel1"), for: .normal)
+                cancelBT.addTarget(self, action: #selector(self.dissMissUserCardView), for: .touchUpInside)
+                UIView.transition(with: self.view, duration: 0.3, options: [.transitionCrossDissolve], animations: {self.view.addSubview(cancelBT)}, completion: nil)//加入此視窗
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
         }
+        
+        
     }
     
     @objc func dissMissUserCardView() {
@@ -568,8 +681,14 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         feedbackGenerator?.impactOccurred()
     }
     
-    func didUpdateMessage() {
-        refreshLoadData(1)
+    func didUpdateMessage(note: PaperData) {
+        
+        guard let index = self.data.firstIndex(of: note) else {return}
+        let indexPath = IndexPath(row: 0, section: index + 1)
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        
     }
     
 }

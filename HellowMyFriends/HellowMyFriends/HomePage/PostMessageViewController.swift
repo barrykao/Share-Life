@@ -89,71 +89,81 @@ class PostMessageViewController: UIViewController ,UITextViewDelegate{
     
     @IBAction func postToServer(_ sender: Any) {
         
-        let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
             
-            if self.textView.text == "在想些什麼?"{
-                self.textView.text = ""
+            let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+                
+                if self.textView.text == "在想些什麼?"{
+                    self.textView.text = ""
+                }
+                self.currentData.message = self.textView.text
+                self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
+                self.postPhotoBtn()
+                self.dismiss(animated: true)
             }
-            self.currentData.message = self.textView.text
-            self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
-            self.postPhotoBtn()
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "發送失敗", message: "請確認您的網路連線是否正常，謝謝!")
             
-
-            self.dismiss(animated: true)
         }
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
         
     }
    
     func postPhotoBtn() {
         
-        print("postPhotoBtn")
-        for i in 0 ..< self.images.count {
-            let fileName = self.currentData.imageName[i]
-            print(fileName)
-            // save To file
-            guard let image1 = thumbmail(image: self.images[i]) else {return}
-            guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
-            // save To Server
-            guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
-            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-            let storageFileName = self.storageRef.child(account).child("\(fileName).jpg")
-            let metadata = StorageMetadata()
-            storageFileName.putData(imageData, metadata: metadata) { (data, error) in
-                print("執行putData")
-                if error != nil {
-                    assertionFailure("fail to setValue!")
-                    return
-                }
-                let now: Date = Date()
-                let dateFormat:DateFormatter = DateFormatter()
-                dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let dateString:String = dateFormat.string(from: now)
-                self.currentData.date = dateString
-                guard let message = self.textView.text else { return}
-                guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+            for i in 0 ..< self.images.count {
+                let fileName = self.currentData.imageName[i]
+                print(fileName)
+                // save To file
+                guard let image1 = thumbmail(image: self.images[i]) else {return}
+                guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
+                // save To Server
+                guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
                 guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-                guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
-                let postMessage: [String : Any] = ["account" : account,
-                                                   "nickName" : nickName,
-                                                   "date" : dateString,
-                                                   "message" : message,
-                                                   "uid" : uid,
-                                                   "photo" : self.currentData.imageName,
-                                                   "postTime": [".sv":"timestamp"]
-                                                   ]
-                self.databaseRef.setValue(postMessage) { (error, data) in
+                let storageFileName = self.storageRef.child(account).child("\(fileName).jpg")
+                let metadata = StorageMetadata()
+                storageFileName.putData(imageData, metadata: metadata) { (data, error) in
+                    print("執行putData")
                     if error != nil {
                         assertionFailure("fail to setValue!")
-                    }else {
-                        print("上傳成功")
-                        NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
+                        return
+                    }
+                    let now: Date = Date()
+                    let dateFormat:DateFormatter = DateFormatter()
+                    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let dateString:String = dateFormat.string(from: now)
+                    self.currentData.date = dateString
+                    guard let message = self.textView.text else { return}
+                    guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+                    guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                    guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+                    let postMessage: [String : Any] = ["account" : account,
+                                                       "nickName" : nickName,
+                                                       "date" : dateString,
+                                                       "message" : message,
+                                                       "uid" : uid,
+                                                       "photo" : self.currentData.imageName,
+                                                       "postTime": [".sv":"timestamp"]
+                    ]
+                    self.databaseRef.setValue(postMessage) { (error, data) in
+                        if error != nil {
+                            assertionFailure("fail to setValue!")
+                        }else {
+                            print("上傳成功")
+                            NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
+                        }
                     }
                 }
             }
-        }
+        
+        print("postPhotoBtn")
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

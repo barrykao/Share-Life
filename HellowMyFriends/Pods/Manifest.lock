@@ -85,6 +85,7 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - PageMenu (2.0.0)
+  - ReachabilitySwift (4.3.1)
   - RSKImageCropper (2.2.2)
 
 DEPENDENCIES:
@@ -97,6 +98,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - Lightbox
   - PageMenu
+  - ReachabilitySwift
   - RSKImageCropper
 
 SPEC REPOS:
@@ -120,6 +122,7 @@ SPEC REPOS:
     - Lightbox
     - nanopb
     - PageMenu
+    - ReachabilitySwift
     - RSKImageCropper
 
 SPEC CHECKSUMS:
@@ -142,8 +145,9 @@ SPEC CHECKSUMS:
   Lightbox: d317750e4132bfb871a5307cfe0a2c7d6a583c65
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PageMenu: 9c38fd7e0d9ef4b1408320f55bb907bbc0e538dc
+  ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
   RSKImageCropper: 05e3b82a18da83ea3c2b7bffa7f2199a621d6802
 
-PODFILE CHECKSUM: 82b34ea14bf0688752b1be590460253d5a9446cc
+PODFILE CHECKSUM: cb6d3ba7d5c5d7d9ca89ce6a3c2fc33012b0a868
 
 COCOAPODS: 1.6.1

@@ -80,93 +80,108 @@ class EditPostViewController: UIViewController {
     }
     
     @IBAction func saveData(_ sender: Any) {
-        let alert = UIAlertController(title: "發送貼文", message: "發送成功", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-            
-            if self.textView.text == "在想些什麼?"{
-                self.textView.text = ""
-            }
-            
-            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-            let storageRefAccount = self.storageRef.child(account)
-            let databaseRefPaper = self.databaseRef.child("Paper")
-            databaseRefPaper.child(self.currentData.paperName!).removeValue()
-            for i in 0 ..< self.currentData.imageName.count {
-                let imageName = "\(self.currentData.imageName[i]).jpg"
-                storageRefAccount.child(imageName).delete(completion: nil)
-                if checkFile(fileName: imageName) {
-                    let url = fileDocumentsPath(fileName: imageName)
-                    do{
-                        try FileManager.default.removeItem(at: url)
-                    }catch{
-                        print("error: \(error)")
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            let alert = UIAlertController(title: "編輯貼文", message: "編輯成功", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+                
+                if self.textView.text == "在想些什麼?"{
+                    self.textView.text = ""
+                }
+                
+                guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                let storageRefAccount = self.storageRef.child(account)
+                let databaseRefPaper = self.databaseRef.child("Paper")
+                databaseRefPaper.child(self.currentData.paperName!).removeValue()
+                for i in 0 ..< self.currentData.imageName.count {
+                    let imageName = "\(self.currentData.imageName[i]).jpg"
+                    storageRefAccount.child(imageName).delete(completion: nil)
+                    if checkFile(fileName: imageName) {
+                        let url = fileDocumentsPath(fileName: imageName)
+                        do{
+                            try FileManager.default.removeItem(at: url)
+                        }catch{
+                            print("error: \(error)")
+                        }
                     }
                 }
+                
+                self.currentData.imageName = []
+                for _ in 0 ..< self.images.count {
+                    let uuidString = UUID().uuidString
+                    self.currentData.imageName.append(uuidString)
+                }
+                
+                self.currentData.message = self.textView.text
+                self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
+                self.postPhotoBtn()
+                self.delegate?.didUpdatePaper()
+                self.dismiss(animated: true)
             }
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "編輯失敗", message: "請確認您的網路連線是否正常，謝謝!")
             
-            self.currentData.imageName = []
-            for _ in 0 ..< self.images.count {
-                let uuidString = UUID().uuidString
-                self.currentData.imageName.append(uuidString)
-            }
-            
-            self.currentData.message = self.textView.text
-            self.databaseRef = self.databaseRef.child("Paper").child(self.currentData.imageName[0])
-            self.postPhotoBtn()
-            self.delegate?.didUpdatePaper()
-            self.dismiss(animated: true)
         }
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
+       
       
     }
     func postPhotoBtn() {
         
-        print("postPhotoBtn")
-        for i in 0 ..< self.images.count {
-            let fileName = self.currentData.imageName[i]
-            print(fileName)
-            // save To file
-            guard let image1 = thumbmail(image: self.images[i]) else {return}
-            guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
-            // save To Server
-            guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
-            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-            guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
-            self.storageRef = Storage.storage().reference().child(account).child("\(fileName).jpg")
-            let metadata = StorageMetadata()
-            self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
-                print("執行putData")
-                if error != nil {
-                    print("Error: \(error!.localizedDescription)")
-                    return
-                }
-                let now: Date = Date()
-                let dateFormat:DateFormatter = DateFormatter()
-                dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let dateString:String = dateFormat.string(from: now)
-                guard let uid = Auth.auth().currentUser?.uid else {return}
-                guard let message = self.textView.text else { return}
+            for i in 0 ..< self.images.count {
+                let fileName = self.currentData.imageName[i]
+                print(fileName)
+                // save To file
+                guard let image1 = thumbmail(image: self.images[i]) else {return}
+                guard let image2 = thumbmailImage(image: image1, fileName: "\(fileName).jpg") else {return}
+                // save To Server
+                guard let imageData = image2.jpegData(compressionQuality: 1) else {return}
                 guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-                let postMessage: [String : Any] = ["account" : account,
-                                                   "date" : dateString,
-                                                   "message" : message,
-                                                   "nickName" : nickName,
-                                                   "uid" : uid,
-                                                   "photo" : self.currentData.imageName,
-                                                   "postTime": [".sv":"timestamp"]
-                                                  ]
-                
-                self.databaseRef.setValue(postMessage) { (error, data) in
+                guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
+                self.storageRef = Storage.storage().reference().child(account).child("\(fileName).jpg")
+                let metadata = StorageMetadata()
+                self.storageRef.putData(imageData, metadata: metadata) { (data, error) in
+                    print("執行putData")
                     if error != nil {
-                        assertionFailure()
-                    }else {
-                        print("上傳成功")
-//                        NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
+                        print("Error: \(error!.localizedDescription)")
+                        return
+                    }
+                    let now: Date = Date()
+                    let dateFormat:DateFormatter = DateFormatter()
+                    dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let dateString:String = dateFormat.string(from: now)
+                    guard let uid = Auth.auth().currentUser?.uid else {return}
+                    guard let message = self.textView.text else { return}
+                    guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                    let postMessage: [String : Any] = ["account" : account,
+                                                       "date" : dateString,
+                                                       "message" : message,
+                                                       "nickName" : nickName,
+                                                       "uid" : uid,
+                                                       "photo" : self.currentData.imageName,
+                                                       "postTime": [".sv":"timestamp"]
+                    ]
+                    
+                    self.databaseRef.setValue(postMessage) { (error, data) in
+                        if error != nil {
+                            assertionFailure()
+                        }else {
+                            print("上傳成功")
+                            //                        NotificationCenter.default.post(name: Notification.Name("NoteUpdated"), object: nil, userInfo: ["note": self.currentData!])
+                        }
                     }
                 }
             }
-        }
+        
+        print("postPhotoBtn")
+        
+        
+        
+        
     }
     @IBAction func camera(_ sender: Any) {
         

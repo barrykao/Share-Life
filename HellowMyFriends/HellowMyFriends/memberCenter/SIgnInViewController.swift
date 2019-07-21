@@ -75,21 +75,22 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
     }
     
     @IBAction func SignIn(_ sender: Any) {
-        
-        UserDefaults.standard.set(self.account.text, forKey: "account")
-        UserDefaults.standard.set(self.password.text, forKey: "password")
-        UserDefaults.standard.set(self.nickName, forKey: "nickName")
+//        checkInternet(controller: self)
     
-        guard self.account.text != "" && self.password.text != "" else {
-//            isEmpty(controller: self)
-            alertAction(controller: self, title: "警告", message: "有空格尚未填寫!")
-            return
-        }
-        
-        
-        Auth.auth().signIn(withEmail: self.account.text!, password: self.password.text!) { (user, error) in
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            UserDefaults.standard.set(self.account.text, forKey: "account")
+            UserDefaults.standard.set(self.password.text, forKey: "password")
+            UserDefaults.standard.set(self.nickName, forKey: "nickName")
             
-            if error == nil {
+            guard self.account.text != "" && self.password.text != "" else {
+                alertAction(controller: self, title: "警告", message: "有空格尚未填寫!")
+                return
+            }
+            Auth.auth().signIn(withEmail: self.account.text!, password: self.password.text!) { (user, error) in
+                
+                if error == nil {
                     print("log in!")
                     let alert = UIAlertController(title: "登入成功", message: "觀迎來到Share Life!", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
@@ -99,12 +100,17 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
                     UserDefaults.standard.set(uid, forKey: "uid")
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
-
-            } else {
-                alertAction(controller: self, title: "錯誤", message: "帳號或密碼錯誤!")
-
+                    
+                } else {
+                    alertAction(controller: self, title: "錯誤", message: "帳號或密碼錯誤!")
+                }
             }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
         }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -122,17 +128,26 @@ class SignInViewController: UIViewController ,UITextFieldDelegate ,RegisterViewC
     
     
     @IBAction func report(_ sender: Any) {
-        
-        if MFMailComposeViewController.canSendMail(){
-            let mailController = MFMailComposeViewController()
-            mailController.mailComposeDelegate = self
-            mailController.setSubject("回報問題")
-            mailController.setToRecipients(["barrykao881@gmail.com"])
-            mailController.setMessageBody("問題：", isHTML: false)
-            self.present(mailController, animated: true, completion: nil)
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            if MFMailComposeViewController.canSendMail(){
+                let mailController = MFMailComposeViewController()
+                mailController.mailComposeDelegate = self
+                mailController.setSubject("回報問題")
+                mailController.setToRecipients(["barrykao881@gmail.com"])
+                mailController.setMessageBody("問題：", isHTML: false)
+                self.present(mailController, animated: true, completion: nil)
+            }else {
+                print("send mail Fail!")
+            }
         }else {
-            print("send mail Fail!")
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
         }
+       
         
     }
     

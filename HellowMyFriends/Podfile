@@ -16,5 +16,6 @@ target 'HellowMyFriends' do
  pod 'PageMenu'
  pod 'RSKImageCropper'
  pod 'Lightbox'
+ pod 'ReachabilitySwift'
 
 end

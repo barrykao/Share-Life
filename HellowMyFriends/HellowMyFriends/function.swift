@@ -10,10 +10,35 @@ import Foundation
 import UIKit
 import Firebase
 import FirebaseAuth
-
+import Reachability
 
 var databaseRef : DatabaseReference! = Database.database().reference()
 var storageRef : StorageReference!
+var reachability = Reachability(hostName: "www.apple.com")
+
+
+//實作一個方法來檢查網路連線，讓其回傳一個布林值
+func checkInternetFunction() -> Bool {
+    if reachability?.currentReachabilityStatus().rawValue == 0 {
+        print("no internet connected.")
+        return false
+    }else {
+        print("internet connected successfully.")
+        return true
+    }
+}
+//在下載資料的函式中，可以先呼叫確認網路的函式，如果回傳的值是true，就可以開始下載。
+func checkInternet(controller: UIViewController) {
+    if checkInternetFunction() == true {
+        //write something to download
+        print("true")
+    }else {
+        //error handling when no internet
+        print("false")
+        alertAction(controller: controller, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+        
+    }
+}
 
 
 func alertAction(controller: UIViewController, title: String, message: String){

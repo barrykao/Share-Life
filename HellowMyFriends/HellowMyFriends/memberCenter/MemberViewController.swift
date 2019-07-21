@@ -18,6 +18,8 @@ protocol MemberViewControllerDelegate: class {
 }
 
 class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,UINavigationControllerDelegate ,RSKImageCropViewControllerDelegate, MessageViewControllerDelegate, EditPostViewControllerDelegate {
+
+    
    
     @IBOutlet var account: UILabel!
 
@@ -122,48 +124,57 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     override func viewDidAppear(_ animated: Bool) {
         print("viewDidAppear")
-
-        if Auth.auth().currentUser != nil {
-            print("登入成功")
-            isEdit = false
-            sendBtn.setImage(UIImage(named: "file"), for: .normal)
-            textView.isUserInteractionEnabled = false
-
-            print("顯示圖片")
-            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-            self.account.text = account
-            let fileName = "\(account).jpg"
-            let photoImage = loadImage(fileName: fileName)
-            self.imageBtn.setImage(photoImage, for: .normal)
-            imageBtn.imageView?.layer.cornerRadius = (imageBtn.imageView?.frame.height)!/2
-          
-            guard let uid = Auth.auth().currentUser?.uid else {return}
-            let databaseUid = self.databaseRef.child("User").child(uid)
-            databaseUid.observeSingleEvent(of: .value, with: { (snapshot) in
-                guard let uidDict = snapshot.value as? [String:Any] else {return}
-                guard let nickName = uidDict["nickName"] as? String else {return}
-                UserDefaults.standard.set(nickName, forKey: "nickName")
-                print(nickName)
-                self.nickName.text = nickName
-                 guard let profile = uidDict["profile"] as? String else {return}
-                if profile == "" {
-                    self.textView.text = "在想些什麼?"
-                }else {
-                    self.textView.text = profile
-                    self.textView.textColor = UIColor.black
-                    self.textView.font = UIFont(name: "verdana", size: 14.0)
+        if checkInternetFunction() == true {
+            //write something to download
+            if Auth.auth().currentUser != nil {
+                print("登入成功")
+                isEdit = false
+                sendBtn.setImage(UIImage(named: "file"), for: .normal)
+                textView.isUserInteractionEnabled = false
+                
+                print("顯示圖片")
+                guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                self.account.text = account
+                let fileName = "\(account).jpg"
+                let photoImage = loadImage(fileName: fileName)
+                self.imageBtn.setImage(photoImage, for: .normal)
+                imageBtn.imageView?.layer.cornerRadius = (imageBtn.imageView?.frame.height)!/2
+                
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                let databaseUid = self.databaseRef.child("User").child(uid)
+                databaseUid.observeSingleEvent(of: .value, with: { (snapshot) in
+                    guard let uidDict = snapshot.value as? [String:Any] else {return}
+                    guard let nickName = uidDict["nickName"] as? String else {return}
+                    UserDefaults.standard.set(nickName, forKey: "nickName")
+                    print(nickName)
+                    self.nickName.text = nickName
+                    guard let profile = uidDict["profile"] as? String else {return}
+                    if profile == "" {
+                        self.textView.text = "在想些什麼?"
+                    }else {
+                        self.textView.text = profile
+                        self.textView.textColor = UIColor.black
+                        self.textView.font = UIFont(name: "verdana", size: 14.0)
+                    }
+                })
+                
+                collectionViewReloadData()
+            }else{
+                print("尚未登入")
+                if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
+                {
+                    present(signVC, animated: true, completion: nil)
+                    self.databaseRef.removeAllObservers()
                 }
-            })
-            
-            collectionViewReloadData()
-        }else{
-            print("尚未登入")
-            if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
-            {
-                present(signVC, animated: true, completion: nil)
-                self.databaseRef.removeAllObservers()
             }
+            print("true")
+          
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
         }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -171,15 +182,26 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     }
     
     @IBAction func refreshBtn(_ sender: Any) {
-        refreshControl.beginRefreshing()
-        // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
-        // 動畫結束之後使用 loadData()
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
-            self.collectionView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
-            
-        }) { (finish) in
-            self.collectionViewReloadData()
+        
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            refreshControl.beginRefreshing()
+            // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
+            // 動畫結束之後使用 loadData()
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                self.collectionView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
+                
+            }) { (finish) in
+                self.collectionViewReloadData()
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
         }
+        
+       
     }
     
     @objc func collectionViewReloadData() {
@@ -264,28 +286,37 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     
     @IBAction func imageBtn(_ sender: Any) {
         
-//        imagePicker1.delegate = self
-        
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        
-        let controller = UIAlertController(title: "變更圖片", message: "請選擇要上傳的照片或啟用相機", preferredStyle: .actionSheet)
-        let names = ["照片圖庫", "相機"]
-        for name in names {
-            let action = UIAlertAction(title: name, style: .default) { (action) in
-                if action.title == "照片圖庫" {
-                    imagePicker.sourceType = .savedPhotosAlbum
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            
+            let controller = UIAlertController(title: "變更圖片", message: "請選擇要上傳的照片或啟用相機", preferredStyle: .actionSheet)
+            let names = ["照片圖庫", "相機"]
+            for name in names {
+                let action = UIAlertAction(title: name, style: .default) { (action) in
+                    if action.title == "照片圖庫" {
+                        imagePicker.sourceType = .savedPhotosAlbum
+                    }
+                    if action.title == "相機" {
+                        imagePicker.sourceType = .camera
+                    }
+                    self.present(imagePicker, animated: true, completion: nil)
                 }
-                if action.title == "相機" {
-                    imagePicker.sourceType = .camera
-                }
-                self.present(imagePicker, animated: true, completion: nil)
+                controller.addAction(action)
             }
-            controller.addAction(action)
+            let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+            controller.addAction(cancelAction)
+            self.present(controller, animated: true, completion: nil)
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
         }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        controller.addAction(cancelAction)
-        self.present(controller, animated: true, completion: nil)
+        
+       
         
         
     }
@@ -334,61 +365,81 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         for name in names {
             let action = UIAlertAction(title: name, style: .default) { (action) in
                 if action.title == "編輯貼文" {
-                    if let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "EditPostVC") as? UINavigationController
-                    {
-                        print("編輯貼文")
-                        self.dismiss(animated: true)
-                        let current = self.memberData[self.index]
-                        let editPostVC = navigationVC.topViewController as! EditPostViewController
-                        editPostVC.currentData = current
-                        editPostVC.images = self.images
-                        editPostVC.delegate = self
-                        self.present(navigationVC, animated: true, completion: nil)
+                    if checkInternetFunction() == true {
+                        //write something to download
+                        print("true")
+                        if let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "EditPostVC") as? UINavigationController
+                        {
+                            print("編輯貼文")
+                            self.dismiss(animated: true)
+                            let current = self.memberData[self.index]
+                            let editPostVC = navigationVC.topViewController as! EditPostViewController
+                            editPostVC.currentData = current
+                            editPostVC.images = self.images
+                            editPostVC.delegate = self
+                            self.present(navigationVC, animated: true, completion: nil)
+                            
+                        }
+                    }else {
+                        //error handling when no internet
+                        print("false")
+                        alertAction(controller: self.lightboxController, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
                         
                     }
+                  
                     
                 }
                 if action.title == "刪除貼文" {
-                    print("刪除貼文")
-                    // ....
-                    let controller = UIAlertController(title: "刪除貼文", message: "請問是否確認刪除貼文", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
-                        print("Yes")
-                        let currentData = self.memberData[self.index]
-                        guard let account = UserDefaults.standard.string(forKey: "account") else {return}
-                        let storageRefAccount = self.storageRef.child(account)
-                        let databaseRefPaper = self.databaseRef.child("Paper")
-                        databaseRefPaper.child(currentData.paperName!).removeValue()
-                        for i in 0 ..< currentData.imageName.count {
-                            let imageName = "\(currentData.imageName[i]).jpg"
-                            storageRefAccount.child(imageName).delete(completion: { (error) in
-                                if let error = error {
-                                    print("error: \(error)")
-                                }
-                                if checkFile(fileName: imageName) {
-                                    let url = fileDocumentsPath(fileName: imageName)
-                                    do{
-                                        try FileManager.default.removeItem(at: url)
-                                        if i == currentData.imageName.count - 1 {
-                                            DispatchQueue.main.async {
-                                                self.collectionView.reloadData()
-                                            }
-                                        }
-                                    }catch{
+                    if checkInternetFunction() == true {
+                        //write something to download
+                        print("true")
+                        let controller = UIAlertController(title: "刪除貼文", message: "請問是否確認刪除貼文", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                            print("Yes")
+                            let currentData = self.memberData[self.index]
+                            guard let account = UserDefaults.standard.string(forKey: "account") else {return}
+                            let storageRefAccount = self.storageRef.child(account)
+                            let databaseRefPaper = self.databaseRef.child("Paper")
+                            databaseRefPaper.child(currentData.paperName!).removeValue()
+                            for i in 0 ..< currentData.imageName.count {
+                                let imageName = "\(currentData.imageName[i]).jpg"
+                                storageRefAccount.child(imageName).delete(completion: { (error) in
+                                    if let error = error {
                                         print("error: \(error)")
                                     }
-                                }
-                            })
+                                    if checkFile(fileName: imageName) {
+                                        let url = fileDocumentsPath(fileName: imageName)
+                                        do{
+                                            try FileManager.default.removeItem(at: url)
+                                            if i == currentData.imageName.count - 1 {
+                                                DispatchQueue.main.async {
+                                                    self.collectionView.reloadData()
+                                                }
+                                            }
+                                        }catch{
+                                            print("error: \(error)")
+                                        }
+                                    }
+                                })
+                                
+                            }
+                            self.memberData.remove(at: self.index)
+                            self.dismiss(animated: true)
                             
                         }
-                        self.memberData.remove(at: self.index)
-                        self.dismiss(animated: true)
+                        controller.addAction(okAction)
+                        let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
+                        controller.addAction(cancelAction)
+                        self.lightboxController.present(controller, animated: true, completion: nil)
+                    }else {
+                        //error handling when no internet
+                        print("false")
+                        alertAction(controller: self.lightboxController, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
                         
                     }
-                    controller.addAction(okAction)
-                    let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
-                    controller.addAction(cancelAction)
-                    self.lightboxController.present(controller, animated: true, completion: nil)
+                    print("刪除貼文")
+                    // ....
+                   
                 }
             }
             controller.addAction(action)
@@ -401,25 +452,35 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
     }
     
     @IBAction func signOut(_ sender: Any) {
-        
-        let alert = UIAlertController(title: "登出成功", message: "希望您再次使用", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-       
-            if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
-            {
-                self.present(signVC, animated: true, completion: nil)
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            let alert = UIAlertController(title: "登出成功", message: "希望您再次使用", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+                
+                if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
+                {
+                    self.present(signVC, animated: true, completion: nil)
+                }
+                self.imageBtn.imageView?.image = UIImage(named: "member.png")
             }
-            self.imageBtn.imageView?.image = UIImage(named: "member.png")
-        }
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: {
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: {
+                
+                do {
+                    try Auth.auth().signOut()
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            })
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
             
-            do {
-                try Auth.auth().signOut()
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
-        })
+        }
+       
+        
     }
     
     func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
@@ -436,7 +497,6 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         self.imageBtn.setImage(photoImage, for: .normal)
       
         // upload to firebase
-        
         let now:Date = Date()
         let dateFormat:DateFormatter = DateFormatter()
         dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -479,9 +539,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             })
         }
         
-        
         controller.dismiss(animated: true)
-        
         
     }
     
@@ -492,47 +550,63 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             sendBtn.setImage(UIImage(named: "save"), for: .normal)
             textView.isUserInteractionEnabled = true
         }else {
-            let alert = UIAlertController(title: "送出成功", message: "已成功修改個人簡介", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-                
-                guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
-                let databaseUser = self.databaseRef.child("User").child(uid)
-                let profile: [String:Any] = ["profile" : self.textView.text!]
-                databaseUser.updateChildValues(profile) { (error, data) in
-                    if let error = error {
-                        print("error: \(error)")
-                    }else {
-                        print("個人簡介上傳成功")
-                        self.sendBtn.setImage(UIImage(named: "file"), for: .normal)
-                        self.textView.isUserInteractionEnabled = false
+            if checkInternetFunction() == true {
+                //write something to download
+                print("true")
+                let alert = UIAlertController(title: "編輯個人簡介", message: "編輯成功", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+                    
+                    guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+                    let databaseUser = self.databaseRef.child("User").child(uid)
+                    let profile: [String:Any] = ["profile" : self.textView.text!]
+                    databaseUser.updateChildValues(profile) { (error, data) in
+                        if let error = error {
+                            print("error: \(error)")
+                        }else {
+                            print("個人簡介上傳成功")
+                            self.sendBtn.setImage(UIImage(named: "file"), for: .normal)
+                            self.textView.isUserInteractionEnabled = false
+                        }
                     }
+                    
                 }
-                
+                alert.addAction(okAction)
+                self.present(alert, animated: true)
+            }else {
+                //error handling when no internet
+                print("false")
+                alertAction(controller: self, title: "編輯失敗", message: "請確認您的網路連線是否正常，謝謝!")
             }
-            alert.addAction(okAction)
-            self.present(alert, animated: true)
         }
     }
     
     @IBAction func reportBtn(_ sender: Any) {
-        
-        if MFMailComposeViewController.canSendMail(){
-            let mailController = MFMailComposeViewController()
-            mailController.mailComposeDelegate = self
-            mailController.setSubject("回報問題")
-            mailController.setToRecipients(["barrykao881@gmail.com"])
-            mailController.setMessageBody("問題：", isHTML: false)
-            self.present(mailController, animated: true, completion: nil)
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            if MFMailComposeViewController.canSendMail(){
+                let mailController = MFMailComposeViewController()
+                mailController.mailComposeDelegate = self
+                mailController.setSubject("回報問題")
+                mailController.setToRecipients(["barrykao881@gmail.com"])
+                mailController.setMessageBody("問題：", isHTML: false)
+                self.present(mailController, animated: true, completion: nil)
+            }else {
+                print("send mail Fail!")
+            }
         }else {
-            print("send mail Fail!")
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            
         }
+       
         
     }
     
-    func didUpdateMessage() {
+    func didUpdateMessage(note: PaperData) {
         refreshBtn(1)
     }
-    
     func didUpdatePaper() {
         refreshBtn(1)
     }
@@ -593,6 +667,7 @@ extension MemberViewController : UICollectionViewDataSource, UICollectionViewDel
             self.heartButton.alpha = self.flag ? 1.0 : 0.0
             self.editButton.alpha = self.flag ? 1.0 : 0.0
         })
+        
         messageButton.addTarget(self, action: #selector(messageVC), for: .touchUpInside)
         heartButton.addTarget(self, action: #selector(heartVC), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(editVC), for: .touchUpInside)
@@ -649,7 +724,6 @@ extension MemberViewController: MFMailComposeViewControllerDelegate{
         if result == .sent {
             alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
         }
-        
         if result == .cancelled {
             controller.dismiss(animated: true)
         }

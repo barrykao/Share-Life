@@ -41,18 +41,27 @@ class ResetPasswordViewController: UIViewController ,UITextFieldDelegate {
     
     @IBAction func send(_ sender: Any) {
         
-        if self.emailText.text == "" {
-            alertAction(controller: self, title: "警告", message: "請輸入E-mail")
-        } else {
-            Auth.auth().sendPasswordReset(withEmail: self.emailText.text!, completion: { (error) in
-                if error == nil {
-                    self.emailText.text = ""
-                    alertActionDismiss(controller: self, title: "成功", message: "已成功將驗證信件寄送至您的信箱")
-                } else {
-                    alertAction(controller: self, title: "失敗", message: "請輸入正確的E-mail")
-                }
-            })
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            if self.emailText.text == "" {
+                alertAction(controller: self, title: "警告", message: "請輸入E-mail")
+            } else {
+                Auth.auth().sendPasswordReset(withEmail: self.emailText.text!, completion: { (error) in
+                    if error == nil {
+                        self.emailText.text = ""
+                        alertActionDismiss(controller: self, title: "成功", message: "已成功將驗證信件寄送至您的信箱")
+                    } else {
+                        alertAction(controller: self, title: "失敗", message: "請輸入正確的E-mail")
+                    }
+                })
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
         }
+        
     }
 
     @IBAction func back(_ sender: Any) {

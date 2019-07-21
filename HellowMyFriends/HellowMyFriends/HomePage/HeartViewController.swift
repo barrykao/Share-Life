@@ -33,16 +33,25 @@ class HeartViewController: UIViewController {
         refreshLoadData(1)
     }
     @IBAction func refreshLoadData(_ sender: Any) {
-        
-        refreshControl.beginRefreshing()
-        // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
-        // 動畫結束之後使用 loadData()
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
-            self.tableView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            refreshControl.beginRefreshing()
+            // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
+            // 動畫結束之後使用 loadData()
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
+                
+            }) { (finish) in
+                self.loadData()
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
             
-        }) { (finish) in
-            self.loadData()
         }
+       
     }
     @objc func loadData(){
         // 這邊我們用一個延遲讀取的方法，來模擬網路延遲效果（延遲3秒）

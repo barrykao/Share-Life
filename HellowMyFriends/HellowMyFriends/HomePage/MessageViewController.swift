@@ -12,7 +12,7 @@ import FirebaseAuth
 import MessageUI
 
 protocol MessageViewControllerDelegate: class {
-    func didUpdateMessage()
+    func didUpdateMessage(note: PaperData)
 }
 
 class MessageViewController: UIViewController {
@@ -79,15 +79,24 @@ class MessageViewController: UIViewController {
     }
     
     func refreshLoadData() {
-        
-        refreshControl.beginRefreshing()
-        // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
-        // 動畫結束之後使用 loadData()
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
-            self.tableView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
-        }) { (finish) in
-            self.loadData()
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            refreshControl.beginRefreshing()
+            // 使用 UIView.animate 彈性效果，並且更改 TableView 的 ContentOffset 使其位移
+            // 動畫結束之後使用 loadData()
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -self.refreshControl.bounds.height)
+            }) { (finish) in
+                self.loadData()
+            }
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
         }
+      
+        
     }
     
     @objc func loadData(){
@@ -130,48 +139,59 @@ class MessageViewController: UIViewController {
     
     @IBAction func postBtn(_ sender: Any) {
         
-        guard let paperName = messageData.paperName else {return}
-        let databasePaper = self.databaseRef.child("Paper")
-        databasePaper.observeSingleEvent(of: .value) { (snapshot) in
-            guard let paperNameDict = snapshot.value as? [String:Any] else {return}
-            let paperNameArray = Array(paperNameDict.keys)
-            if paperNameArray.contains(paperName) {
-                guard let uid = Auth.auth().currentUser?.uid else { return}
-                guard let account = UserDefaults.standard.string(forKey: "account") else { return}
-                guard let nickName = UserDefaults.standard.string(forKey: "nickName") else { return}
-                guard let comment = self.textView.text else {return}
-                let note = CommentData()
-                
-                let postMessage: [String : Any] = [ "comment" : comment,
-                                                    "postTime": [".sv":"timestamp"],
-                                                    "account" : account,
-                                                    "uid" : uid,
-                                                    "nickName" :nickName]
-                self.databaseRef.child("Paper").child(paperName).child("comment").child(note.commentUUID).setValue(postMessage) { (error, database) in
+        if checkInternetFunction() == true {
+            //write something to download
+            print("true")
+            guard let paperName = messageData.paperName else {return}
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    guard let uid = Auth.auth().currentUser?.uid else { return}
+                    guard let account = UserDefaults.standard.string(forKey: "account") else { return}
+                    guard let nickName = UserDefaults.standard.string(forKey: "nickName") else { return}
+                    guard let comment = self.textView.text else {return}
+                    self.messageData.commentCount += 1
+                    let note = CommentData()
+                    
+                    let postMessage: [String : Any] = [ "comment" : comment,
+                                                        "postTime": [".sv":"timestamp"],
+                                                        "account" : account,
+                                                        "uid" : uid,
+                                                        "nickName" :nickName]
+                    self.databaseRef.child("Paper").child(paperName).child("comment").child(note.commentUUID).setValue(postMessage) { (error, database) in
                         if let error = error {
                             assertionFailure("Fail To postMessage \(error)")
                         }
                         print("上傳留言成功")
                         self.loadData()
+                    }
+                    self.textView.text = ""
+                    self.dismissKeyBoard()
+                    self.delegate?.didUpdateMessage(note: self.messageData)
+                    
+                }else {
+                    let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
+                        self.dismiss(animated: true)
+                    })
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
                 }
-                self.textView.text = ""
-                self.dismissKeyBoard()
                 
-            }else {
-                let alert = UIAlertController(title: "警告", message: "請貼文已刪除或修改!", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "ok", style: .default, handler: { (ok) in
-                    self.dismiss(animated: true)
-                })
-                alert.addAction(okAction)
-                self.present(alert, animated: true, completion: nil)
             }
-            
+        }else {
+            //error handling when no internet
+            print("false")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
         }
+        
+        
         
     }
     
     @IBAction func backBtn(_ sender: Any) {
-        self.delegate?.didUpdateMessage()
         self.dismiss(animated: true)
 
     }

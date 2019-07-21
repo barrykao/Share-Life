@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import IQKeyboardManagerSwift
 import FirebaseAuth
+import Reachability
 
 
 @UIApplicationMain
@@ -21,11 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var paperData : [PaperData] = []
     var userData: [UserData] = []
     
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        
         FirebaseApp.configure()
-
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
       
@@ -46,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let array = dataDic[keyArray[i]] as! [String:Any]
                     let note = PaperData()
                     note.paperName = keyArray[i]
-                    note.paperNameArry = keyArray
+                    note.paperNameArray = keyArray
                     note.account = array["account"] as? String
                     note.message = array["message"] as? String
                     note.date = array["date"] as? String
