@@ -18,10 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background3.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="0kC-e8-sBT">
-                                <rect key="frame" x="0.0" y="64" width="414" height="628"/>
-                            </imageView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FMC-RI-WTy">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FMC-RI-WTy">
                                 <rect key="frame" x="10" y="329" width="394" height="397"/>
                                 <color key="backgroundColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="dwJ-Fh-tv3">
@@ -212,19 +209,15 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FMC-RI-WTy" firstAttribute="leading" secondItem="5eI-RT-q9A" secondAttribute="leading" constant="10" id="0fE-vf-cZB"/>
-                            <constraint firstItem="0kC-e8-sBT" firstAttribute="leading" secondItem="B2T-fH-qIc" secondAttribute="leading" id="FVl-sL-wIM"/>
                             <constraint firstItem="5eI-RT-q9A" firstAttribute="trailing" secondItem="0E8-pk-FyT" secondAttribute="trailing" constant="8" id="Ncr-xR-jwd"/>
                             <constraint firstItem="5eI-RT-q9A" firstAttribute="trailing" secondItem="zVU-8u-efW" secondAttribute="trailing" constant="8" id="UDR-1l-q7r"/>
                             <constraint firstItem="zVU-8u-efW" firstAttribute="leading" secondItem="5eI-RT-q9A" secondAttribute="leading" constant="8" id="VHG-Vu-wA0"/>
                             <constraint firstItem="5eI-RT-q9A" firstAttribute="trailing" secondItem="FMC-RI-WTy" secondAttribute="trailing" constant="10" id="bBj-0h-oBx"/>
                             <constraint firstItem="0E8-pk-FyT" firstAttribute="leading" secondItem="5eI-RT-q9A" secondAttribute="leading" constant="8" id="biH-1O-Ece"/>
-                            <constraint firstAttribute="trailing" secondItem="0kC-e8-sBT" secondAttribute="trailing" id="frq-SI-nDc"/>
-                            <constraint firstItem="0kC-e8-sBT" firstAttribute="top" secondItem="5eI-RT-q9A" secondAttribute="top" id="hKE-9d-Sym"/>
                             <constraint firstItem="FMC-RI-WTy" firstAttribute="top" secondItem="zVU-8u-efW" secondAttribute="bottom" constant="5" id="hgP-B2-Sml"/>
                             <constraint firstItem="zVU-8u-efW" firstAttribute="top" secondItem="0E8-pk-FyT" secondAttribute="bottom" constant="8" id="kMK-Y3-Z4b"/>
                             <constraint firstItem="0E8-pk-FyT" firstAttribute="top" secondItem="5eI-RT-q9A" secondAttribute="top" constant="10" id="nog-6p-Tob"/>
                             <constraint firstItem="5eI-RT-q9A" firstAttribute="bottom" secondItem="FMC-RI-WTy" secondAttribute="bottom" constant="10" id="tDB-dt-8ZT"/>
-                            <constraint firstAttribute="bottom" secondItem="0kC-e8-sBT" secondAttribute="bottom" constant="44" id="zm3-Bn-hOr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5eI-RT-q9A"/>
                     </view>
@@ -327,7 +320,7 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="C6G-2b-uuC">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="C6G-2b-uuC">
                                 <rect key="frame" x="0.0" y="384" width="414" height="308"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Aic-Nc-ii5">
