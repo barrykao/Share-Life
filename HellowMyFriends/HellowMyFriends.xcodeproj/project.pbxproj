@@ -27,7 +27,6 @@
 		C65F50C922C22E2D00CAB067 /* register.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50C822C22E2D00CAB067 /* register.png */; };
 		C65F50CD22C22E8400CAB067 /* reset.png in Resources */ = {isa = PBXBuildFile; fileRef = C65F50CC22C22E8300CAB067 /* reset.png */; };
 		C65F510B22C5D26C00CAB067 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */; };
-		C673B5A822E01BE1000E9379 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C673B5A722E01BE1000E9379 /* GoogleService-Info.plist */; };
 		C673B5AD22E068A9000E9379 /* member.png in Resources */ = {isa = PBXBuildFile; fileRef = C673B5AC22E068A8000E9379 /* member.png */; };
 		C67AF9AC22ABAF44001E51E4 /* MemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */; };
 		C67D83D922DC6D3B00EE1109 /* background3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C67D83D822DC6D3B00EE1109 /* background3.jpg */; };
@@ -38,6 +37,7 @@
 		C6CF777B22CD1B04004FFE6C /* photoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C6CF777A22CD1B03004FFE6C /* photoImage.png */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */; };
+		C6EE44CB22E57E3800B5E974 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6EE44CA22E57E3700B5E974 /* GoogleService-Info.plist */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
 		C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F65686226F14EF00706BEA /* AppDelegate.swift */; };
 		C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568A226F14EF00706BEA /* Main.storyboard */; };
@@ -69,7 +69,6 @@
 		C65F50C822C22E2D00CAB067 /* register.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register.png; sourceTree = "<group>"; };
 		C65F50CC22C22E8300CAB067 /* reset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reset.png; sourceTree = "<group>"; };
 		C65F510A22C5D26B00CAB067 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
-		C673B5A722E01BE1000E9379 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C673B5AC22E068A8000E9379 /* member.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = member.png; sourceTree = "<group>"; };
 		C67AF9AB22ABAF44001E51E4 /* MemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewController.swift; sourceTree = "<group>"; };
 		C67D83D822DC6D3B00EE1109 /* background3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background3.jpg; sourceTree = "<group>"; };
@@ -80,6 +79,7 @@
 		C6CF777A22CD1B03004FFE6C /* photoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photoImage.png; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		C6EE44CA22E57E3700B5E974 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C6F3F486227C557400D4F246 /* function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = function.swift; sourceTree = "<group>"; };
 		C6F65683226F14EF00706BEA /* HellowMyFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellowMyFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6F65686226F14EF00706BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -186,8 +186,8 @@
 				C65EB18222B642B00093AAC6 /* HomePage */,
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
-				C673B5A722E01BE1000E9379 /* GoogleService-Info.plist */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
+				C6EE44CA22E57E3700B5E974 /* GoogleService-Info.plist */,
 				C6F65692226F14F000706BEA /* Info.plist */,
 				C619DE0422E4BC710044346C /* Reachability.h */,
 				C619DE0522E4BC710044346C /* Reachability.m */,
@@ -269,7 +269,6 @@
 			files = (
 				C65F50CD22C22E8400CAB067 /* reset.png in Resources */,
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
-				C673B5A822E01BE1000E9379 /* GoogleService-Info.plist in Resources */,
 				C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */,
 				C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */,
 				C673B5AD22E068A9000E9379 /* member.png in Resources */,
@@ -277,6 +276,7 @@
 				C65F50C922C22E2D00CAB067 /* register.png in Resources */,
 				C65BDE9F22E1A21E00DD9400 /* background4.jpeg in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
+				C6EE44CB22E57E3800B5E974 /* GoogleService-Info.plist in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
 				C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */,
 				C6CF777B22CD1B04004FFE6C /* photoImage.png in Resources */,
