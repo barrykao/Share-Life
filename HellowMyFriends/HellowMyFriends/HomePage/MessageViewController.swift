@@ -37,7 +37,7 @@ class MessageViewController: UIViewController {
     var refreshControl:UIRefreshControl!
     var isEdit: Bool = false
     var delegate: MessageViewControllerDelegate?
-    
+    var index: Int!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -231,7 +231,7 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
         self.tableView.deselectRow(at: indexPath, animated: true)
         print("\(indexPath.section), \(indexPath.row)")
         let note = self.commentData[indexPath.row]
-        
+        self.index = indexPath.row
         guard let paperName = messageData.paperName else {return}
         guard let nickName = note.nickName else {return}
         guard let commentName = note.commentName else {return}
@@ -309,6 +309,15 @@ extension MessageViewController: MFMailComposeViewControllerDelegate {
         
         if result == .sent {
             alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
+            let note = self.commentData[self.index]
+            guard let paperName = self.messageData.paperName else { return}
+            guard let commentName = note.commentName else {return}
+            let databasePaperName = self.databaseRef.child("Paper").child(paperName)
+            databasePaperName.child("comment").child(commentName).removeValue(completionBlock: { (error, data) in
+                print("刪除留言成功")
+                self.refreshLoadData()
+            })
+            
         }
         
         if result == .cancelled {

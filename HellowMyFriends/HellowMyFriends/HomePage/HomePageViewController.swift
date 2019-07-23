@@ -27,7 +27,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     var flag: Bool = true
     var index: Int!
     var lightboxController: LightboxController = LightboxController()
-
+    var indexEdit: Int!
     var touchedIndexPath : Int = 0
     var feedbackGenerator : UIImpactFeedbackGenerator? = UIImpactFeedbackGenerator(style: .heavy)
     //先呼叫Reachability，並且讓他嘗試連線到"www.apple.com"
@@ -291,8 +291,9 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         if checkInternetFunction() == true {
             //write something to download
             print("true")
-            let indexTage = sender.tag / 5
-            let note = self.data[indexTage - 1]
+            let indexTag = sender.tag / 5
+            self.indexEdit = indexTag
+            let note = self.data[indexTag - 1]
             guard let paperName = note.paperName else {return}
             guard let nickName = note.nickName else {return}
             guard let message = note.message else {return}
@@ -734,6 +735,20 @@ extension HomePageViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         if result == .sent {
             alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
+            
+            let note = self.data[indexEdit - 1]
+            guard let paperName = note.paperName else {return}
+            let databasePaper = self.databaseRef.child("Paper")
+            databasePaper.child(paperName).removeValue { (error, data) in
+                if let error = error {
+                    print("error: \(error)")
+                }
+                print("檢舉成功")
+                self.refreshLoadData(1)
+            }
+//            let indexPath = IndexPath(row: 0, section: indexEdit - 1)
+//            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            
         }
         
         if result == .cancelled {
