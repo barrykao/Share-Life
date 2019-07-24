@@ -129,7 +129,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             if Auth.auth().currentUser != nil {
                 print("登入成功")
                 isEdit = false
-                sendBtn.setImage(UIImage(named: "file"), for: .normal)
+//                sendBtn.setImage(UIImage(named: "file"), for: .normal)
+                sendBtn.setTitle("編輯", for: .normal)
                 textView.isUserInteractionEnabled = false
                 
                 print("顯示圖片")
@@ -431,6 +432,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
                         controller.addAction(cancelAction)
                         self.lightboxController.present(controller, animated: true, completion: nil)
+                        
                     }else {
                         //error handling when no internet
                         print("false")
@@ -455,24 +457,40 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         if checkInternetFunction() == true {
             //write something to download
             print("true")
-            let alert = UIAlertController(title: "登出成功", message: "希望您再次使用", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
-                
-                if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
-                {
-                    self.present(signVC, animated: true, completion: nil)
+            let controller = UIAlertController(title: "登出", message: "請問是否確認登出", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                print("Yes")
+                let alert = UIAlertController(title: "登出成功", message: "希望您再次使用", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+                    
+                    if let signVC = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as? SignInViewController
+                    {
+                        self.present(signVC, animated: true, completion: nil)
+                    }
+                    self.imageBtn.imageView?.image = UIImage(named: "member.png")
                 }
-                self.imageBtn.imageView?.image = UIImage(named: "member.png")
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: {
+                    do {
+                        try Auth.auth().signOut()
+                    } catch let error as NSError {
+                        print(error.localizedDescription)
+                    }
+                })
+                
+                
+//                self.dismiss(animated: true)
+                
             }
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: {
-                
-                do {
-                    try Auth.auth().signOut()
-                } catch let error as NSError {
-                    print(error.localizedDescription)
-                }
-            })
+            controller.addAction(okAction)
+            let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
+            controller.addAction(cancelAction)
+            self.present(controller, animated: true, completion: nil)
+            
+            
+            
+            
+            
         }else {
             //error handling when no internet
             print("false")
@@ -547,13 +565,14 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
         
         isEdit = !isEdit
         if isEdit {
-            sendBtn.setImage(UIImage(named: "save"), for: .normal)
+//            sendBtn.setImage(UIImage(named: "save"), for: .normal)
+            sendBtn.setTitle("儲存", for: .normal)
             textView.isUserInteractionEnabled = true
         }else {
             if checkInternetFunction() == true {
                 //write something to download
                 print("true")
-                let alert = UIAlertController(title: "編輯個人簡介", message: "編輯成功", preferredStyle: .alert)
+                let alert = UIAlertController(title: "編輯個人簡介", message: "儲存成功", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
                     
                     guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
@@ -564,7 +583,8 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                             print("error: \(error)")
                         }else {
                             print("個人簡介上傳成功")
-                            self.sendBtn.setImage(UIImage(named: "file"), for: .normal)
+//                            self.sendBtn.setImage(UIImage(named: "file"), for: .normal)
+                            self.sendBtn.setTitle("編輯", for: .normal)
                             self.textView.isUserInteractionEnabled = false
                         }
                     }
@@ -575,7 +595,7 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
             }else {
                 //error handling when no internet
                 print("false")
-                alertAction(controller: self, title: "編輯失敗", message: "請確認您的網路連線是否正常，謝謝!")
+                alertAction(controller: self, title: "儲存失敗", message: "請確認您的網路連線是否正常，謝謝!")
             }
         }
     }

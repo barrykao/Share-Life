@@ -155,8 +155,11 @@
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     </textView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Us0-IP-7a3">
-                                                        <rect key="frame" x="146" y="0.0" width="32" height="32"/>
-                                                        <state key="normal" image="file"/>
+                                                        <rect key="frame" x="148" y="0.0" width="30" height="28"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <state key="normal" title="編輯">
+                                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="sendBtn:" destination="A6p-q6-AKt" eventType="touchUpInside" id="k8m-MY-h1z"/>
                                                         </connections>
@@ -911,7 +914,6 @@
     <resources>
         <image name="background.jpg" width="700" height="1050"/>
         <image name="background3.jpg" width="1524.719970703125" height="2537.280029296875"/>
-        <image name="file" width="32" height="32"/>
         <image name="first.png" width="823" height="482"/>
         <image name="fullHeart" width="32" height="32"/>
         <image name="logout" width="32" height="32"/>

@@ -13,6 +13,7 @@
 		C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */; };
 		C619DE0622E4BC720044346C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C619DE0522E4BC710044346C /* Reachability.m */; };
 		C61E7D0122D1E41F00473FA6 /* OpenSegueAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */; };
+		C62239C622E85AC200EF9BCD /* post1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C62239C522E85AC100EF9BCD /* post1.jpg */; };
 		C64882BB22BBE4C900D0CB9E /* PostMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64882BA22BBE4C900D0CB9E /* PostMessageViewController.swift */; };
 		C64882BF22BBE6A500D0CB9E /* ReisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */; };
 		C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C65A131822B88F36002C2881 /* HomePage.storyboard */; };
@@ -55,6 +56,7 @@
 		C619DE0422E4BC710044346C /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C619DE0522E4BC710044346C /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C61E7D0022D1E41F00473FA6 /* OpenSegueAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSegueAnimation.swift; sourceTree = "<group>"; };
+		C62239C522E85AC100EF9BCD /* post1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = post1.jpg; path = HellowMyFriends/Assets.xcassets/AppIcon.appiconset/post1.jpg; sourceTree = SOURCE_ROOT; };
 		C64882BA22BBE4C900D0CB9E /* PostMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostMessageViewController.swift; sourceTree = "<group>"; };
 		C64882BE22BBE6A400D0CB9E /* ReisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReisterViewController.swift; sourceTree = "<group>"; };
 		C65A131822B88F36002C2881 /* HomePage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HomePage.storyboard; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				C6CF777A22CD1B03004FFE6C /* photoImage.png */,
 				C65BDE9E22E1A21E00DD9400 /* background4.jpeg */,
 				C65F50C622C22DEE00CAB067 /* first.png */,
+				C62239C522E85AC100EF9BCD /* post1.jpg */,
 				C67D83D822DC6D3B00EE1109 /* background3.jpg */,
 				C65F50CC22C22E8300CAB067 /* reset.png */,
 				C6A897FC22AF896F008C7BF5 /* background.jpg */,
@@ -268,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C65F50CD22C22E8400CAB067 /* reset.png in Resources */,
+				C62239C622E85AC200EF9BCD /* post1.jpg in Resources */,
 				C6F65691226F14F000706BEA /* LaunchScreen.storyboard in Resources */,
 				C65A132222B8AB9D002C2881 /* background 2.jpg in Resources */,
 				C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */,

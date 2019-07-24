@@ -46,6 +46,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     @objc func finishUpdate(notification : Notification) {
         
         refreshLoadData(1)
+        self.tableView.reloadData()
      }
  
     
@@ -322,6 +323,18 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
                     print("Yes")
                     alertAction(controller: self, title: "送出成功", message: "後續客服會進行查證，謝謝")
+                    /*
+                    if MFMailComposeViewController.canSendMail(){
+                        let mailController = MFMailComposeViewController()
+                        mailController.mailComposeDelegate = self
+                        mailController.setSubject("檢舉文章")
+                        mailController.setToRecipients(["barrykao881@gmail.com"])
+                        mailController.setMessageBody("發文文章：\(paperName))\n發文人姓名：\(nickName)\n文章內容：\(message)\n檢舉原因：", isHTML: false)
+                        self.present(mailController, animated: true, completion: nil)
+                    }else {
+                        print("send mail Fail!")
+                    }
+ */
                 }
                 controller.addAction(okAction)
                 let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
@@ -422,7 +435,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     messageVC.messageData = note
                     messageVC.delegate = self
                     self.present(navigationVC, animated: true)
-                    
                 }else {
                     alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                     self.refreshLoadData(1)
@@ -747,7 +759,7 @@ extension HomePageViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         if result == .sent {
             alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
-            
+            /*
             let note = self.data[indexEdit - 1]
             guard let paperName = note.paperName else {return}
             let databasePaper = self.databaseRef.child("Paper")
@@ -758,9 +770,7 @@ extension HomePageViewController: MFMailComposeViewControllerDelegate {
                 print("檢舉成功")
                 self.refreshLoadData(1)
             }
-//            let indexPath = IndexPath(row: 0, section: indexEdit - 1)
-//            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            
+            */
         }
         
         if result == .cancelled {

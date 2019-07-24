@@ -83,7 +83,7 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
                         NotificationCenter.default.post(name: Notification.Name("AccountUpdated"), object: nil, userInfo: ["account": self.currentData!])
                         
                         let uid = Auth.auth().currentUser!.uid
-                        let accoutdict = ["account":account, "nickName": nickName]
+                        let accoutdict = ["account":account,"uid":uid ,"nickName": nickName]
                         
                         self.databaseRef.child("User").child("\(uid)").setValue(accoutdict)
                         self.dismiss(animated: true, completion: nil)

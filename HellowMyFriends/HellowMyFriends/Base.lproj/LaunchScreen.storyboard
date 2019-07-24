@@ -18,24 +18,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background3.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="tFq-r6-CSn">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="post1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="fhq-Ar-7Yn">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Share Life" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XYW-oE-NkV">
-                                <rect key="frame" x="86.666666666666671" y="353" width="240.66666666666663" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <color key="textColor" red="0.16483829929999999" green="0.097113616489999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.26842221721899906" green="0.64566369297369386" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="tFq-r6-CSn" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="17n-4h-JDe"/>
-                            <constraint firstItem="tFq-r6-CSn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="CUJ-e2-8jX"/>
-                            <constraint firstItem="XYW-oE-NkV" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Ehc-X8-mRT"/>
-                            <constraint firstItem="XYW-oE-NkV" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Enh-dU-XmV"/>
-                            <constraint firstItem="tFq-r6-CSn" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="G2F-Da-NKz"/>
-                            <constraint firstItem="tFq-r6-CSn" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="IUo-At-ID6"/>
+                            <constraint firstItem="fhq-Ar-7Yn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="YBn-Oj-AQh"/>
+                            <constraint firstItem="fhq-Ar-7Yn" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="fO5-zE-wZN"/>
+                            <constraint firstItem="fhq-Ar-7Yn" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="jI8-LV-GnV"/>
+                            <constraint firstItem="fhq-Ar-7Yn" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="s0L-Qa-37v"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -46,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="background3.jpg" width="1524.719970703125" height="2537.280029296875"/>
+        <image name="post1.jpg" width="1024" height="1024"/>
     </resources>
 </document>
