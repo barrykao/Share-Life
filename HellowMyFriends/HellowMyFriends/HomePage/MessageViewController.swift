@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
-import MessageUI
+//import MessageUI
 
 protocol MessageViewControllerDelegate: class {
     func didUpdateMessage(note: PaperData)
@@ -233,9 +233,9 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
         let note = self.commentData[indexPath.row]
         self.index = indexPath.row
         guard let paperName = messageData.paperName else {return}
-        guard let nickName = note.nickName else {return}
+//        guard let nickName = note.nickName else {return}
         guard let commentName = note.commentName else {return}
-        guard let comment = note.comment else {return}
+//        guard let comment = note.comment else {return}
         let commentNameArray = messageData.commentNameArray
         let databasePaper = self.databaseRef.child("Paper")
         databasePaper.observeSingleEvent(of: .value) { (snapshot) in
@@ -245,8 +245,10 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
                 if commentNameArray.contains(commentName) {
                     guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
                     if note.uid == uid {
-                        let controller = UIAlertController(title: "留言", message: "請選擇操作", preferredStyle: .actionSheet)
-                        let action = UIAlertAction(title: "刪除留言", style: .default) { (action) in
+                        
+                        let controller = UIAlertController(title: "刪除留言功能", message: "請問是否確認刪除此留言", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                            print("Yes")
                             guard let paperName = self.messageData.paperName else { return}
                             guard let commentName = note.commentName else {return}
                             let databasePaperName = self.databaseRef.child("Paper").child(paperName)
@@ -254,13 +256,18 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
                                 print("刪除留言成功")
                                 self.commentData.remove(at: indexPath.row)
                                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                                alertAction(controller: self, title: "刪除留言功能", message: "刪除成功")
+
                             })
+                            
                         }
-                        controller.addAction(action)
-                        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                        controller.addAction(okAction)
+                        let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
                         controller.addAction(cancelAction)
                         self.present(controller, animated: true, completion: nil)
+                        
                     }else {
+                        /*
                         let controller = UIAlertController(title: "留言", message: "請選擇操作", preferredStyle: .actionSheet)
                         let action = UIAlertAction(title: "檢舉留言", style: .default) { (action) in
                             
@@ -279,6 +286,17 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
                         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
                         controller.addAction(cancelAction)
                         self.present(controller, animated: true, completion: nil)
+                        */
+                        let controller = UIAlertController(title: "檢舉功能", message: "請問是否確認檢舉此留言", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                            print("Yes")
+                            alertAction(controller: self, title: "送出成功", message: "後續客服會進行查證，謝謝")
+                        }
+                        controller.addAction(okAction)
+                        let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
+                        controller.addAction(cancelAction)
+                        self.present(controller, animated: true, completion: nil)
+                        
                     }
                 }else {
                     print("請留言已刪除!")
@@ -302,7 +320,7 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
     
 }
 
-
+/*
 //MARK:MFMailComposeViewControllerDelegate
 extension MessageViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
@@ -330,7 +348,7 @@ extension MessageViewController: MFMailComposeViewControllerDelegate {
     
     
 }
-
+*/
 extension MessageViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {

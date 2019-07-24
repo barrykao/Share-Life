@@ -124,6 +124,8 @@ extension HeartViewController: UITableViewDataSource {
             cell.imageView?.image = loadImage(fileName: "\(accountView).jpg")
             cell.detailTextLabel?.text = "給了你愛心"
         }
+        cell.selectionStyle = .none
+
         return cell
         
     }

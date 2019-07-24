@@ -276,7 +276,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.editBtn.tag = indexPath.section * 5
         cell?.editBtn.addTarget(self, action: #selector(editPaper), for: .touchUpInside)
         
-        
+        cell?.selectionStyle = .none
         return cell!
     }
     
@@ -295,10 +295,11 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             self.indexEdit = indexTag
             let note = self.data[indexTag - 1]
             guard let paperName = note.paperName else {return}
-            guard let nickName = note.nickName else {return}
-            guard let message = note.message else {return}
+//            guard let nickName = note.nickName else {return}
+//            guard let message = note.message else {return}
             
             if note.paperNameArray.contains(paperName) {
+                /*
                 let controller = UIAlertController(title: "文章", message: "請選擇操作", preferredStyle: .actionSheet)
                 let action = UIAlertAction(title: "檢舉文章", style: .default) { (action) in
                     if MFMailComposeViewController.canSendMail(){
@@ -316,6 +317,17 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
                 controller.addAction(cancelAction)
                 self.present(controller, animated: true, completion: nil)
+                */
+                let controller = UIAlertController(title: "檢舉功能", message: "請問是否確認檢舉此貼文", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                    print("Yes")
+                    alertAction(controller: self, title: "送出成功", message: "後續客服會進行查證，謝謝")
+                }
+                controller.addAction(okAction)
+                let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
+                controller.addAction(cancelAction)
+                self.present(controller, animated: true, completion: nil)
+                
             }else {
                 alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                 self.refreshLoadData(1)

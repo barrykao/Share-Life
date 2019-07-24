@@ -19,21 +19,21 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.3</string>
+	<string>1.4</string>
 	<key>CFBundleVersion</key>
-	<string>1.3</string>
+	<string>1.4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Share Life want to use your camera to take photo/movie</string>
+	<string>Share Life 會使用您的相機來進行拍照，請確認是否讓Share Life使用相機功能</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Share Life want to use location to locate your position</string>
+	<string>Share Life 會使用您的定位來確認位置，請確認是否讓Share Life使用定位功能</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Access microphone when record movie</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Share Life want to add photo/movie to libary</string>
+	<string>Share Life 會使用您的相簿來存取照片，請確認是否讓Share Life使用相簿存取功能</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Share Life want to get photo/moview from libary</string>
+	<string>Share Life 會使用您的相簿來取得照片，請確認是否讓Share Life使用相簿功能</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
