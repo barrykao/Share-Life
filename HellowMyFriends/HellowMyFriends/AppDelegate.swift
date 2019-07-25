@@ -76,12 +76,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         // loadImageToFile
                         let fileName = "\(note.imageName[j]).jpg"
                         guard let storageRefPhoto = self?.storageRef.child(note.account!).child(fileName) else {return}
-                        
+                       
                         storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in
                             guard let imageData = data else {return}
                             let filePath = fileDocumentsPath(fileName: fileName)
                             do {
-                                    try imageData.write(to: filePath)
+                                try imageData.write(to: filePath)
                                 print("下載Paper成功")
                             }catch{
                                 print("error: \(error)")

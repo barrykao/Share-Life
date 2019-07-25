@@ -524,7 +524,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             let paperNameArray = note.paperNameArray
             let heartUid = note.heartUid
             let indexPath = IndexPath(row: 0, section: indexTag)
-            let databasePaperName = self.databaseRef.child("Paper").child(paperName)
             if paperNameArray.contains(paperName) {
                 if heartUid.contains(uid) {
                     guard let index = note.heartUid.firstIndex(of: uid) else {return}
@@ -534,15 +533,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     DispatchQueue.main.async {
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
-                        if let error = error {
-                            assertionFailure("Fail To postMessage \(error)")
-                        }else {
-                            print("刪除愛心成功")
-                        }
-                    })
-                    
-                    
                 }else {
                     note.heartUid.append(uid)
                     note.heartCount += 1
@@ -550,59 +540,52 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     DispatchQueue.main.async {
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
-                                                 "account" : account,
-                                                 "uid" : uid,
-                                                 "nickName" : nickName]
-                    databasePaperName.child("heart").child(uid).updateChildValues(heart){ (error, database) in
-                        if let error = error {
-                            assertionFailure("Fail To postMessage \(error)")
-                        }
-                        print("上傳愛心成功")
-                    }
-                    
-                    
                 }
-                self.scaleLikeButton(sender: sender)
             }else {
                 alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                 self.refreshLoadData(1)
             }
-          /*
-            let databasePaper = self.databaseRef.child("Paper")
-            databasePaper.observeSingleEvent(of: .value) { (snapshot) in
+            
+            let databasePaperName = self.databaseRef.child("Paper")
+            databasePaperName.observeSingleEvent(of: .value) { (snapshot) in
                 guard let paperNameDict = snapshot.value as? [String:Any] else {return}
                 let paperNameArray = Array(paperNameDict.keys)
                 if paperNameArray.contains(paperName) {
-                    let databasePaperName = self.databaseRef.child("Paper").child(paperName)
-                    if note.heartUid.contains(uid) {
-                        // delete
-                        databasePaperName.child("heart").child(uid).removeValue(completionBlock: { (error, data) in
+                    if heartUid.contains(uid) {
+                        databasePaperName.child(paperName).child("heart").child(uid).removeValue(completionBlock: { (error, data) in
                             if let error = error {
                                 assertionFailure("Fail To postMessage \(error)")
                             }else {
+                                
                                 print("刪除愛心成功")
                             }
                         })
+                        
+                        
                     }else {
-                        // add
                         let heart: [String : Any] = ["postTime": [".sv":"timestamp"],
-                                                        "account" : account,
-                                                        "uid" : uid,
-                                                        "nickName" : nickName]
-                        databasePaperName.child("heart").child(uid).updateChildValues(heart){ (error, database) in
+                                                     "account" : account,
+                                                     "uid" : uid,
+                                                     "nickName" : nickName]
+                        databasePaperName.child(paperName).child("heart").child(uid).updateChildValues(heart){ (error, database) in
                             if let error = error {
                                 assertionFailure("Fail To postMessage \(error)")
                             }
                             print("上傳愛心成功")
+                            self.scaleLikeButton(sender: sender)
                         }
+                        
+                        
                     }
                 }else {
                     alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
                     self.refreshLoadData(1)
                 }
+                
+                
             }
-            */
+            
+          
         }else {
             //error handling when no internet
             print("false")

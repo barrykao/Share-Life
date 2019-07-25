@@ -65,39 +65,48 @@ class RegisterViewController: UIViewController ,UITextFieldDelegate {
             //write something to download
             print("true")
             guard self.newAccount.text != "" && self.newPassword.text != "" && self.nickName.text != "" else {
-                alertAction(controller: self, title: "警告", message: "有空格尚未填寫!")
+                alertAction(controller: self, title: "警告", message: "有空格尚未填寫")
                 return
             }
             guard let account = newAccount.text else {return}
             guard let password = newPassword.text else {return}
             guard let nickName = nickName.text else {return}
-            
-            Auth.auth().createUser(withEmail: account, password: password) { (user, error) in
-                if error == nil {
-                    print("You have successfully signed up")
-                    let alert = UIAlertController(title: "註冊", message: "註冊成功!", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: { (ok) in
-                        self.currentData.account = account
-                        self.currentData.nickName = password
-                        //                    self.delegate?.didFinishRegister(account: self.newAccount.text, password: self.newPassword.text, nickName: self.nickName.text)
-                        NotificationCenter.default.post(name: Notification.Name("AccountUpdated"), object: nil, userInfo: ["account": self.currentData!])
-                        
-                        let uid = Auth.auth().currentUser!.uid
-                        let accoutdict = ["account":account,"uid":uid ,"nickName": nickName]
-                        
-                        self.databaseRef.child("User").child("\(uid)").setValue(accoutdict)
-                        self.dismiss(animated: true, completion: nil)
-                    })
-                    alert.addAction(okAction)
-                    self.present(alert, animated: true, completion: nil)
-                } else {
-                    alertAction(controller: self, title: "錯誤", message: "帳號或密碼重複或是錯誤!")
+            let message = "帳號：\(account)\n密碼：\(password)\n暱稱：\(nickName)\n請確認資料是否正確"
+            let controller = UIAlertController(title: "註冊", message: message, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                print("Yes")
+                Auth.auth().createUser(withEmail: account, password: password) { (user, error) in
+                    if error == nil {
+                        print("You have successfully signed up")
+                        let alert = UIAlertController(title: "註冊", message: "註冊成功", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: { (ok) in
+                            self.currentData.account = account
+                            self.currentData.nickName = password
+                            //                    self.delegate?.didFinishRegister(account: self.newAccount.text, password: self.newPassword.text, nickName: self.nickName.text)
+                            NotificationCenter.default.post(name: Notification.Name("AccountUpdated"), object: nil, userInfo: ["account": self.currentData!])
+                            
+                            let uid = Auth.auth().currentUser!.uid
+                            let accoutdict = ["account":account,"uid":uid ,"nickName": nickName]
+                            
+                            self.databaseRef.child("User").child("\(uid)").setValue(accoutdict)
+                            self.dismiss(animated: true, completion: nil)
+                        })
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        alertAction(controller: self, title: "錯誤", message: "帳號或密碼重複或是錯誤")
+                    }
                 }
             }
+            controller.addAction(okAction)
+            let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
+            controller.addAction(cancelAction)
+            self.present(controller, animated: true, completion: nil)
+            
         }else {
             //error handling when no internet
             print("false")
-            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝")
         }
         
     }
