@@ -268,6 +268,7 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
                         
                     }else {
                         /*
+                        /*
                         let controller = UIAlertController(title: "留言", message: "請選擇操作", preferredStyle: .actionSheet)
                         let action = UIAlertAction(title: "檢舉留言", style: .default) { (action) in
                             
@@ -296,7 +297,7 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate{
                         let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
                         controller.addAction(cancelAction)
                         self.present(controller, animated: true, completion: nil)
-                        
+                        */
                     }
                 }else {
                     print("請留言已刪除!")

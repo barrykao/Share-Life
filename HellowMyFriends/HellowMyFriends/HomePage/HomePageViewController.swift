@@ -274,8 +274,8 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.messageBtn.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
         cell?.messageCount.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
 
-        cell?.editBtn.tag = indexPath.section * 5
-        cell?.editBtn.addTarget(self, action: #selector(editPaper), for: .touchUpInside)
+//        cell?.editBtn.tag = indexPath.section * 5
+//        cell?.editBtn.addTarget(self, action: #selector(editPaper), for: .touchUpInside)
         
         cell?.selectionStyle = .none
         return cell!
@@ -287,7 +287,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         print("\(indexPath.section), \(indexPath.row)")
        
     }
-    
+    /*
     @objc func editPaper(sender: UIButton) {
         if checkInternetFunction() == true {
             //write something to download
@@ -355,6 +355,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         
         
     }
+    */
     // MARK: tableVIew lightbox
     @objc func messageVC() {
         print("messageVC")
@@ -531,14 +532,14 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     note.heartCount -= 1
                     print(note.heartCount)
                     DispatchQueue.main.async {
-                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                        self.tableView.reloadRows(at: [indexPath], with: .none)
                     }
                 }else {
                     note.heartUid.append(uid)
                     note.heartCount += 1
                     print(note.heartCount)
                     DispatchQueue.main.async {
-                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                        self.tableView.reloadRows(at: [indexPath], with: .none)
                     }
                 }
             }else {
@@ -662,6 +663,10 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     }
     
     @objc func fullScreen(tapGestureRecognizer: UITapGestureRecognizer) {
+        
+        
+        
+        
         
         let tappedImage = tapGestureRecognizer.view as! UIImageView
         let index = (tappedImage.tag / 1000) - 1
