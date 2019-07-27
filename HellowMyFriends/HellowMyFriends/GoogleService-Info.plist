@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>436321025756-fdiqmkuifirip6g4pkj4nipc8edqufmi.apps.googleusercontent.com</string>
+	<string>141562144883-arklhfrsvgbvrdqeqvdjjfp3kgh7u0do.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.436321025756-fdiqmkuifirip6g4pkj4nipc8edqufmi</string>
+	<string>com.googleusercontent.apps.141562144883-arklhfrsvgbvrdqeqvdjjfp3kgh7u0do</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAf-XLxBWg7_EJnOXhJz8XAd8fhXN5mj0c</string>
+	<string>AIzaSyBEyaGuADJiQvBwAKCqN95FCOSg7pY6n_w</string>
 	<key>GCM_SENDER_ID</key>
-	<string>436321025756</string>
+	<string>141562144883</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.www.HellowMyFriends1</string>
+	<string>com.www.HellowMyFriends2</string>
 	<key>PROJECT_ID</key>
-	<string>share-life-project</string>
+	<string>share-life-1</string>
 	<key>STORAGE_BUCKET</key>
-	<string>share-life-project.appspot.com</string>
+	<string>share-life-1.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:436321025756:ios:ce39f2e896d69ca8</string>
+	<string>1:141562144883:ios:f122ee03108f92ba</string>
 	<key>DATABASE_URL</key>
-	<string>https://share-life-project.firebaseio.com</string>
+	<string>https://share-life-1.firebaseio.com</string>
 </dict>
 </plist>

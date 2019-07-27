@@ -35,10 +35,10 @@
 		C68439DB22DDE6AA00CDC2A6 /* UserCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C68439DA22DDE6AA00CDC2A6 /* UserCardView.swift */; };
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
+		C6B1127F22EBCFEF009BDA1C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6B1127E22EBCFEF009BDA1C /* GoogleService-Info.plist */; };
 		C6CF777B22CD1B04004FFE6C /* photoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C6CF777A22CD1B03004FFE6C /* photoImage.png */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */; };
-		C6EE44CB22E57E3800B5E974 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6EE44CA22E57E3700B5E974 /* GoogleService-Info.plist */; };
 		C6F3F487227C557400D4F246 /* function.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3F486227C557400D4F246 /* function.swift */; };
 		C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F65686226F14EF00706BEA /* AppDelegate.swift */; };
 		C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6F6568A226F14EF00706BEA /* Main.storyboard */; };
@@ -78,10 +78,10 @@
 		C68439DA22DDE6AA00CDC2A6 /* UserCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCardView.swift; sourceTree = "<group>"; };
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
+		C6B1127E22EBCFEF009BDA1C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C6CF777A22CD1B03004FFE6C /* photoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photoImage.png; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
-		C6EE44CA22E57E3700B5E974 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C6F3F486227C557400D4F246 /* function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = function.swift; sourceTree = "<group>"; };
 		C6F65683226F14EF00706BEA /* HellowMyFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HellowMyFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6F65686226F14EF00706BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -190,9 +190,9 @@
 				C67AF9AD22ABAF7B001E51E4 /* memberCenter */,
 				C6F6568D226F14F000706BEA /* Assets.xcassets */,
 				C6F6568F226F14F000706BEA /* LaunchScreen.storyboard */,
-				C6EE44CA22E57E3700B5E974 /* GoogleService-Info.plist */,
 				C6F65692226F14F000706BEA /* Info.plist */,
 				C619DE0422E4BC710044346C /* Reachability.h */,
+				C6B1127E22EBCFEF009BDA1C /* GoogleService-Info.plist */,
 				C619DE0522E4BC710044346C /* Reachability.m */,
 				C619DE0322E4BC700044346C /* HellowMyFriends-Bridging-Header.h */,
 				C6A897FA22AF896F008C7BF5 /* images */,
@@ -280,9 +280,9 @@
 				C65F50C922C22E2D00CAB067 /* register.png in Resources */,
 				C65BDE9F22E1A21E00DD9400 /* background4.jpeg in Resources */,
 				C6F6568E226F14F000706BEA /* Assets.xcassets in Resources */,
-				C6EE44CB22E57E3800B5E974 /* GoogleService-Info.plist in Resources */,
 				C6F6568C226F14EF00706BEA /* Main.storyboard in Resources */,
 				C65EB18822B64F960093AAC6 /* MemberCenter.storyboard in Resources */,
+				C6B1127F22EBCFEF009BDA1C /* GoogleService-Info.plist in Resources */,
 				C6CF777B22CD1B04004FFE6C /* photoImage.png in Resources */,
 				C65F50C722C22DEE00CAB067 /* first.png in Resources */,
 				C65A131922B88F36002C2881 /* HomePage.storyboard in Resources */,
@@ -539,7 +539,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HellowMyFriends/HellowMyFriends-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -561,7 +561,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.www.HellowMyFriends2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HellowMyFriends/HellowMyFriends-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

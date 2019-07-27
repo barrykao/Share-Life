@@ -46,7 +46,7 @@ class CustomCellTableViewCell: UITableViewCell {
 
     @IBOutlet var photoCount: UIImageView!
     
-//    @IBOutlet var editBtn: UIButton!
+    @IBOutlet var editBtn: UIButton!
     
     @IBOutlet var collectionView: UICollectionView!
 

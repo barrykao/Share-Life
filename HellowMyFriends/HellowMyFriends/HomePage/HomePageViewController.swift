@@ -273,10 +273,10 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.messageBtn.tag = indexPath.section
         cell?.messageBtn.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
         cell?.messageCount.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
-
-//        cell?.editBtn.tag = indexPath.section * 5
-//        cell?.editBtn.addTarget(self, action: #selector(editPaper), for: .touchUpInside)
-        
+        /*
+        cell?.editBtn.tag = indexPath.section * 5
+        cell?.editBtn.addTarget(self, action: #selector(editPaper), for: .touchUpInside)
+        */
         cell?.selectionStyle = .none
         return cell!
     }
@@ -296,55 +296,94 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             self.indexEdit = indexTag
             let note = self.data[indexTag - 1]
             guard let paperName = note.paperName else {return}
-//            guard let nickName = note.nickName else {return}
-//            guard let message = note.message else {return}
             
-            if note.paperNameArray.contains(paperName) {
-                /*
-                let controller = UIAlertController(title: "文章", message: "請選擇操作", preferredStyle: .actionSheet)
-                let action = UIAlertAction(title: "檢舉文章", style: .default) { (action) in
-                    if MFMailComposeViewController.canSendMail(){
-                        let mailController = MFMailComposeViewController()
-                        mailController.mailComposeDelegate = self
-                        mailController.setSubject("檢舉文章")
-                        mailController.setToRecipients(["barrykao881@gmail.com"])
-                        mailController.setMessageBody("發文文章：\(paperName))\n發文人姓名：\(nickName)\n文章內容：\(message)\n檢舉原因：", isHTML: false)
-                        self.present(mailController, animated: true, completion: nil)
-                    }else {
-                        print("send mail Fail!")
+            let databasePaperName = self.databaseRef.child("Paper")
+            databasePaperName.observeSingleEvent(of: .value) { (snapshot) in
+                guard let paperNameDict = snapshot.value as? [String:Any] else {return}
+                let paperNameArray = Array(paperNameDict.keys)
+                if paperNameArray.contains(paperName) {
+                    let controller = UIAlertController(title: "檢舉", message: "請選擇檢舉功能", preferredStyle: .actionSheet)
+                    let names = ["檢舉貼文", "封鎖User"]
+                    for name in names {
+                        let action = UIAlertAction(title: name, style: .default) { (action) in
+                            if action.title == "檢舉貼文" {
+                                if checkInternetFunction() == true {
+                                    //write something to download
+                                    print("true")
+                                    let controller = UIAlertController(title: "檢舉貼文", message: "請問確認是否檢舉此貼文", preferredStyle: .alert)
+                                    let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                                        print("Yes")
+                                        guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+                                        let databaseUser = self.databaseRef.child("User")
+                                        note.blockPaper.append(paperName)
+                                        let report: [String:Any] = ["block" : ["Paper":note.blockPaper]]
+                                        databaseUser.child(uid).updateChildValues(report, withCompletionBlock: { (error, data) in
+                                            if let error = error {
+                                                print("error: \(error)")
+                                            }
+                                            
+                                            
+                                            
+                                        })
+                                        
+                                        
+                                        
+                                        
+                                    }
+                                    controller.addAction(okAction)
+                                    let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
+                                    controller.addAction(cancelAction)
+                                    self.present(controller, animated: true, completion: nil)
+                                    
+                                }else {
+                                    //error handling when no internet
+                                    print("false")
+                                    alertAction(controller: self.lightboxController, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+                                    
+                                }
+                                
+                                
+                            }
+                            if action.title == "封鎖User" {
+                                if checkInternetFunction() == true {
+                                    //write something to download
+                                    print("true")
+                                    let controller = UIAlertController(title: "封鎖User", message: "請問確認是否封鎖User", preferredStyle: .alert)
+                                    let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
+                                        print("Yes")
+                                        
+                                        
+                                        
+                                        
+                                        
+                                    }
+                                    controller.addAction(okAction)
+                                    let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
+                                    controller.addAction(cancelAction)
+                                    self.present(controller, animated: true, completion: nil)
+                                    
+                                }else {
+                                    //error handling when no internet
+                                    print("false")
+                                    alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+                                    
+                                }
+                                // ....
+                                
+                            }
+                        }
+                        controller.addAction(action)
                     }
+                    let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+                    controller.addAction(cancelAction)
+                    self.present(controller, animated: true, completion: nil)
+                }else {
+                    alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
+                    self.refreshLoadData(1)
                 }
-                controller.addAction(action)
-                let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-                controller.addAction(cancelAction)
-                self.present(controller, animated: true, completion: nil)
-                */
-                let controller = UIAlertController(title: "檢舉功能", message: "請問是否確認檢舉此貼文", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
-                    print("Yes")
-                    alertAction(controller: self, title: "送出成功", message: "後續客服會進行查證，謝謝")
-                    /*
-                    if MFMailComposeViewController.canSendMail(){
-                        let mailController = MFMailComposeViewController()
-                        mailController.mailComposeDelegate = self
-                        mailController.setSubject("檢舉文章")
-                        mailController.setToRecipients(["barrykao881@gmail.com"])
-                        mailController.setMessageBody("發文文章：\(paperName))\n發文人姓名：\(nickName)\n文章內容：\(message)\n檢舉原因：", isHTML: false)
-                        self.present(mailController, animated: true, completion: nil)
-                    }else {
-                        print("send mail Fail!")
-                    }
- */
-                }
-                controller.addAction(okAction)
-                let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
-                controller.addAction(cancelAction)
-                self.present(controller, animated: true, completion: nil)
                 
-            }else {
-                alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
-                self.refreshLoadData(1)
             }
+           
         }else {
             //error handling when no internet
             print("false")
@@ -583,7 +622,6 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     self.refreshLoadData(1)
                 }
                 
-                
             }
             
           
@@ -741,12 +779,19 @@ extension HomePageViewController: LightboxControllerTouchDelegate {
 }
 
 
-
 //MARK:MFMailComposeViewControllerDelegate
 extension HomePageViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         if result == .sent {
-            alertActionDismiss(controller: controller, title: "回報問題", message: "感謝您的意見回饋，我們會盡快處理!")
+            
+            let alert = UIAlertController(title: "送出成功", message: "後續客服會進行查證，謝謝", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                
+             
+            })
+            alert.addAction(okAction)
+            controller.present(alert, animated: true, completion: nil)
+            
             /*
             let note = self.data[indexEdit - 1]
             guard let paperName = note.paperName else {return}
