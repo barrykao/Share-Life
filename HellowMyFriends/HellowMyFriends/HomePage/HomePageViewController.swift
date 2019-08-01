@@ -16,7 +16,9 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     var messageButton: UIButton!
     var heartButton: UIButton!
     
-    var data : [PaperData] = []
+    var paperData : [PaperData] = []
+    var userData: [UserData] = []
+    
     var databaseRef : DatabaseReference!
     var storageRef : StorageReference!
     var refreshControl:UIRefreshControl!
@@ -54,7 +56,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         super.viewDidLoad()
 
         let home: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.data = home.paperData
+        self.paperData = home.paperData
         feedbackGenerator?.prepare()
         
         self.tableView.dataSource = self
@@ -105,74 +107,89 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
             // 停止 refreshControl 動畫
             self.refreshControl.endRefreshing()
+            guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
             
             let databaseRefPaper = self.databaseRef.child("Paper")
-            databaseRefPaper.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
+            databaseRefPaper.observeSingleEvent(of: .value, with: { (snapshot) in
                 
                 if let uploadDataDic = snapshot.value as? [String:Any] {
                     let dataDic = uploadDataDic
                     let keyArray = Array(dataDic.keys)
-                    self?.data = []
+                    self.paperData = []
                     for i in 0 ..< keyArray.count {
-                        let array = dataDic[keyArray[i]] as! [String:Any]
+                        guard let array = dataDic[keyArray[i]] as? [String:Any] else {return}
                         let note = PaperData()
-                        note.paperName = keyArray[i]
-                        note.paperNameArray = keyArray
-                        note.account = array["account"] as? String
-                        note.message = array["message"] as? String
-                        note.date = array["date"] as? String
-                        note.imageName = array["photo"] as! [String]
-                        note.uid = array["uid"] as? String
-                        note.postTime = array["postTime"] as? Double
-                        note.nickName = array["nickName"] as? String
-                       
-                        if let comment = array["comment"] as? [String:Any] {
-                            note.commentNameArray = Array(comment.keys)
-                            note.commentCount = comment.count
-                        }else {
-                            note.commentCount = 0
+                        
+                        if let blockUid = array["blockUid"] as? [String] {
+                            note.blockUid = blockUid
                         }
                         
-                        if let heart = array["heart"] as? [String:Any] {
-                            note.heartUid = Array(heart.keys)
-                            note.heartCount = heart.count
-                        }else {
-                            note.heartCount = 0
-                        }
-                        
-                        self!.data.append(note)
-                        self?.data.sort(by: { (post1, post2) -> Bool in
-                            post1.postTime! > post2.postTime!
-                        })
-                         for j in 0 ..< note.imageName.count {
-                         // loadImageToFile
-                            let fileName = "\(note.imageName[j]).jpg"
-                            if checkFile(fileName: fileName) {
-//                                print(fileName)
+                        if !note.blockUid.contains(uid) {
+                            note.paperName = keyArray[i]
+                            note.paperNameArray = keyArray
+                            note.account = array["account"] as? String
+                            note.message = array["message"] as? String
+                            note.date = array["date"] as? String
+                            note.uid = array["uid"] as? String
+                            note.postTime = array["postTime"] as? Double
+                            note.nickName = array["nickName"] as? String
+                            
+                            if let imageName = array["photo"] as? [String] {
+                                note.imageName = imageName
+                            }
+                            
+                            if let comment = array["comment"] as? [String:Any] {
+                                note.commentNameArray = Array(comment.keys)
+                                note.commentCount = comment.count
                             }else {
-                                guard let storageRefPhoto = self?.storageRef.child(note.account!).child(fileName) else {return}
-                                
-                                storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in
-                                    guard let imageData = data else {return}
-                                    let filePath = fileDocumentsPath(fileName: fileName)
-                                    do {
-                                        try imageData.write(to: filePath)
-                                        print("下載成功")
-                                        if j == note.imageName.count - 1 {
-                                            DispatchQueue.main.async {
-                                                self?.tableView.reloadData()
+                                note.commentCount = 0
+                            }
+                            
+                            if let heart = array["heart"] as? [String:Any] {
+                                note.heartUid = Array(heart.keys)
+                                note.heartCount = heart.count
+                            }else {
+                                note.heartCount = 0
+                            }
+                            
+                            self.paperData.append(note)
+                            self.paperData.sort(by: { (post1, post2) -> Bool in
+                                post1.postTime! > post2.postTime!
+                            })
+                            for j in 0 ..< note.imageName.count {
+                                // loadImageToFile
+                                let fileName = "\(note.imageName[j]).jpg"
+                                if checkFile(fileName: fileName) {
+                                    //                                print(fileName)
+                                }else {
+                                    let storageRefPhoto = self.storageRef.child(note.account!).child(fileName)
+                                    
+                                    storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in
+                                        guard let imageData = data else {return}
+                                        let filePath = fileDocumentsPath(fileName: fileName)
+                                        do {
+                                            try imageData.write(to: filePath)
+                                            print("下載成功")
+                                            if j == note.imageName.count - 1 {
+                                                DispatchQueue.main.async {
+                                                    self.tableView.reloadData()
+                                                }
                                             }
+                                        }catch{
+                                            print("error: \(error)")
                                         }
-                                    }catch{
-                                        print("error: \(error)")
                                     }
                                 }
                             }
+                        }else {
+                            print("封鎖")
                         }
                         
+                        
                     }
+                    
                     DispatchQueue.main.async {
-                        self?.tableView.reloadData()
+                        self.tableView.reloadData()
                     }
                 }
                 
@@ -191,7 +208,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.data.count + 1
+        return self.paperData.count + 1
     }
     
     //MARK:  UITableViewDataSource
@@ -214,9 +231,9 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             return cell!
         }
         
-        cell?.collectionViewData = self.data
+        cell?.collectionViewData = self.paperData
         
-        let note = self.data[indexPath.section - 1]
+        let note = self.paperData[indexPath.section - 1]
         cell?.currentData = note
         cell?.collectionView.delegate = cell
         cell?.collectionView.dataSource = cell
@@ -273,10 +290,18 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         cell?.messageBtn.tag = indexPath.section
         cell?.messageBtn.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
         cell?.messageCount.addTarget(self, action: #selector(messageVC1), for: .touchUpInside)
-        /*
+        
         cell?.editBtn.tag = indexPath.section * 5
         cell?.editBtn.addTarget(self, action: #selector(editPaper), for: .touchUpInside)
-        */
+        
+        if let uid = UserDefaults.standard.string(forKey: "uid") {
+            if note.uid == uid {
+                cell?.editBtn.isHidden = true
+            }else {
+                cell?.editBtn.isHidden = false
+            }
+        
+        }
         cell?.selectionStyle = .none
         return cell!
     }
@@ -287,16 +312,18 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         print("\(indexPath.section), \(indexPath.row)")
        
     }
-    /*
+    
     @objc func editPaper(sender: UIButton) {
         if checkInternetFunction() == true {
             //write something to download
             print("true")
             let indexTag = sender.tag / 5
             self.indexEdit = indexTag
-            let note = self.data[indexTag - 1]
+            let note = self.paperData[indexTag - 1]
             guard let paperName = note.paperName else {return}
-            
+            guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
+            guard let nickName = note.nickName else {return}
+            guard let account = note.account else {return}
             let databasePaperName = self.databaseRef.child("Paper")
             databasePaperName.observeSingleEvent(of: .value) { (snapshot) in
                 guard let paperNameDict = snapshot.value as? [String:Any] else {return}
@@ -313,22 +340,18 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                                     let controller = UIAlertController(title: "檢舉貼文", message: "請問確認是否檢舉此貼文", preferredStyle: .alert)
                                     let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
                                         print("Yes")
-                                        guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
-                                        let databaseUser = self.databaseRef.child("User")
-                                        note.blockPaper.append(paperName)
-                                        let report: [String:Any] = ["block" : ["Paper":note.blockPaper]]
-                                        databaseUser.child(uid).updateChildValues(report, withCompletionBlock: { (error, data) in
+                                        let databasePaper = self.databaseRef.child("Paper")
+                                        note.blockUid.append(uid)
+                                        let report: [String:Any] = ["uid" : note.blockUid,
+                                                                    "account" : account]
+                                        databasePaper.child(paperName).child("block").updateChildValues(report, withCompletionBlock: { (error, data) in
                                             if let error = error {
                                                 print("error: \(error)")
                                             }
-                                            
-                                            
-                                            
+                                            alertAction(controller: self, title: "檢舉貼文", message: "已經檢舉貼文成功，謝謝")
+                                            note.blockUid = []
+                                            self.refreshLoadData(1)
                                         })
-                                        
-                                        
-                                        
-                                        
                                     }
                                     controller.addAction(okAction)
                                     let cancelAction = UIAlertAction(title: "No", style: .destructive , handler: nil)
@@ -338,7 +361,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                                 }else {
                                     //error handling when no internet
                                     print("false")
-                                    alertAction(controller: self.lightboxController, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+                                    alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝")
                                     
                                 }
                                 
@@ -348,13 +371,51 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                                 if checkInternetFunction() == true {
                                     //write something to download
                                     print("true")
-                                    let controller = UIAlertController(title: "封鎖User", message: "請問確認是否封鎖User", preferredStyle: .alert)
+                                    let controller = UIAlertController(title: "封鎖\(nickName)", message: "請問確認是否封鎖\(nickName)", preferredStyle: .alert)
                                     let okAction = UIAlertAction(title: "Yes", style: .default) { (_) in
                                         print("Yes")
                                         
+                                        guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
                                         
-                                        
-                                        
+                                        let databaseRefPaper = self.databaseRef.child("Paper")
+                                        databaseRefPaper.observeSingleEvent(of: .value, with: {(snapshot) in
+                                            
+                                        guard let uploadDataDic = snapshot.value as? [String:Any] else {return}
+                                                let dataDic = uploadDataDic
+                                                let keyArray = Array(dataDic.keys)
+                                                for i in 0 ..< keyArray.count {
+                                                    guard let array = dataDic[keyArray[i]] as? [String:Any] else {return}
+                                                    let user = PaperData()
+                                                    user.uid = array["uid"] as? String
+                                                    
+                                                    if let blockUid = array["blockUid"] as? [String] {
+                                                        user.blockUid = blockUid
+                                                        
+                                                    }
+                                                    
+                                                    if user.uid == note.uid {
+                                                        let paperName = keyArray[i]
+                                                        user.blockUid.append(uid)
+                                                        
+                                                        let report: [String:Any] = ["uid" : note.blockUid,
+                                                                                    "account" : account]
+                                                        databaseRefPaper.child(paperName).child("block").updateChildValues(report, withCompletionBlock: { (error, data) in
+                                                            if let error = error {
+                                                                print("error: \(error)")
+                                                            }
+                                                            alertAction(controller: self, title: "檢舉貼文", message: "已經檢舉貼文成功，謝謝")
+                                                            
+                                                            self.refreshLoadData(1)
+                                                        })
+                                                        
+                                                    }
+                                                
+                                                    
+                                                }
+                                                
+                                            
+                                            
+                                        })
                                         
                                     }
                                     controller.addAction(okAction)
@@ -365,7 +426,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                                 }else {
                                     //error handling when no internet
                                     print("false")
-                                    alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+                                    alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝")
                                     
                                 }
                                 // ....
@@ -378,7 +439,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                     controller.addAction(cancelAction)
                     self.present(controller, animated: true, completion: nil)
                 }else {
-                    alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改!")
+                    alertAction(controller: self, title: "警告", message: "請貼文已刪除或修改")
                     self.refreshLoadData(1)
                 }
                 
@@ -387,21 +448,21 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         }else {
             //error handling when no internet
             print("false")
-            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝!")
+            alertAction(controller: self, title: "連線中斷", message: "請確認您的網路連線是否正常，謝謝")
             
         }
        
         
         
     }
-    */
+    
     // MARK: tableVIew lightbox
     @objc func messageVC() {
         print("messageVC")
         if checkInternetFunction() == true {
             //write something to download
             print("true")
-            let note = self.data[self.index]
+            let note = self.paperData[self.index]
             guard let paperName = note.paperName else { return}
             let databasePaper = self.databaseRef.child("Paper")
             databasePaper.observeSingleEvent(of: .value) { (snapshot) in
@@ -433,7 +494,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         print("heartVC")
         if checkInternetFunction() == true {
             //write something to download
-            let note = self.data[self.index]
+            let note = self.paperData[self.index]
             guard let paperName = note.paperName else { return}
             let databasePaper = self.databaseRef.child("Paper")
             databasePaper.observeSingleEvent(of: .value) { (snapshot) in
@@ -463,7 +524,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             //write something to download
             print("true")
             let indexTag = sender.tag
-            let note = self.data[indexTag - 1]
+            let note = self.paperData[indexTag - 1]
             guard let paperName = note.paperName else { return}
             let databasePaper = self.databaseRef.child("Paper")
             databasePaper.observeSingleEvent(of: .value) { (snapshot) in
@@ -495,7 +556,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             //write something to download
             print("true")
             let indexTag = sender.tag
-            let note = self.data[indexTag - 1]
+            let note = self.paperData[indexTag - 1]
             guard let paperName = note.paperName else { return}
             
             let databasePaper = self.databaseRef.child("Paper")
@@ -534,11 +595,12 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
                 guard let index = sender as? UIButton else {return}
                 let indexPath = index.tag
                 print(indexPath)
-                let home = self.data[indexPath - 1]
+                let home = self.paperData[indexPath - 1]
                 let navigationVC = segue.destination as! UINavigationController
                 let heartVC = navigationVC.topViewController as! HeartViewController
                 heartVC.messageData = home
             }
+            
         }else {
             //error handling when no internet
             print("false")
@@ -559,7 +621,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
             guard let nickName = UserDefaults.standard.string(forKey: "nickName") else {return}
             guard let uid = UserDefaults.standard.string(forKey: "uid") else {return}
             let indexTag = (sender.tag) / 10
-            let note = self.data[indexTag - 1]
+            let note = self.paperData[indexTag - 1]
             guard let paperName = note.paperName else { return}
             let paperNameArray = note.paperNameArray
             let heartUid = note.heartUid
@@ -638,7 +700,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         let tappedImage = tapGestureRecognizer.view as! UIImageView
         let indexPath = tappedImage.tag / 100
         // Your action
-        let note = self.data[indexPath - 1]
+        let note = self.paperData[indexPath - 1]
         if checkInternetFunction() == true {
             //write something to download
             print("true")
@@ -709,8 +771,8 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
         let tappedImage = tapGestureRecognizer.view as! UIImageView
         let index = (tappedImage.tag / 1000) - 1
         self.images = []
-        guard self.data[index].imageName.count > 0 else { return }
-        let note = self.data[index]
+        guard self.paperData[index].imageName.count > 0 else { return }
+        let note = self.paperData[index]
         let fileName = note.imageName
         var light: [LightboxImage] = []
         for i in 0 ..< note.imageName.count {
@@ -755,7 +817,7 @@ class HomePageViewController: UIViewController ,UITableViewDataSource,UITableVie
     
     func didUpdateMessage(note: PaperData) {
         
-        guard let index = self.data.firstIndex(of: note) else {return}
+        guard let index = self.paperData.firstIndex(of: note) else {return}
         let indexPath = IndexPath(row: 0, section: index + 1)
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [indexPath], with: .automatic)

@@ -38,24 +38,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("home= \(NSHomeDirectory())")
         
         let databaseRefPaper = self.databaseRef.child("Paper")
-        databaseRefPaper.observeSingleEvent(of: .value, with: { [weak self] (snapshot) in
+        databaseRefPaper.observeSingleEvent(of: .value, with: { (snapshot) in
             
             guard let uploadDataDic = snapshot.value as? [String:Any] else { return}
                 let dataDic = uploadDataDic
                 let keyArray = Array(dataDic.keys)
-                self?.paperData = []
+                self.paperData = []
                 for i in 0 ..< keyArray.count {
-                    let array = dataDic[keyArray[i]] as! [String:Any]
+                    guard let array = dataDic[keyArray[i]] as? [String:Any] else {return}
                     let note = PaperData()
                     note.paperName = keyArray[i]
                     note.paperNameArray = keyArray
                     note.account = array["account"] as? String
                     note.message = array["message"] as? String
                     note.date = array["date"] as? String
-                    note.imageName = array["photo"] as! [String]
                     note.uid = array["uid"] as? String
                     note.postTime = array["postTime"] as? Double
                     note.nickName = array["nickName"] as? String
+                    if let imageName = array["photo"] as? [String] {
+                        note.imageName = imageName
+                    }
+                    
+                    if let blockUid = array["blockUid"] as? [String] {
+                        note.blockUid = blockUid
+                    }
+                    
                     if let comment = array["comment"] as? [String:Any] {
                         note.commentNameArray = Array(comment.keys)
                         note.commentCount = comment.count
@@ -68,14 +75,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }else {
                         note.heartCount = 0
                     }
-                    self?.paperData.append(note)
-                    self?.paperData.sort(by: { (post1, post2) -> Bool in
+                    self.paperData.append(note)
+                    self.paperData.sort(by: { (post1, post2) -> Bool in
                         post1.postTime! > post2.postTime!
                     })
                     for j in 0 ..< note.imageName.count {
                         // loadImageToFile
                         let fileName = "\(note.imageName[j]).jpg"
-                        guard let storageRefPhoto = self?.storageRef.child(note.account!).child(fileName) else {return}
+                        let storageRefPhoto = self.storageRef.child(note.account!).child(fileName)
                        
                         storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in
                             guard let imageData = data else {return}
@@ -99,14 +106,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.userData = []
             for i in 0 ..< keyArray.count {
                 let array = dataDic[keyArray[i]] as! [String:Any]
-                let note = UserData()
-                note.account = array["account"] as? String
-                note.nickName = array["nickName"] as? String
-                note.profile = array["profile"] as? String
+                let user = UserData()
+                user.account = array["account"] as? String
+                user.nickName = array["nickName"] as? String
+                user.profile = array["profile"] as? String
                 
-                self.userData.append(note)
+                
+               
+                self.userData.append(user)
                 // loadImageToFile
-                guard let account = note.account else {return}
+                guard let account = user.account else {return}
                 let fileName = "\(account).jpg"
                 let storageRefPhoto = self.storageRef.child(account).child(fileName)
                 storageRefPhoto.getData(maxSize: 1*1024*1024) { (data, error) in

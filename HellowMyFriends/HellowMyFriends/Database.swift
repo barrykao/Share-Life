@@ -30,8 +30,8 @@ static func == (lhs: PaperData, rhs: PaperData) -> Bool {
     var nickName : String?
     var paperNameArray: [String] = []
     var commentNameArray: [String] = []
-//    var blockUser: [String] = []
-//    var blockPaper: [String] = []
+    var blockUid: [String] = []
+
 }
 
 class UserData {
@@ -44,8 +44,6 @@ class UserData {
     var postTime : Double?
 
 }
-
-
 
 class CommentData {
     

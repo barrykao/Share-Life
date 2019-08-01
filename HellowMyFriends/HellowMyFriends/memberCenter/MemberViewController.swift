@@ -372,13 +372,13 @@ class MemberViewController: UIViewController, UIImagePickerControllerDelegate ,U
                         if let navigationVC = self.storyboard?.instantiateViewController(withIdentifier: "EditPostVC") as? UINavigationController
                         {
                             print("編輯貼文")
-                            self.dismiss(animated: true)
+                            
                             let current = self.memberData[self.index]
                             let editPostVC = navigationVC.topViewController as! EditPostViewController
                             editPostVC.currentData = current
                             editPostVC.images = self.images
                             editPostVC.delegate = self
-                            self.present(navigationVC, animated: true, completion: nil)
+                            self.lightboxController.present(navigationVC, animated: true, completion: nil)
                             
                         }
                     }else {

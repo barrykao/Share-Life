@@ -36,6 +36,7 @@
 		C6A897FE22AF8970008C7BF5 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6A897FC22AF896F008C7BF5 /* background.jpg */; };
 		C6B0574C22BB5AA600D00761 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B0574B22BB5AA600D00761 /* Database.swift */; };
 		C6B1127F22EBCFEF009BDA1C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6B1127E22EBCFEF009BDA1C /* GoogleService-Info.plist */; };
+		C6B112A122EEA859009BDA1C /* LockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B112A022EEA859009BDA1C /* LockViewController.swift */; };
 		C6CF777B22CD1B04004FFE6C /* photoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C6CF777A22CD1B03004FFE6C /* photoImage.png */; };
 		C6EC218222B15A8E00D6C2C4 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */; };
 		C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */; };
@@ -79,6 +80,7 @@
 		C6A897FC22AF896F008C7BF5 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		C6B0574B22BB5AA600D00761 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = HellowMyFriends/Database.swift; sourceTree = SOURCE_ROOT; };
 		C6B1127E22EBCFEF009BDA1C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C6B112A022EEA859009BDA1C /* LockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewController.swift; sourceTree = "<group>"; };
 		C6CF777A22CD1B03004FFE6C /* photoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photoImage.png; sourceTree = "<group>"; };
 		C6EC218122B15A8E00D6C2C4 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		C6EE2DFE22BFB8F900844D38 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				C65A131822B88F36002C2881 /* HomePage.storyboard */,
+				C6B112A022EEA859009BDA1C /* LockViewController.swift */,
 				C60A5BD8226FF2CE00299FC6 /* HomePageViewController.swift */,
 				C68439D822DDE64200CDC2A6 /* UserCardView.xib */,
 				C68439DA22DDE6AA00CDC2A6 /* UserCardView.swift */,
@@ -377,6 +380,7 @@
 				C68439DB22DDE6AA00CDC2A6 /* UserCardView.swift in Sources */,
 				C6EE2DFF22BFB8F900844D38 /* PostViewController.swift in Sources */,
 				C619DE0622E4BC720044346C /* Reachability.m in Sources */,
+				C6B112A122EEA859009BDA1C /* LockViewController.swift in Sources */,
 				C60A5BD9226FF2CE00299FC6 /* HomePageViewController.swift in Sources */,
 				C6F65687226F14EF00706BEA /* AppDelegate.swift in Sources */,
 				C65BDEA122E2C1B700DD9400 /* PrivacyViewController.swift in Sources */,
